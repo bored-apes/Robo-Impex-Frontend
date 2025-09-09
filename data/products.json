@@ -1,0 +1,182 @@
+[
+  {
+    "id": "film-blowing-machine-001",
+    "slug": "high-speed-pe-ldpe-hdpe-film-blowing-machine",
+    "name": "High Speed PE LDPE HDPE PLA Biodegradable Blowing Film Machine",
+    "descriptionShort": "Professional film blowing machine with rotary die single layer extruder for high-quality plastic film production.",
+    "descriptionLong": "This high-speed film blowing machine is designed for producing PE, LDPE, HDPE, and PLA biodegradable films. Features rotary die head technology for consistent film quality, automatic winding system, and computerized control for precise operation. Ideal for packaging, agricultural, and industrial film applications.",
+    "price": 12500.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "videos": ["/placeholder.svg?height=300&width=400"],
+    "categories": ["plastic-machinery", "film-blowing"],
+    "tags": ["biodegradable", "high-speed", "rotary-die", "computerized"],
+    "rating": 4.6,
+    "ratingCount": 128,
+    "inStock": true,
+    "brand": "RUIAN NUOSHENG MACHINE CO., LTD.",
+    "modelNumber": "SJ-45 (50-55-65)",
+    "warranty": "One Year",
+    "specifications": {
+      "screwDiameter": "55mm",
+      "automation": "Automatic",
+      "computerized": "Computerized",
+      "machineWeight": "2.6t",
+      "certification": "CE, ISO9001:2008",
+      "dieHead": "Rotary Die Head",
+      "screwLDRatio": "30:1",
+      "maxOutput": "60-75kg/H",
+      "mainMotor": "Siemens Brand",
+      "inverterBrand": "Delta Brand",
+      "trademark": "NuoSheng",
+      "transportPackage": "as Required",
+      "specification": "CQC, ISO9001, CE, SGS",
+      "origin": "Zhejiang China",
+      "hsCode": "8477309000"
+    },
+    "variants": {
+      "model": ["SJ-45", "SJ-50", "SJ-55", "SJ-65"],
+      "output": ["60-75kg/H", "80-100kg/H", "120-150kg/H"]
+    },
+    "similar": ["extruder-machine-002", "plastic-blowing-003", "film-machine-004"]
+  },
+  {
+    "id": "extruder-machine-002",
+    "slug": "multi-layer-co-extrusion-ldpe-hdpe-film-blowing",
+    "name": "Multi-Layer Co-Extrusion LDPE HDPE PE Film Blowing Machine",
+    "descriptionShort": "Advanced multi-layer co-extrusion system for complex film structures and enhanced barrier properties.",
+    "descriptionLong": "State-of-the-art multi-layer co-extrusion film blowing machine capable of producing complex film structures with enhanced barrier properties. Perfect for food packaging, medical applications, and specialty films requiring multiple material layers.",
+    "price": 47000.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "categories": ["plastic-machinery", "co-extrusion"],
+    "tags": ["multi-layer", "co-extrusion", "barrier-films", "food-packaging"],
+    "rating": 4.8,
+    "ratingCount": 89,
+    "inStock": true,
+    "brand": "RUIAN NUOSHENG MACHINE CO., LTD.",
+    "modelNumber": "ML-3L-65",
+    "warranty": "Two Years",
+    "variants": {
+      "layers": ["3-Layer", "5-Layer", "7-Layer"],
+      "width": ["1000mm", "1500mm", "2000mm"]
+    },
+    "similar": ["film-blowing-machine-001", "plastic-blowing-003"]
+  },
+  {
+    "id": "plastic-blowing-003",
+    "slug": "mini-biodegradable-rotary-die-head-film-machine",
+    "name": "Mini Model Biodegradable High Speed Rotary Die Head Film Machine",
+    "descriptionShort": "Compact biodegradable film production machine with rotary die head technology for small-scale operations.",
+    "descriptionLong": "Compact and efficient biodegradable film blowing machine designed for small to medium-scale production. Features rotary die head technology, energy-efficient operation, and eco-friendly film production capabilities.",
+    "price": 15000.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "categories": ["plastic-machinery", "biodegradable"],
+    "tags": ["mini-model", "biodegradable", "eco-friendly", "compact"],
+    "rating": 4.4,
+    "ratingCount": 156,
+    "inStock": true,
+    "brand": "RUIAN NUOSHENG MACHINE CO., LTD.",
+    "modelNumber": "MINI-BIO-45",
+    "warranty": "One Year",
+    "variants": {
+      "capacity": ["20-30kg/H", "30-45kg/H"],
+      "filmWidth": ["300mm", "500mm", "800mm"]
+    },
+    "similar": ["film-blowing-machine-001", "extruder-machine-002"]
+  },
+  {
+    "id": "plastic-extruder-004",
+    "slug": "pe-lldpe-plastic-extruder-biodegradable-blow-film",
+    "name": "PE LLDPE Plastic Extruder Biodegradable Blow Film Blowing Machine",
+    "descriptionShort": "High-performance plastic extruder for biodegradable film production with advanced control systems.",
+    "descriptionLong": "Professional-grade plastic extruder designed for producing high-quality biodegradable films from PE and LLDPE materials. Features advanced temperature control, precision thickness control, and energy-efficient operation.",
+    "price": 50000.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "categories": ["plastic-machinery", "extruders"],
+    "tags": ["pe-lldpe", "biodegradable", "high-performance", "precision-control"],
+    "rating": 4.7,
+    "ratingCount": 94,
+    "inStock": true,
+    "brand": "RUIAN NUOSHENG MACHINE CO., LTD.",
+    "modelNumber": "PE-EXT-75",
+    "warranty": "Two Years",
+    "variants": {
+      "screwSize": ["65mm", "75mm", "90mm"],
+      "output": ["100-150kg/H", "150-200kg/H", "200-300kg/H"]
+    },
+    "similar": ["film-blowing-machine-001", "extruder-machine-002"]
+  },
+  {
+    "id": "film-machine-005",
+    "slug": "plastic-film-blowing-machine-sl-45-600",
+    "name": "Plastic Film Blowing Machine (SL-45-600)",
+    "descriptionShort": "Reliable plastic film blowing machine with consistent output and user-friendly operation.",
+    "descriptionLong": "Dependable plastic film blowing machine designed for consistent production of high-quality plastic films. Features user-friendly controls, reliable performance, and suitable for various plastic film applications.",
+    "price": 9500.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "categories": ["plastic-machinery", "film-blowing"],
+    "tags": ["reliable", "user-friendly", "consistent-output", "versatile"],
+    "rating": 4.3,
+    "ratingCount": 203,
+    "inStock": true,
+    "brand": "Jiangyin City Honghua Machinery and Equipment Co., Ltd.",
+    "modelNumber": "SL-45-600",
+    "warranty": "One Year",
+    "variants": {
+      "filmWidth": ["400mm", "600mm", "800mm"],
+      "thickness": ["0.01-0.15mm", "0.02-0.20mm"]
+    },
+    "similar": ["film-blowing-machine-001", "plastic-blowing-003"]
+  },
+  {
+    "id": "injection-molding-006",
+    "slug": "high-precision-injection-molding-machine",
+    "name": "High Precision Injection Molding Machine for Plastic Components",
+    "descriptionShort": "Advanced injection molding machine for precision plastic component manufacturing.",
+    "descriptionLong": "State-of-the-art injection molding machine designed for high-precision manufacturing of plastic components. Features servo motor drive, advanced control system, and energy-efficient operation for various industrial applications.",
+    "price": 85000.0,
+    "currency": "USD",
+    "images": [
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400",
+      "/placeholder.svg?height=400&width=400"
+    ],
+    "categories": ["plastic-machinery", "injection-molding"],
+    "tags": ["high-precision", "servo-motor", "energy-efficient", "automated"],
+    "rating": 4.9,
+    "ratingCount": 67,
+    "inStock": true,
+    "brand": "HAITIAN INTERNATIONAL",
+    "modelNumber": "HTF-180X",
+    "warranty": "Three Years",
+    "variants": {
+      "clampingForce": ["180T", "250T", "350T"],
+      "injectionVolume": ["500cm³", "750cm³", "1000cm³"]
+    },
+    "similar": ["plastic-extruder-004", "film-machine-005"]
+  }
+]
