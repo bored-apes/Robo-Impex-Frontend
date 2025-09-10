@@ -8,7 +8,7 @@ import { Mail, Phone, MapPin, Clock, Award, Shield, Truck } from "lucide-react";
 
 export function Footer() {
   const footerLinks = {
-    company: [
+    company: [  
       { name: "About Us", href: "/" },
       { name: "Contact", href: "/" },
       { name: "Our Team", href: "/" },
