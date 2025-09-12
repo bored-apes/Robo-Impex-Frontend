@@ -3,93 +3,121 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  /* Premium B2B Industrial Design Tokens */
-  --background: oklch(0.99 0.002 106.423);
-  --foreground: oklch(0.09 0.005 285.882);
-  --card: oklch(0.99 0.002 106.423);
-  --card-foreground: oklch(0.09 0.005 285.882);
-  --popover: oklch(0.99 0.002 106.423);
-  --popover-foreground: oklch(0.09 0.005 285.882);
-  --primary: oklch(0.205 0.015 285.882); /* Industrial dark gray */
-  --primary-foreground: oklch(0.985 0.002 106.423);
-  --secondary: oklch(0.75 0.084 83.27); /* Industrial amber/orange accent */
-  --secondary-foreground: oklch(0.09 0.005 285.882);
-  --muted: oklch(0.96 0.006 285.882);
-  --muted-foreground: oklch(0.45 0.006 285.882);
-  --accent: oklch(0.75 0.084 83.27); /* Matching secondary for consistency */
-  --accent-foreground: oklch(0.09 0.005 285.882);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0.002 106.423);
-  --border: oklch(0.89 0.006 285.882);
-  --input: oklch(0.89 0.006 285.882);
-  --ring: oklch(0.45 0.006 285.882);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0.002 106.423);
-  --sidebar-foreground: oklch(0.09 0.005 285.882);
-  --sidebar-primary: oklch(0.205 0.015 285.882);
-  --sidebar-primary-foreground: oklch(0.985 0.002 106.423);
-  --sidebar-accent: oklch(0.96 0.006 285.882);
-  --sidebar-accent-foreground: oklch(0.09 0.005 285.882);
-  --sidebar-border: oklch(0.89 0.006 285.882);
-  --sidebar-ring: oklch(0.45 0.006 285.882);
 
-  /* Industrial silver/metallic accents */
-  --silver: #9ca3af;
-  --silver-light: #d1d5db;
-  --silver-dark: #6b7280;
-  --metallic: linear-gradient(135deg, #e5e7eb 0%, #9ca3af 50%, #6b7280 100%);
+:root {
+  /* Updated color palette to match industrial IoT theme */
+  --background: #ffffff;
+  --foreground: #374151;
+  --card: #f1f5f9;
+  --card-foreground: #374151;
+  --popover: #ffffff;
+  --popover-foreground: #374151;
+  --primary: #38b6ff;
+  /* Changed */
+  --primary-foreground: #ffffff;
+  --secondary: #4f9dff;
+  /* Changed */
+  --secondary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #4f9dff;
+  /* Changed */
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #f9fafb;
+  --ring: rgba(56, 182, 255, 0.5);
+  /* Changed */
+  --radius: 0.5rem;
+  --chart-1: #38b6ff;
+  /* Changed */
+  --chart-2: #4f9dff;
+  /* Changed */
+  --chart-3: #dc2626;
+  --chart-4: #f59e0b;
+  --chart-5: #be123c;
+  --sidebar: #f1f5f9;
+  --sidebar-foreground: #374151;
+  --sidebar-primary: #38b6ff;
+  /* Changed */
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #4f9dff;
+  /* Changed */
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: rgba(56, 182, 255, 0.5);
+  /* Changed */
 }
 
 .dark {
-  /* React.dev inspired sophisticated dark mode */
-  --background: oklch(0.08 0.004 285.882); /* Deep slate blue-gray like react.dev */
-  --foreground: oklch(0.95 0.013 109.77);
-  --card: oklch(0.12 0.006 285.882); /* Elevated surface */
-  --card-foreground: oklch(0.95 0.013 109.77);
-  --popover: oklch(0.12 0.006 285.882);
-  --popover-foreground: oklch(0.95 0.013 109.77);
-  --primary: oklch(0.75 0.084 83.27); /* Warm amber for dark mode CTAs */
-  --primary-foreground: oklch(0.08 0.004 285.882);
-  --secondary: oklch(0.18 0.008 285.882); /* Muted slate for secondary elements */
-  --secondary-foreground: oklch(0.95 0.013 109.77);
-  --muted: oklch(0.15 0.007 285.882);
-  --muted-foreground: oklch(0.65 0.015 285.882);
-  --accent: oklch(0.18 0.008 285.882);
-  --accent-foreground: oklch(0.95 0.013 109.77);
-  --destructive: oklch(0.62 0.204 25.331);
-  --destructive-foreground: oklch(0.95 0.013 109.77);
-  --border: oklch(0.18 0.008 285.882);
-  --input: oklch(0.15 0.007 285.882);
-  --ring: oklch(0.75 0.084 83.27);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.1 0.005 285.882);
-  --sidebar-foreground: oklch(0.95 0.013 109.77);
-  --sidebar-primary: oklch(0.75 0.084 83.27);
-  --sidebar-primary-foreground: oklch(0.08 0.004 285.882);
-  --sidebar-accent: oklch(0.15 0.007 285.882);
-  --sidebar-accent-foreground: oklch(0.95 0.013 109.77);
-  --sidebar-border: oklch(0.18 0.008 285.882);
-  --sidebar-ring: oklch(0.75 0.084 83.27);
-
-  /* Dark mode industrial accents */
-  --silver: #64748b;
-  --silver-light: #94a3b8;
-  --silver-dark: #475569;
-  --metallic: linear-gradient(135deg, #475569 0%, #64748b 50%, #94a3b8 100%);
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+  --primary: #38b6ff;
+  /* Changed */
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #999999;
+  --accent: #1e90ff;
+  /* Changed */
+  --accent-foreground: #000000;
+  --destructive: #cc0000;
+  --destructive-foreground: #ffffff;
+  --border: #333333;
+  --input: #333333;
+  --ring: #38b6ff;
+  /* Changed */
 }
 
 @theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@theme inline {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -133,25 +161,120 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
-    /* Enhanced smooth scrolling and transitions */
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+
   html {
     scroll-behavior: smooth;
-    /* Enhanced scroll padding for better navigation */
     scroll-padding-top: 80px;
   }
 }
 
-/* Premium Industrial Animations */
+/* Enhanced Industrial IoT Animations */
+@keyframes circuit-pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes gear-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes signal-wave {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes iot-connect {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+
+  100% {
+    stroke-dasharray: 100 0;
+  }
+}
+
+@keyframes robot-move {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+
+  75% {
+    transform: translateY(5px) rotate(-2deg);
+  }
+}
+
+@keyframes network-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -163,6 +286,7 @@
     opacity: 0;
     transform: translateX(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -174,6 +298,7 @@
     opacity: 0;
     transform: translateX(30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -181,22 +306,26 @@
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 @keyframes glow {
+
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   }
+
   50% {
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
   }
 }
 
@@ -204,12 +333,14 @@
   0% {
     background-position: -200px 0;
   }
+
   100% {
     background-position: calc(200px + 100%) 0;
   }
 }
 
 @keyframes bounce-gentle {
+
   0%,
   20%,
   53%,
@@ -217,13 +348,16 @@
   100% {
     transform: translateY(0);
   }
+
   40%,
   43% {
     transform: translateY(-15px);
   }
+
   70% {
     transform: translateY(-7px);
   }
+
   90% {
     transform: translateY(-3px);
   }
@@ -233,27 +367,30 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
 @keyframes scale-pulse {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
 }
 
-/* Added new premium animations for enhanced user experience */
 @keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -264,6 +401,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -274,13 +412,57 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* Animation Classes */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Industrial IoT Animation Classes */
+.animate-circuit-pulse {
+  animation: circuit-pulse 2s ease-in-out infinite;
+}
+
+.animate-data-flow {
+  animation: data-flow 3s linear infinite;
+}
+
+.animate-gear-rotate {
+  animation: gear-rotate 8s linear infinite;
+}
+
+.animate-signal-wave {
+  animation: signal-wave 1.5s ease-in-out infinite;
+}
+
+.animate-iot-connect {
+  animation: iot-connect 2s ease-in-out infinite;
+}
+
+.animate-robot-move {
+  animation: robot-move 4s ease-in-out infinite;
+}
+
+.animate-network-pulse {
+  animation: network-pulse 2s infinite;
+}
+
+/* Existing Animation Classes */
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out;
 }
@@ -319,7 +501,6 @@
   animation: scale-pulse 2s ease-in-out infinite;
 }
 
-/* Added new animation classes */
 .animate-slide-up {
   animation: slideUp 0.6s ease-out;
 }
@@ -333,21 +514,16 @@
 }
 
 /* Industrial Design Effects */
-.metallic-gradient {
-  background: var(--metallic);
-}
-
 .glass-morphism {
   backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  /* Enhanced glass morphism with better transitions */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .glass-morphism {
-  background-color: rgba(30, 41, 59, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(17, 25, 40, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
 .hover-lift {
@@ -364,18 +540,22 @@
 }
 
 .industrial-border {
+  position: relative;
   border: 2px solid transparent;
-  background: linear-gradient(var(--background), var(--background)) padding-box, var(--metallic) border-box;
+  background: linear-gradient(var(--background), var(--background)) padding-box,
+    linear-gradient(135deg, var(--color-primary), var(--color-accent)) border-box;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
 }
 
-/* Enhanced custom scrollbar with better dark mode support */
+/* Enhanced custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -394,55 +574,59 @@
   background: var(--color-accent);
 }
 
-/* Intersection Observer Animation Delays */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease-out;
+/* Interactive IoT Elements */
+.iot-device {
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.animate-on-scroll.animate {
+
+
+/* Circuit Board Pattern */
+.circuit-pattern {
+  background-image: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+}
+
+.circuit-pattern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(5, 150, 105, 0.1) 2px, transparent 2px);
+  background-size: 40px 40px;
+}
+
+/* Form Field Animations */
+.form-field-glow:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  border-color: var(--color-primary);
+}
+
+.form-field-glow:focus+.field-circuit {
   opacity: 1;
-  transform: translateY(0);
+  animation: circuit-pulse 1s ease-in-out;
 }
 
-.animate-on-scroll:nth-child(1) {
-  transition-delay: 0.1s;
-}
-.animate-on-scroll:nth-child(2) {
-  transition-delay: 0.2s;
-}
-.animate-on-scroll:nth-child(3) {
-  transition-delay: 0.3s;
-}
-.animate-on-scroll:nth-child(4) {
-  transition-delay: 0.4s;
-}
-.animate-on-scroll:nth-child(5) {
-  transition-delay: 0.5s;
-}
-.animate-on-scroll:nth-child(6) {
-  transition-delay: 0.6s;
+.field-circuit {
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* Added enhanced focus states for better accessibility */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
-}
-
-/* Added smooth page transitions */
-.page-transition {
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Enhanced button hover effects */
-.btn-hover-effect {
+/* Button Enhancements */
+.btn-iot {
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transition: all 0.3s ease;
 }
 
-.btn-hover-effect::before {
+.btn-iot::before {
   content: "";
   position: absolute;
   top: 0;
@@ -453,6 +637,25 @@
   transition: left 0.5s;
 }
 
-.btn-hover-effect:hover::before {
+.btn-iot:hover::before {
   left: 100%;
+}
+
+.btn-iot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+/* Page Transition Effects */
+.page-transition {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive Animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
