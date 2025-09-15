@@ -1,134 +1,165 @@
-"use client"
-import { useState, useEffect } from "react"
-import type { ReactElement } from "react"
-import Link from "next/link"
-import { Minus, Plus, Trash2, Heart, ShoppingBag } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { cartStorage, wishlistStorage, type CartItem, type Variant } from "@/lib/utils/storage"
-import { CURRENCY } from "@/data/constants"
+"use client";
+import { useState, useEffect } from "react";
+import type { ReactElement } from "react";
+import Link from "next/link";
+import {
+  Minus,
+  Plus,
+  Trash2,
+  Heart,
+  ShoppingBag,
+  ArrowLeft,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import {
+  cartStorage,
+  wishlistStorage,
+  type CartItem,
+  type Variant,
+} from "@/lib/utils/storage";
+import { CURRENCY } from "@/data/constants";
+import { SectionLoader } from "@/components/shared/common/loader";
 
 export default function CartPage(): ReactElement {
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setCartItems(cartStorage.getItems())
-    setIsLoading(false)
-  }, [])
+    const timer = setTimeout(() => {
+      setCartItems(cartStorage.getItems());
+      setIsLoading(false);
+    }, 1000); // Reduced loading time for better UX
 
-  const updateQuantity = (id: string, variant: Variant, newQty: number): void => {
+    return () => clearTimeout(timer);
+  }, []);
+
+  const updateQuantity = (
+    id: string,
+    variant: Variant,
+    newQty: number
+  ): void => {
     if (newQty <= 0) {
-      removeItem(id, variant)
-      return
+      removeItem(id, variant);
+      return;
     }
-    cartStorage.updateQuantity(id, variant, newQty)
-    setCartItems(cartStorage.getItems())
-  }
+    cartStorage.updateQuantity(id, variant, newQty);
+    setCartItems(cartStorage.getItems());
+  };
 
   const removeItem = (id: string, variant: Variant): void => {
-    cartStorage.removeItem(id, variant)
-    setCartItems(cartStorage.getItems())
-  }
+    cartStorage.removeItem(id, variant);
+    setCartItems(cartStorage.getItems());
+  };
 
   const moveToWishlist = (item: CartItem): void => {
-    const wishlistItem = { id: item.id, name: item.name, price: item.price, image: item.image || "" }
-    wishlistStorage.addItem(wishlistItem)
-    removeItem(item.id, item.variant)
-  }
+    const wishlistItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image || "",
+    };
+    wishlistStorage.addItem(wishlistItem);
+    removeItem(item.id, item.variant);
+  };
 
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.qty, 0)
-  const shipping = subtotal > 1000 ? 0 : 50
-  const total = subtotal + shipping
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your cart...</p>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
-  if (cartItems.length === 0) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1 flex items-center justify-center py-16">
-          <div className="text-center space-y-6 max-w-md mx-auto px-4">
-            <div className="w-24 h-24 mx-auto bg-muted/30 rounded-full flex items-center justify-center">
-              <ShoppingBag className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold mb-2">Your cart is empty</h2>
-              <p className="text-muted-foreground text-lg">Discover our premium industrial machinery and equipment</p>
-            </div>
-            <div className="space-y-3 space-x-4">
-              <Button size="lg" className="animate-glow" asChild>
-                <Link href="/">Explore Products</Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/">Back to Home</Link>
-              </Button>
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.qty,
+    0
+  );
+  const shipping = subtotal > 1000 ? 0 : 50;
+  const total = subtotal + shipping;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">Shopping Cart</h1>
-            <p className="text-muted-foreground">Review your selected items before checkout</p>
-          </div>
+    <div className="min-h-screen bg-background px-4 sm:px-8 lg:px-12 xl:px-20">
+      <main className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-[#38b6ff]">
+            Shopping Cart
+          </h1>
+          <p className="text-muted-foreground">Review your selected items</p>
+        </div>
 
+        {isLoading ? (
+          <SectionLoader text="Loading your cart..." minHeight="h-96" />
+        ) : cartItems.length === 0 ? (
+          <div className="empty-state rounded-xl p-16 text-center animate-fade-in-up">
+            <div className="max-w-md mx-auto space-y-6">
+              <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center animate-gentle-float">
+                <ShoppingBag className="h-12 w-12 text-muted-foreground" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-semibold">Your cart is empty</h2>
+                <p className="text-muted-foreground">
+                  Discover our industrial equipment and add items to get
+                  started.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild className="animate-soft-glow">
+                  <Link href="/products">Browse Products</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link href="/">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Home
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
               {cartItems.map((item, index) => (
                 <Card
                   key={`${item.id}-${JSON.stringify(item.variant)}`}
-                  className="hover-lift animate-fade-in-up"
+                  className="product-card animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardContent className="p-6">
-                    <div className="flex gap-6">
+                    <div className="flex gap-4">
                       <div className="relative">
                         <img
-                          src={item.image || "/placeholder.svg?height=120&width=120&query=industrial machinery"}
+                          src={
+                            item.image ||
+                            "/placeholder.svg?height=100&width=100&query=industrial equipment"
+                          }
                           alt={item.name}
-                          className="w-24 h-24 object-cover rounded-xl border"
+                          className="w-20 h-20 object-cover rounded-lg border"
                         />
                       </div>
-                      <div className="flex-1 space-y-4">
+                      <div className="flex-1 space-y-3">
                         <div>
-                          <h3 className="font-semibold text-lg line-clamp-2 hover:text-primary transition-colors">
+                          <h3 className="font-semibold line-clamp-2">
                             {item.name}
                           </h3>
                           {item.variant && (
-                            <p className="text-sm text-muted-foreground mt-1">
+                            <p className="text-sm text-muted-foreground">
                               {Object.entries(item.variant)
-                                .map(([key, value]) => `${key}: ${String(value)}`)
+                                .map(
+                                  ([key, value]) => `${key}: ${String(value)}`
+                                )
                                 .join(", ")}
                             </p>
                           )}
                         </div>
 
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-2">
                             <Button
                               variant="outline"
                               size="icon"
                               className="h-8 w-8 bg-transparent"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty - 1)}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  item.qty - 1
+                                )
+                              }
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
@@ -136,7 +167,11 @@ export default function CartPage(): ReactElement {
                               type="number"
                               value={item.qty}
                               onChange={(e) =>
-                                updateQuantity(item.id, item.variant, Number.parseInt(e.target.value) || 1)
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  Number.parseInt(e.target.value) || 1
+                                )
                               }
                               className="w-16 text-center h-8"
                               min={1}
@@ -145,14 +180,20 @@ export default function CartPage(): ReactElement {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8 bg-transparent"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty + 1)}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  item.qty + 1
+                                )
+                              }
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
                           </div>
 
                           <div className="text-right">
-                            <div className="font-bold text-lg text-primary">
+                            <div className="font-semibold text-lg">
                               {CURRENCY.SYMBOL}
                               {(item.price * item.qty).toLocaleString()}
                             </div>
@@ -164,7 +205,12 @@ export default function CartPage(): ReactElement {
                         </div>
 
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => moveToWishlist(item)} className="text-xs">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => moveToWishlist(item)}
+                            className="text-xs"
+                          >
                             <Heart className="h-3 w-3 mr-1" />
                             Save for Later
                           </Button>
@@ -186,13 +232,13 @@ export default function CartPage(): ReactElement {
             </div>
 
             <div className="lg:col-span-1">
-              <Card className="sticky top-4 glass-morphism">
-                <CardContent className="p-6 space-y-6">
-                  <h2 className="text-2xl font-semibold">Order Summary</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-lg">
+              <Card className="sticky top-4">
+                <CardContent className="p-6 space-y-4">
+                  <h2 className="text-xl font-semibold">Order Summary</h2>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
                       <span>Subtotal ({cartItems.length} items)</span>
-                      <span className="font-semibold">
+                      <span className="font-medium">
                         {CURRENCY.SYMBOL}
                         {subtotal.toLocaleString()}
                       </span>
@@ -211,35 +257,39 @@ export default function CartPage(): ReactElement {
                       </span>
                     </div>
                     {subtotal < 1000 && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground bg-muted p-2 rounded">
                         Add {CURRENCY.SYMBOL}
-                        {(1000 - subtotal).toLocaleString()} more for free shipping
+                        {(1000 - subtotal).toLocaleString()} more for free
+                        shipping
                       </p>
                     )}
                     <Separator />
-                    <div className="flex justify-between font-bold text-xl">
+                    <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>
-                      <span className="text-primary">
+                      <span>
                         {CURRENCY.SYMBOL}
                         {total.toLocaleString()}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <Button className="w-full animate-glow" size="lg">
+                    <Button className="w-full" size="lg">
                       Proceed to Checkout
                     </Button>
-                    <Button variant="outline" className="w-full bg-transparent" asChild>
-                      <Link href="/">Continue Shopping</Link>
+                    <Button
+                      variant="outline"
+                      className="w-full bg-transparent"
+                      asChild
+                    >
+                      <Link href="/products">Continue Shopping</Link>
                     </Button>
                   </div>
-                  <div className="text-xs text-muted-foreground text-center">Secure checkout with SSL encryption</div>
                 </CardContent>
               </Card>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
-  )
+  );
 }

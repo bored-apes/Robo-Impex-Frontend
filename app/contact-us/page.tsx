@@ -1,18 +1,16 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { Mail, Phone, MapPin, MessageCircle, Headphones, Wifi, Zap, Cpu, Radio } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { motion } from "framer-motion"
-import { Icon } from "@iconify/react"
-import { ConnectivityAnimation } from "@/components/shared/common/animatedBackgroundIcons"
+import type React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { ConnectivityAnimation } from "@/components/shared/common/animatedBackgroundIcons";
+import { contactMethods } from "@/data/constants";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -20,55 +18,14 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const hoverEffect = {
   scale: 1.02,
   transition: { duration: 0.3 },
-}
+};
 
 export default function ContactUsPage(): React.ReactElement {
-  const contactMethods = [
-    {
-      icon: Phone,
-      title: "Call Us",
-      description: "Speak directly with our experts",
-      value: "+91 77780 81772",
-      action: "tel:+917778081772",
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
-    },
-    {
-      icon: Mail,
-      title: "Email Us",
-      description: "Send us a detailed inquiry",
-      value: "info.roboimpex@gmail.com",
-      action: "mailto:info.roboimpex@gmail.com",
-      color: "text-primary",
-      bgColor: "bg-primary/10",
-    },
-    {
-      icon: MessageCircle,
-      title: "Live Chat",
-      description: "Chat with our support team",
-      value: "Available 24/7",
-      action: "#",
-      color: "text-accent",
-      bgColor: "bg-accent/10",
-    },
-    {
-      icon: Headphones,
-      title: "Technical Support",
-      description: "Get help with installations",
-      value: "support@roboimpox.com",
-      action: "mailto:support@roboimpox.com",
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
-    },
-  ] as const
-
- 
-
   return (
     <div className="min-h-screen bg-background px-4 sm:px-12 lg:px-20 ">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-10 relative overflow-hidden">
@@ -81,10 +38,13 @@ export default function ContactUsPage(): React.ReactElement {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gradient">Get Connected</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#38b6ff]">
+              Get Connected
+            </h1>
             <p className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed">
-              Ready to transform your industrial operations? Our experts at Robo Impox are here to help you find the
-              perfect connectivity solutions for your business needs.
+              Ready to transform your industrial operations? Our experts at Robo
+              Impox are here to help you find the perfect connectivity solutions
+              for your business needs.
             </p>
           </motion.div>
 
@@ -95,7 +55,12 @@ export default function ContactUsPage(): React.ReactElement {
             animate="animate"
           >
             {contactMethods.map((method, index) => (
-              <motion.div key={index} variants={fadeInUp} whileHover={hoverEffect} className="iot-device">
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                whileHover={hoverEffect}
+                className="iot-device"
+              >
                 <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover-lift">
                   <CardContent className="p-6 text-center">
                     <motion.div
@@ -105,8 +70,12 @@ export default function ContactUsPage(): React.ReactElement {
                     >
                       <method.icon className={`h-8 w-8 ${method.color}`} />
                     </motion.div>
-                    <h3 className="font-semibold text-lg mb-2">{method.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{method.description}</p>
+                    <h3 className="font-semibold text-lg mb-2">
+                      {method.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {method.description}
+                    </p>
                     <p className="font-medium text-sm">{method.value}</p>
                   </CardContent>
                 </Card>
@@ -155,5 +124,5 @@ export default function ContactUsPage(): React.ReactElement {
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -3,9 +3,10 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 import type { Metadata } from "next"
-import type { ReactNode } from "react"
+import type { ReactNode, JSX } from "react"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
+import { ToastProvider } from "@/components/shared/common/customToast"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,12 +39,14 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <ToastProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

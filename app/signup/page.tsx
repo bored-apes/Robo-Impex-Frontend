@@ -26,6 +26,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AnimatedProductSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons";
+import { useRouter } from "next/navigation";
+import { useCustomToast } from "@/components/shared/common/customToast";
+import { tokenManager } from "@/lib/tokenManager";
+import { signupUser } from "@/lib/apiServices/auth.service";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,12 +42,45 @@ export default function SignupPage() {
     password: "",
   });
 
+  const { showToast } = useCustomToast();
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Signup attempt:", formData);
-    setIsLoading(false);
+
+    try {
+      const response = await signupUser(formData);
+
+      if (response.success) {
+        // Store token in localStorage
+        // tokenManager.setToken(response?.user?.token)
+
+        showToast({
+          type: "success",
+          title: "Account Created!",
+          message:
+            response.message ||
+            "Welcome to RoboImpex! Your account has been created successfully.",
+        });
+
+        router.push("/");
+      } else {
+        showToast({
+          type: "error",
+          title: "Signup Failed",
+          message: response.message || "Failed to create account",
+        });
+      }
+    } catch (error) {
+      showToast({
+        type: "error",
+        title: "Signup Error",
+        message: "Network error occurred. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
