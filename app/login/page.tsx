@@ -1,43 +1,90 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Loader2, Zap } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AnimatedHeroSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  ArrowRight,
+  Loader2,
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AnimatedHeroSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons";
+import { useRouter } from "next/navigation";
+import { useCustomToast } from "@/components/shared/common/customToast";
+import { tokenManager } from "@/lib/tokenManager";
+import { loginUser } from "@/lib/apiServices/auth.service";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
+  });
+
+  const { showToast } = useCustomToast();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log("Login attempt:", formData)
-    setIsLoading(false)
-  }
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await loginUser(formData);
+
+      if (response.success && response.token) {
+        tokenManager.setToken(response.token);
+        showToast({
+          type: "success",
+          title: "Login Successful!",
+          message: response.message || "Welcome back to RoboImpex",
+        });
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
+      } else {
+        showToast({
+          type: "error",
+          title: "Login Failed",
+          message: response.message || "Invalid credentials",
+        });
+      }
+    } catch (error) {
+      showToast({
+        type: "error",
+        title: "Login Error",
+        message: "Network error occurred. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <AnimatedHeroSectionBackgroundIcons/>
+      <AnimatedHeroSectionBackgroundIcons />
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
         <div
@@ -48,14 +95,12 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Vector Illustration Section */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="hidden lg:flex flex-col items-center justify-center space-y-8"
         >
-          {/* Animated Robot Vector */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -63,14 +108,16 @@ export default function LoginPage() {
             className="relative"
           >
             <div className="w-80 h-80 relative">
-              {/* Robot Body */}
               <motion.div
                 animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
                 className="absolute inset-0"
               >
                 <svg viewBox="0 0 320 320" className="w-full h-full">
-                  {/* Robot Head */}
                   <motion.rect
                     x="120"
                     y="40"
@@ -83,7 +130,6 @@ export default function LoginPage() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   />
-                  {/* Eyes */}
                   <motion.circle
                     cx="140"
                     cy="65"
@@ -91,7 +137,10 @@ export default function LoginPage() {
                     fill="currentColor"
                     className="text-background"
                     animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                    }}
                   />
                   <motion.circle
                     cx="180"
@@ -100,9 +149,12 @@ export default function LoginPage() {
                     fill="currentColor"
                     className="text-background"
                     animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.1 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      delay: 0.1,
+                    }}
                   />
-                  {/* Body */}
                   <motion.rect
                     x="100"
                     y="120"
@@ -115,7 +167,6 @@ export default function LoginPage() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
                   />
-                  {/* Arms */}
                   <motion.rect
                     x="60"
                     y="140"
@@ -125,7 +176,10 @@ export default function LoginPage() {
                     fill="currentColor"
                     className="text-accent"
                     animate={{ rotate: [0, 10, 0] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                    }}
                   />
                   <motion.rect
                     x="230"
@@ -136,9 +190,11 @@ export default function LoginPage() {
                     fill="currentColor"
                     className="text-accent"
                     animate={{ rotate: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                    }}
                   />
-                  {/* Legs */}
                   <motion.rect
                     x="120"
                     y="240"
@@ -168,7 +224,6 @@ export default function LoginPage() {
             </div>
           </motion.div>
 
-          {/* Welcome Text */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,15 +231,15 @@ export default function LoginPage() {
             className="text-center space-y-4"
           >
             <h1 className="text-4xl font-bold text-foreground text-balance">
-              Welcome Back to <span className="text-gradient">RoboImpax</span>
+              Welcome Back to <span className="text-gradient">RoboImpex</span>
             </h1>
             <p className="text-lg text-muted-foreground text-pretty max-w-md">
-              Continue your journey in industrial automation and robotics excellence.
+              Continue your journey in industrial automation and robotics
+              excellence.
             </p>
           </motion.div>
         </motion.div>
 
-        {/* Login Form Section */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -205,7 +260,9 @@ export default function LoginPage() {
               </motion.div>
 
               <div>
-                <CardTitle className="text-2xl font-bold text-foreground">Sign In</CardTitle>
+                <CardTitle className="text-2xl font-bold text-foreground">
+                  Sign In
+                </CardTitle>
                 <CardDescription className="text-muted-foreground">
                   Access your industrial automation dashboard
                 </CardDescription>
@@ -220,7 +277,10 @@ export default function LoginPage() {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Email Address
                   </Label>
                   <div className="relative group">
@@ -244,7 +304,10 @@ export default function LoginPage() {
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Password
                   </Label>
                   <div className="relative group">
@@ -264,7 +327,11 @@ export default function LoginPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                 </motion.div>
@@ -315,7 +382,10 @@ export default function LoginPage() {
                 >
                   <p className="text-sm text-muted-foreground">
                     Don't have an account?{" "}
-                    <Link href="/signup" className="text-primary hover:text-primary/80 transition-colors font-semibold">
+                    <Link
+                      href="/signup"
+                      className="text-primary hover:text-primary/80 transition-colors font-semibold"
+                    >
                       Create Account
                     </Link>
                   </p>
@@ -330,12 +400,15 @@ export default function LoginPage() {
             transition={{ delay: 1, duration: 0.5 }}
             className="text-center mt-8"
           >
-            <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               ← Back to Home
             </Link>
           </motion.div>
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

@@ -7,7 +7,6 @@ import { Icon } from "@iconify/react";
 import { SITE } from "@/data/constants";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Cog, Users, TrendingUp, Award } from "lucide-react";
 import { GrowthAnimation } from "@/components/shared/common/animatedBackgroundIcons";
 
 const fadeInUp = {
@@ -118,44 +117,46 @@ export default function AboutUsPage(): React.ReactElement {
   ] as const;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <main className="flex-1">
         <GrowthAnimation />
 
-        <section className="py-16 bg-gradient-to-r from-primary/10 to-accent/10 relative overflow-hidden">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-primary/10 to-accent/10 relative overflow-hidden">
           <motion.div
-            className="container mx-auto px-4 text-center relative z-10"
+            className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-gradient leading-tight">
               About {SITE.NAME}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
               {SITE.DESCRIPTION} We connect businesses worldwide with trusted
               suppliers and cutting-edge industrial equipment.
             </p>
           </motion.div>
         </section>
 
-        <section className="py-16 bg-muted/30 circuit-pattern px-4 sm:px-12 lg:px-20">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 bg-muted/30 circuit-pattern">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              className="text-center mb-12"
+              className="text-center mb-8 sm:mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4">Our Core Values</h2>
-              <p className="text-muted-foreground text-lg">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+                Our Core Values
+              </h2>
+              <p className="text-muted-foreground text-base sm:text-lg px-4">
                 The principles that drive our innovation
               </p>
             </motion.div>
 
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
               variants={staggerContainer}
               initial="initial"
               whileInView="animate"
@@ -165,23 +166,23 @@ export default function AboutUsPage(): React.ReactElement {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="iot-device"
+                  className="iot-device w-full"
                 >
                   <Card className="text-center hover:shadow-lg transition-shadow border-2 h-full hover-lift glass-morphism">
-                    <CardContent className="p-6">
+                    <CardContent className="p-4 sm:p-6">
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
                         <Icon
                           icon={value.icon}
-                          className="h-12 w-12 mx-auto text-primary mb-4 animate-circuit-pulse"
+                          className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-primary mb-4 animate-circuit-pulse"
                         />
                       </motion.div>
-                      <h3 className="text-xl font-semibold mb-3">
+                      <h3 className="text-lg sm:text-xl font-semibold mb-3">
                         {value.title}
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                         {value.description}
                       </p>
                     </CardContent>
@@ -192,50 +193,56 @@ export default function AboutUsPage(): React.ReactElement {
           </div>
         </section>
 
-        <section className="py-16 px-4 sm:px-12 lg:px-20">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              className="text-center mb-12"
+              className="text-center mb-8 sm:mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
                 Our Innovation Journey
               </h2>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-muted-foreground text-base sm:text-lg px-4">
                 Key milestones in our evolution story
               </p>
             </motion.div>
 
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
               {timeline.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="flex items-center mb-8 last:mb-0"
+                  className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6"
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="flex-shrink-0 flex items-center">
-                    <Badge variant="default" className="text-lg px-4 py-2 mr-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+                    <Badge
+                      variant="default"
+                      className="text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2 whitespace-nowrap"
+                    >
                       {item.year}
                     </Badge>
                     <motion.div
-                      className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center"
+                      className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0"
                       whileHover={{ scale: 1.1, rotate: 360 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <Icon icon={item.icon} className="h-6 w-6 text-primary" />
+                      <Icon
+                        icon={item.icon}
+                        className="h-5 w-5 sm:h-6 sm:w-6 text-primary"
+                      />
                     </motion.div>
                   </div>
-                  <div className="ml-6 flex-1">
-                    <div className="h-px bg-border flex-1 mr-6"></div>
-                  </div>
-                  <div className="flex-shrink-0 max-w-md">
-                    <p className="text-muted-foreground">{item.event}</p>
+
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      {item.event}
+                    </p>
                   </div>
                 </motion.div>
               ))}
@@ -243,23 +250,25 @@ export default function AboutUsPage(): React.ReactElement {
           </div>
         </section>
 
-        <section className="py-16 bg-muted/30 px-4 sm:px-12 lg:px-20">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              className="text-center mb-12"
+              className="text-center mb-8 sm:mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4">Meet Our Experts</h2>
-              <p className="text-muted-foreground text-lg">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+                Meet Our Experts
+              </h2>
+              <p className="text-muted-foreground text-base sm:text-lg px-4">
                 The innovators behind our success
               </p>
             </motion.div>
 
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
               variants={staggerContainer}
               initial="initial"
               whileInView="animate"
@@ -270,10 +279,10 @@ export default function AboutUsPage(): React.ReactElement {
                   key={index}
                   variants={fadeInUp}
                   whileHover={hoverEffect}
-                  className="iot-device"
+                  className="iot-device w-full"
                 >
                   <Card className="text-center hover:shadow-lg transition-shadow border-2 h-full hover-lift glass-morphism">
-                    <CardContent className="p-6">
+                    <CardContent className="p-4 sm:p-6">
                       <motion.div
                         whileHover={{ scale: 1.05, rotate: 2 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -281,16 +290,16 @@ export default function AboutUsPage(): React.ReactElement {
                         <img
                           src={member.image || "/placeholder.svg"}
                           alt={member.name}
-                          className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-primary/20"
+                          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto mb-4 object-cover border-4 border-primary/20"
                         />
                       </motion.div>
-                      <h3 className="text-xl font-semibold mb-1">
+                      <h3 className="text-lg sm:text-xl font-semibold mb-1">
                         {member.name}
                       </h3>
-                      <p className="text-primary font-medium mb-3">
+                      <p className="text-primary font-medium mb-3 text-sm sm:text-base">
                         {member.role}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                         {member.description}
                       </p>
                     </CardContent>
@@ -301,30 +310,32 @@ export default function AboutUsPage(): React.ReactElement {
           </div>
         </section>
 
-        <section className="py-16 bg-muted/30 circuit-pattern px-4 sm:px-12 lg:px-20">
-          <div className="container mx-auto px-4 text-center">
+        <section className="py-12 sm:py-16 bg-muted/30 circuit-pattern">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4">Ready to Innovate?</h2>
-              <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+                Ready to Innovate?
+              </h2>
+              <p className="text-muted-foreground text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-4 leading-relaxed">
                 Join thousands of businesses worldwide who trust us for their
                 industrial equipment needs.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
                 <motion.a
                   href="/products"
-                  className="btn-iot inline-flex items-center justify-center px-6 py-3 text-primary-foreground rounded-lg"
+                  className="btn-iot inline-flex items-center justify-center px-6 py-3 text-primary-foreground rounded-lg w-full sm:w-auto text-center"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   Browse Products
                 </motion.a>
                 <motion.button
-                  className="inline-flex items-center justify-center px-6 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors btn-hover-grow"
+                  className="inline-flex items-center justify-center px-6 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors btn-hover-grow w-full sm:w-auto"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => router.push("/contact-us")}

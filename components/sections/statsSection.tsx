@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { AnimatedStateSectionBackgroundIcons } from "../shared/common/animatedBackgroundIcons";
+import { stats } from "@/data/constants";
 
 export function StatsSection(): JSX.Element {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -11,41 +12,6 @@ export function StatsSection(): JSX.Element {
     Record<number, number | string>
   >({});
   const sectionRef = useRef<HTMLElement | null>(null);
-
-  const stats = [
-    {
-      icon: "mdi:factory",
-      value: 50000,
-      suffix: "+",
-      label: "Products Available",
-      color: "text-[#38b6ff]",
-      bgColor: "bg-[#38b6ff]/10",
-    },
-    {
-      icon: "mdi:account-group",
-      value: 10000,
-      suffix: "+",
-      label: "Verified Suppliers",
-      color: "text-[#38b6ff]",
-      bgColor: "bg-[#38b6ff]/10",
-    },
-    {
-      icon: "mdi:earth",
-      value: 100,
-      suffix: "+",
-      label: "Countries Served",
-      color: "text-[#38b6ff]",
-      bgColor: "bg-[#38b6ff]/10",
-    },
-    {
-      icon: "mdi:star",
-      value: 4.9,
-      suffix: "/5",
-      label: "Customer Rating",
-      color: "text-[#38b6ff]",
-      bgColor: "bg-[#38b6ff]/10",
-    },
-  ] as const;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
