@@ -28,7 +28,7 @@ import {
 import { motion } from "framer-motion";
 import productsData from "@/data/products.json";
 import { Icon } from "@iconify/react";
-import { Product } from "@/types/produt";
+import { Product } from "@/types/products";
 import { CommunicationAnimation } from "@/components/shared/common/animatedBackgroundIcons";
 
 type FormData = {
@@ -40,8 +40,6 @@ type FormData = {
   quantity: string;
   message: string;
 };
-
-
 
 export default function InquiryPage(): ReactElement {
   const [formData, setFormData] = useState<FormData>({
@@ -57,17 +55,17 @@ export default function InquiryPage(): ReactElement {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(
-    (productsData as Product[]).slice(0, 10)
+    (productsData as unknown as Product[]).slice(0, 10)
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
     if (term === "") {
-      setFilteredProducts((productsData as Product[]).slice(0, 10));
+      setFilteredProducts((productsData as unknown as Product[]).slice(0, 10));
     } else {
-      const filtered = (productsData as Product[]).filter((product: Product) =>
-        product.name.toLowerCase().includes(term)
+      const filtered = (productsData as unknown as Product[]).filter(
+        (product: Product) => product.name.toLowerCase().includes(term)
       );
       setFilteredProducts(filtered);
     }

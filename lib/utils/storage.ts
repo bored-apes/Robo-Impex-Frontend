@@ -21,6 +21,7 @@ export type WishlistItem = {
   name: string
   price: number
   image?: string
+  slug?: string
 }
 
 export type RecentlyViewedItem = {
