@@ -157,7 +157,7 @@ export default function WishlistPage() {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <Button className="flex-1" onClick={() => moveToCart(item)}>
+                  <Button className="flex-1 cursor-pointer" onClick={() => moveToCart(item)}>
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     Add to Cart
                   </Button>

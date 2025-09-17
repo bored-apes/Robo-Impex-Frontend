@@ -30,6 +30,7 @@ import productsData from "@/data/products.json";
 import { Icon } from "@iconify/react";
 import { Product } from "@/types/products";
 import { CommunicationAnimation } from "@/components/shared/common/animatedBackgroundIcons";
+import { CONTACT } from "@/data/constants";
 
 type FormData = {
   name: string;
@@ -345,32 +346,29 @@ export default function InquiryPage(): ReactElement {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    {officeLocation.map((office, index) => (
                       <motion.div
-                        key={index}
                         className="space-y-2 p-4 rounded-lg hover:bg-muted/50 transition-colors"
                         whileHover={{ scale: 1.01 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
                         <h4 className="font-semibold text-primary">
-                          {office.city}
+                          {CONTACT.CITY}
                         </h4>
                         <div className="space-y-1 text-sm text-muted-foreground">
                           <p className="flex items-start space-x-2">
                             <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                            <span>{office.address}</span>
+                            <span>{CONTACT.ADDRESS}</span>
                           </p>
                           <p className="flex items-center space-x-2">
                             <Phone className="h-4 w-4 flex-shrink-0" />
-                            <span>{office.phone}</span>
+                            <span>{CONTACT.PHONE}</span>
                           </p>
                           <p className="flex items-center space-x-2">
                             <Clock className="h-4 w-4 flex-shrink-0" />
-                            <span>{office.hours}</span>
+                            <span>{CONTACT.HOURS}</span>
                           </p>
                         </div>
                       </motion.div>
-                    ))}
                   </CardContent>
                 </Card>
               </motion.div>

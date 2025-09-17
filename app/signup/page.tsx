@@ -53,9 +53,6 @@ export default function SignupPage() {
       const response = await signupUser(formData);
 
       if (response.success) {
-        // Store token in localStorage
-        // tokenManager.setToken(response?.user?.token)
-
         showToast({
           type: "success",
           title: "Account Created!",
@@ -492,7 +489,7 @@ export default function SignupPage() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold btn-hover-grow transition-all duration-300"
+                    className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold btn-hover-grow transition-all duration-300 cursor-pointer"
                   >
                     {isLoading ? (
                       <>

@@ -132,3 +132,31 @@ export interface Variants {
   filmWidth?: string[];
   thickness?: string[];
 }
+
+
+export interface ProductResponse {
+  data: ProductData[]
+  pagination: Pagination
+}
+
+export interface ProductData {
+  id: number
+  name: string
+  description: string
+  type: string
+  category: string
+  base_price: number
+  gst_rate: number
+  min_order_qty: number
+  stock_quantity: number
+  image_url: any
+  status: string
+  created_at: string
+}
+
+export interface Pagination {
+  page: number
+  pageSize: number
+  total: number
+  totalPages: number
+}

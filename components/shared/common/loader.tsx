@@ -87,7 +87,7 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
             }}
           >
             <motion.img
-              src="/logo_transparent.png"
+              src="/logos/logo_transparent.png"
               alt="Loading..."
               className={cn(
                 "object-contain drop-shadow-lg", // Reduced drop-shadow-2xl to drop-shadow-lg
@@ -205,7 +205,7 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
 export function SectionLoader({
   text = "Loading...",
   className,
-  minHeight = "h-32", // Reduced from h-64
+  minHeight = "h-64", // Reduced from h-64
 }: {
   text?: string;
   className?: string;
@@ -252,7 +252,7 @@ export function InlineLoader({
       }}
     >
       <motion.img
-        src="/logo_transparent.png"
+        src="/logos/logo_transparent.png"
         alt="Loading..."
         className={cn("opacity-80", sizeMap[size])}
         animate={{
