@@ -76,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardContent className="p-4">
         <div className="mb-2">
           <Link
-            href={`/products/${product.slug}`}
+            href={`/products/${product.id}`}
             className="font-semibold hover:text-primary transition-colors line-clamp-2"
           >
             {product.name}
@@ -117,7 +117,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
       <CardFooter className="p-4 pt-0 flex gap-2">
         <Button
-          className="flex-1"
+          className="flex-1 cursor-pointer"
           onClick={handleAddToCart}
           disabled={!product.inStock}
         >

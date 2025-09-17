@@ -198,7 +198,7 @@ export function FeaturedProducts() {
                   <CardFooter className="p-4 pt-0 flex gap-3 relative z-10">
                     <Button
                       size="sm"
-                      className="flex-1 group bg-primary hover:bg-primary/90 text-sm electronics-glow"
+                      className="flex-1 group bg-primary hover:bg-primary/90 text-sm electronics-glow cursor-pointer"
                       onClick={() => handleAddToCart(product)}
                       disabled={!product.inStock}
                     >

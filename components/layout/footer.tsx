@@ -24,7 +24,7 @@ export function Footer() {
           <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             <Link href="/" className="flex items-center space-x-3 group">
               <img
-                src="/logo_transparent.png"
+                src="/logos/logo_transparent.png"
                 alt="Robo Impex Logo"
                 className="h-8 w-10 sm:h-10 sm:w-12 transition-all duration-300"
               />
@@ -45,9 +45,8 @@ export function Footer() {
               <h3 className="font-semibold text-base sm:text-lg text-foreground">Follow Us</h3>
               <div className="flex space-x-2 sm:space-x-3">
                 {[
-                  { icon: "mdi:linkedin", href: SOCIAL.LINKEDIN, color: "hover:text-blue-600" },
-                  { icon: "mdi:twitter", href: SOCIAL.TWITTER, color: "hover:text-blue-400" },
-                  { icon: "mdi:facebook", href: SOCIAL.FACEBOOK, color: "hover:text-blue-700" },
+                  { icon: "proicons:x-twitter", href: SOCIAL.TWITTER, color: "hover:text-gray-800 dark:hover:text-gray-200" },
+                  { icon: "mdi:instagram", href: SOCIAL.INSTAGRAM, color: "hover:text-pink-600" },
                   { icon: "mdi:youtube", href: SOCIAL.YOUTUBE, color: "hover:text-red-600" },
                 ].map((social, index) => (
                   <motion.div key={index} whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }}>

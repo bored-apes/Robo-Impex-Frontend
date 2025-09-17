@@ -2,41 +2,28 @@
 import type React from "react"
 import { useState, useEffect, useCallback, useRef } from "react"
 import type { ReactElement } from "react"
-
 import Link from "next/link"
-import {
-  ShoppingCart,
-  Heart,
-  Menu,
-  Search,
-  Zap,
-  LogIn,
-  Phone,
-  Mail,
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin,
-  Youtube,
-} from "lucide-react"
+import { ShoppingCart, Heart, Menu, Search, Zap, LogIn, Phone, Mail } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useTheme } from "@/components/theme-provider"
 import { cartStorage, wishlistStorage } from "@/lib/utils/storage"
 import { motion, AnimatePresence } from "framer-motion"
 import { CONTACT, SOCIAL, NAVIGATION } from "@/data/constants"
 
 type SocialLink = {
   name: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: string
   url: string
   color: string
 }
 
-export function Header(): ReactElement {
+export function Header() {
+  const { theme } = useTheme()
   const [cartCount, setCartCount] = useState<number>(0)
   const [wishlistCount, setWishlistCount] = useState<number>(0)
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
@@ -89,6 +76,25 @@ export function Header(): ReactElement {
     "mdi:cog",
   ]
 
+  // const logoPath = theme === "dark" ? "/logos/logo_transparent.png" : "/logos/logo_Light.png"
+    const logoPath = theme === "dark" ? "/logos/logo_transparent.png" : "/logos/logo_transparent.png"
+
+  const logoDimensions = {
+    notScrolled: {
+      height: "h-12",
+      width: "w-14",
+      smHeight: "sm:h-14",
+      smWidth: "sm:w-16",
+    },
+    scrolled: {
+      height: "h-10",
+      width: "w-12",
+      smHeight: "sm:h-12",
+      smWidth: "sm:w-14",
+    },
+    mobile: { height: "h-12", width: "w-14" },
+  }
+
   useEffect(() => {
     const newParticles = Array.from({ length: 12 }, (_, i) => ({
       id: i,
@@ -118,7 +124,7 @@ export function Header(): ReactElement {
     (event: MouseEvent) => {
       if (headerRef.current && !isScrolled) {
         const now = Date.now()
-        if (now - (handleMouseMove as any).lastCall < 32) return // 30fps throttling for header
+        if (now - (handleMouseMove as any).lastCall < 32) return 
         ;(handleMouseMove as any).lastCall = now
 
         const rect = headerRef.current.getBoundingClientRect()
@@ -127,7 +133,7 @@ export function Header(): ReactElement {
         setMousePosition({ x, y })
       }
     },
-    [isScrolled],
+    [isScrolled]
   )
 
   const handleKeyPress = useCallback(
@@ -144,7 +150,7 @@ export function Header(): ReactElement {
           speed: particle.speed * 2,
           angle: particle.angle + (Math.random() - 0.5) * Math.PI * 0.5,
           opacity: Math.min(0.8, particle.opacity * 1.5),
-        })),
+        }))
       )
 
       setFloatingObjects((prev) =>
@@ -153,7 +159,7 @@ export function Header(): ReactElement {
           rotation: obj.rotation + (Math.random() - 0.5) * 30,
           size: obj.size * 1.3,
           opacity: Math.min(0.7, obj.opacity * 1.5),
-        })),
+        }))
       )
 
       setTimeout(() => {
@@ -164,18 +170,18 @@ export function Header(): ReactElement {
             ...particle,
             speed: particle.speed * 0.5,
             opacity: particle.opacity * 0.8,
-          })),
+          }))
         )
         setFloatingObjects((prev) =>
           prev.map((obj) => ({
             ...obj,
             size: obj.size * 0.77,
             opacity: obj.opacity * 0.7,
-          })),
+          }))
         )
       }, 1000)
     },
-    [isScrolled],
+    [isScrolled]
   )
 
   useEffect(() => {
@@ -226,32 +232,20 @@ export function Header(): ReactElement {
 
   const socialLinks: SocialLink[] = [
     {
-      name: "Facebook",
-      icon: Facebook,
-      url: SOCIAL.FACEBOOK,
-      color: "text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300",
-    },
-    {
       name: "Instagram",
-      icon: Instagram,
+      icon: "mdi:instagram",
       url: SOCIAL.INSTAGRAM,
       color: "text-pink-600 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300",
     },
     {
       name: "Twitter",
-      icon: Twitter,
+      icon: "proicons:x-twitter",
       url: SOCIAL.TWITTER,
       color: "text-gray-800 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100",
     },
     {
-      name: "LinkedIn",
-      icon: Linkedin,
-      url: SOCIAL.LINKEDIN,
-      color: "text-blue-500 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-200",
-    },
-    {
       name: "YouTube",
-      icon: Youtube,
+      icon: "mdi:youtube",
       url: SOCIAL.YOUTUBE,
       color: "text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300",
     },
@@ -268,7 +262,7 @@ export function Header(): ReactElement {
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="w-full bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50 text-sm hidden lg:block backdrop-blur-md"
           >
-            <div className="absolute inset-0 bg-gradient-to-r bg-[#dfedf7]  dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" />
+            <div className="absolute inset-0 bg-gradient-to-r bg-[#dfedf7] dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#38b6ff]/3 via-transparent to-[#38b6ff]/3" />
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-1 relative z-10">
               <div className="flex items-center justify-between">
@@ -293,24 +287,21 @@ export function Header(): ReactElement {
                   </motion.div>
                 </div>
                 <div className="flex items-center space-x-2 lg:space-x-3">
-                  {socialLinks.map((social, index) => {
-                    const IconComponent = social.icon
-                    return (
-                      <motion.a
-                        key={social.name}
-                        href={social.url}
-                        className={`${social.color} transition-all duration-300 p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800`}
-                        whileHover={{ scale: 1.1, y: -1 }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        aria-label={social.name}
-                      >
-                        <IconComponent className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
-                      </motion.a>
-                    )
-                  })}
+                  {socialLinks.map((social, index) => (
+                    <motion.a
+                      key={social.name}
+                      href={social.url}
+                      className={`${social.color} transition-all duration-300 p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800`}
+                      whileHover={{ scale: 1.1, y: -1 }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      aria-label={social.name}
+                    >
+                      <Icon icon={social.icon} className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
+                    </motion.a>
+                  ))}
                 </div>
               </div>
             </div>
@@ -450,10 +441,12 @@ export function Header(): ReactElement {
           >
             <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0">
               <motion.img
-                src="/logo_transparent.png"
+                src={logoPath}
                 alt="Robo Impex Logo"
                 className={`transition-all duration-300 ${
-                  isScrolled ? "h-8 w-10 sm:h-10 sm:w-12" : "h-10 w-12 sm:h-12 sm:w-14"
+                  isScrolled
+                    ? `${logoDimensions.scrolled.height} ${logoDimensions.scrolled.width} ${logoDimensions.scrolled.smHeight} ${logoDimensions.scrolled.smWidth}`
+                    : `${logoDimensions.notScrolled.height} ${logoDimensions.notScrolled.width} ${logoDimensions.notScrolled.smHeight} ${logoDimensions.notScrolled.smWidth}`
                 }`}
                 whileHover={{ rotate: 5 }}
                 animate={{
@@ -690,7 +683,11 @@ export function Header(): ReactElement {
                 >
                   <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
                     <div className="flex items-center space-x-3">
-                      <img src="/logo_transparent.png" alt="Robo Impex Logo" className="h-8 w-10" />
+                      <img
+                        src={logoPath || "/placeholder.svg"}
+                        alt="Robo Impex Logo"
+                        className={`${logoDimensions.mobile.height} ${logoDimensions.mobile.width}`}
+                      />
                       <span className="font-bold text-lg bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/80 bg-clip-text text-transparent">
                         RoboImpex
                       </span>
@@ -735,19 +732,18 @@ export function Header(): ReactElement {
                         </div>
                       </div>
                       <div className="flex items-center space-x-3 mt-4 pt-3 border-t border-slate-200/50 dark:border-slate-700/50">
-                        {socialLinks.slice(0, 4).map((social) => {
-                          const IconComponent = social.icon
-                          return (
-                            <a
-                              key={social.name}
-                              href={social.url}
-                              className={`${social.color} p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300`}
-                              aria-label={social.name}
-                            >
-                              <IconComponent className="h-4 w-4" />
-                            </a>
-                          )
-                        })}
+                        {socialLinks.map((social) => (
+                          <a
+                            key={social.name}
+                            href={social.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${social.color} p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300`}
+                            aria-label={social.name}
+                          >
+                            <Icon icon={social.icon} className="h-4 w-4" />
+                          </a>
+                        ))}
                       </div>
                     </div>
 

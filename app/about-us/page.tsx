@@ -1,19 +1,17 @@
-"use client";
-import { Card, CardContent } from "@/components/ui/card";
-import type React from "react";
-
-import { Badge } from "@/components/ui/badge";
-import { Icon } from "@iconify/react";
-import { SITE } from "@/data/constants";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { GrowthAnimation } from "@/components/shared/common/animatedBackgroundIcons";
+"use client"
+import { Card, CardContent } from "@/components/ui/card"
+import type React from "react"
+import { Badge } from "@/components/ui/badge"
+import { Icon } from "@iconify/react"
+import { SITE } from "@/data/constants"
+import { motion } from "framer-motion"
+import Link from "next/link"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 },
-};
+}
 
 const staggerContainer = {
   animate: {
@@ -21,21 +19,18 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-};
+}
 
 const hoverEffect = {
   scale: 1.05,
   transition: { duration: 0.3 },
-};
+}
 
 export default function AboutUsPage(): React.ReactElement {
-  const router = useRouter();
-
   const timeline = [
     {
       year: "2010",
-      event:
-        "Company founded with a vision to revolutionize industrial equipment supply",
+      event: "Company founded with a vision to revolutionize industrial equipment supply",
       icon: "mdi:rocket-launch",
     },
     {
@@ -58,34 +53,30 @@ export default function AboutUsPage(): React.ReactElement {
       event: "Reached 10,000+ verified suppliers milestone",
       icon: "mdi:trophy",
     },
-  ] as const;
+  ] as const
 
   const values = [
     {
       icon: "mdi:shield-check",
       title: "Quality Assurance",
-      description:
-        "Every device undergoes rigorous quality checks and supplier verification.",
+      description: "Every device undergoes rigorous quality checks and supplier verification.",
     },
     {
       icon: "mdi:handshake",
       title: "Trust & Reliability",
-      description:
-        "Building long-term partnerships with suppliers and customers worldwide.",
+      description: "Building long-term partnerships with suppliers and customers worldwide.",
     },
     {
       icon: "mdi:rocket-launch",
       title: "Innovation",
-      description:
-        "Continuously improving our platform with cutting-edge technology.",
+      description: "Continuously improving our platform with cutting-edge technology.",
     },
     {
       icon: "mdi:earth",
       title: "Global Connectivity",
-      description:
-        "Connecting businesses across continents with seamless solutions.",
+      description: "Connecting businesses across continents with seamless solutions.",
     },
-  ] as const;
+  ] as const
 
   const team = [
     {
@@ -98,8 +89,7 @@ export default function AboutUsPage(): React.ReactElement {
       name: "Sarah Johnson",
       role: "CTO",
       image: "/placeholder.svg?height=200&width=200",
-      description:
-        "Technology leader with expertise in scalable platform development.",
+      description: "Technology leader with expertise in scalable platform development.",
     },
     {
       name: "Michael Chen",
@@ -111,16 +101,13 @@ export default function AboutUsPage(): React.ReactElement {
       name: "Emily Davis",
       role: "Head of Quality",
       image: "/placeholder.svg?height=200&width=200",
-      description:
-        "Quality assurance specialist with manufacturing background.",
+      description: "Quality assurance specialist with manufacturing background.",
     },
-  ] as const;
+  ] as const
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <main className="flex-1">
-        <GrowthAnimation />
-
         <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-primary/10 to-accent/10 relative overflow-hidden">
           <motion.div
             className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10"
@@ -132,8 +119,7 @@ export default function AboutUsPage(): React.ReactElement {
               About {SITE.NAME}
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-              {SITE.DESCRIPTION} We connect businesses worldwide with trusted
-              suppliers and cutting-edge industrial equipment.
+              {SITE.DESCRIPTION} We connect businesses worldwide with trusted suppliers and cutting-edge industrial equipment.
             </p>
           </motion.div>
         </section>
@@ -147,12 +133,8 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                Our Core Values
-              </h2>
-              <p className="text-muted-foreground text-base sm:text-lg px-4">
-                The principles that drive our innovation
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Core Values</h2>
+              <p className="text-muted-foreground text-base sm:text-lg px-4">The principles that drive our innovation</p>
             </motion.div>
 
             <motion.div
@@ -163,28 +145,14 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
             >
               {values.map((value, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  className="iot-device w-full"
-                >
+                <motion.div key={index} variants={fadeInUp} className="iot-device w-full">
                   <Card className="text-center hover:shadow-lg transition-shadow border-2 h-full hover-lift glass-morphism">
                     <CardContent className="p-4 sm:p-6">
-                      <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <Icon
-                          icon={value.icon}
-                          className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-primary mb-4 animate-circuit-pulse"
-                        />
+                      <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Icon icon={value.icon} className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-primary mb-4 animate-circuit-pulse" />
                       </motion.div>
-                      <h3 className="text-lg sm:text-xl font-semibold mb-3">
-                        {value.title}
-                      </h3>
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                        {value.description}
-                      </p>
+                      <h3 className="text-lg sm:text-xl font-semibold mb-3">{value.title}</h3>
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{value.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -202,12 +170,8 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                Our Innovation Journey
-              </h2>
-              <p className="text-muted-foreground text-base sm:text-lg px-4">
-                Key milestones in our evolution story
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Innovation Journey</h2>
+              <p className="text-muted-foreground text-base sm:text-lg px-4">Key milestones in our evolution story</p>
             </motion.div>
 
             <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
@@ -221,10 +185,7 @@ export default function AboutUsPage(): React.ReactElement {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-                    <Badge
-                      variant="default"
-                      className="text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2 whitespace-nowrap"
-                    >
+                    <Badge variant="default" className="text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2 whitespace-nowrap">
                       {item.year}
                     </Badge>
                     <motion.div
@@ -232,17 +193,11 @@ export default function AboutUsPage(): React.ReactElement {
                       whileHover={{ scale: 1.1, rotate: 360 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <Icon
-                        icon={item.icon}
-                        className="h-5 w-5 sm:h-6 sm:w-6 text-primary"
-                      />
+                      <Icon icon={item.icon} className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                     </motion.div>
                   </div>
-
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                      {item.event}
-                    </p>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{item.event}</p>
                   </div>
                 </motion.div>
               ))}
@@ -259,12 +214,8 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                Meet Our Experts
-              </h2>
-              <p className="text-muted-foreground text-base sm:text-lg px-4">
-                The innovators behind our success
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Meet Our Experts</h2>
+              <p className="text-muted-foreground text-base sm:text-lg px-4">The innovators behind our success</p>
             </motion.div>
 
             <motion.div
@@ -275,33 +226,19 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
             >
               {team.map((member, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  whileHover={hoverEffect}
-                  className="iot-device w-full"
-                >
+                <motion.div key={index} variants={fadeInUp} whileHover={hoverEffect} className="iot-device w-full">
                   <Card className="text-center hover:shadow-lg transition-shadow border-2 h-full hover-lift glass-morphism">
                     <CardContent className="p-4 sm:p-6">
-                      <motion.div
-                        whileHover={{ scale: 1.05, rotate: 2 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
+                      <motion.div whileHover={{ scale: 1.05, rotate: 2 }} transition={{ type: "spring", stiffness: 300 }}>
                         <img
                           src={member.image || "/placeholder.svg"}
                           alt={member.name}
                           className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto mb-4 object-cover border-4 border-primary/20"
                         />
                       </motion.div>
-                      <h3 className="text-lg sm:text-xl font-semibold mb-1">
-                        {member.name}
-                      </h3>
-                      <p className="text-primary font-medium mb-3 text-sm sm:text-base">
-                        {member.role}
-                      </p>
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                        {member.description}
-                      </p>
+                      <h3 className="text-lg sm:text-xl font-semibold mb-1">{member.name}</h3>
+                      <p className="text-primary font-medium mb-3 text-sm sm:text-base">{member.role}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{member.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -318,35 +255,34 @@ export default function AboutUsPage(): React.ReactElement {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                Ready to Innovate?
-              </h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Innovate?</h2>
               <p className="text-muted-foreground text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-4 leading-relaxed">
-                Join thousands of businesses worldwide who trust us for their
-                industrial equipment needs.
+                Join thousands of businesses worldwide who trust us for their industrial equipment needs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
-                <motion.a
-                  href="/products"
-                  className="btn-iot inline-flex items-center justify-center px-6 py-3 text-primary-foreground rounded-lg w-full sm:w-auto text-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Browse Products
-                </motion.a>
-                <motion.button
-                  className="inline-flex items-center justify-center px-6 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors btn-hover-grow w-full sm:w-auto"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => router.push("/contact-us")}
-                >
-                  Connect With Us
-                </motion.button>
+                <Link href="/products">
+                  <motion.button
+                    className="btn-iot inline-flex items-center justify-center px-6 py-3 text-[#fff] rounded-lg w-full sm:w-auto text-center cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Browse Products
+                  </motion.button>
+                </Link>
+                <Link href="/inquiry" className="inline-flex w-full sm:w-auto">
+                  <motion.div
+                    className="btn-connect inline-flex items-center justify-center px-6 py-3 text-[#fff] rounded-lg w-full sm:w-auto text-center cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Connect With Us
+                  </motion.div>
+                </Link>
               </div>
             </motion.div>
           </div>
         </section>
       </main>
     </div>
-  );
+  )
 }

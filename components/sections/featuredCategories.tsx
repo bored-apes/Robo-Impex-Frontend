@@ -181,7 +181,7 @@ export function FeaturedCategories(): JSX.Element {
                 </div>
 
                 <CardContent className="p-8 text-center relative">
-                  <Link href="/" className="block">
+                  <Link href="/products" className="block">
                     <div className="relative z-10">
                       <div className="mb-6 relative">
                         <motion.div
@@ -192,7 +192,6 @@ export function FeaturedCategories(): JSX.Element {
                           }}
                           transition={{ duration: 0.6 }}
                         >
-                          {/* Enhanced glow effect */}
                           <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150"></div>
                           <motion.div
                             className="absolute inset-0 bg-primary/20 rounded-full blur-lg opacity-0 group-hover:opacity-100"

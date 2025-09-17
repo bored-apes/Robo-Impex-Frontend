@@ -15,21 +15,22 @@ export const SITE = {
 };
 
 export const CONTACT = {
-  ADDRESS: "105, Dhara Arcade, Mota Varachha, Surat, Gujarat - 394101",
-  PHONE: "+91 77780 81772",
+  ADDRESS: "35, khodiyar krupa soc., shyamdham mandir, sarthana jakatnaka, surat - 395006",
+  PHONE: "+91 72028 73950",
   EMAIL: "info.roboimpex@gmail.com",
   SUPPORT_EMAIL: "support.roboimpex@gmail.com",
   SALES_EMAIL: "sales.roboimpex@gmail.com",
   BUSINESS_HOURS: "Mon-Sat: 9AM-6PM IST",
+  CITY: "Surat Office",
+  HOURS: "Mon-Sat: 9AM-6PM IST",
 };
 
 export const SOCIAL = {
-  FACEBOOK: "#",
-  TWITTER: "#",
-  LINKEDIN: "#",
-  YOUTUBE: "#",
-  INSTAGRAM: "#",
-};
+  TWITTER: "https://x.com/roboimpex",
+  INSTAGRAM: "https://www.instagram.com/roboimpex/",
+  WHATSAPP: "https://wa.me/7202873950",
+  YOUTUBE: "https://www.youtube.com/channel/UC4-BWaS5NxoUzGUiHoiOVtA",
+}
 
 export const FEATURES = {
   ENABLE_WISHLIST: true,

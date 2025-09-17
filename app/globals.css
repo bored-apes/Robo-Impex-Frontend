@@ -123,6 +123,7 @@
 
 /* Enhanced IoT Electronics Animations */
 @keyframes circuit-pulse {
+
   0%,
   100% {
     opacity: 0.4;
@@ -142,9 +143,11 @@
     transform: translateX(-100%);
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     transform: translateX(100%);
     opacity: 0;
@@ -152,11 +155,13 @@
 }
 
 @keyframes chip-glow {
+
   0%,
   100% {
     box-shadow: 0 0 5px rgba(56, 182, 255, 0.3);
     transform: scale(1);
   }
+
   50% {
     box-shadow: 0 0 20px rgba(56, 182, 255, 0.8), 0 0 30px rgba(56, 182, 255, 0.4);
     transform: scale(1.02);
@@ -165,19 +170,23 @@
 
 /* New interactive particle animations for background */
 @keyframes particle-float {
+
   0%,
   100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
     opacity: 0.6;
   }
+
   25% {
     transform: translateY(-20px) translateX(10px) rotate(90deg);
     opacity: 1;
   }
+
   50% {
     transform: translateY(-10px) translateX(-15px) rotate(180deg);
     opacity: 0.8;
   }
+
   75% {
     transform: translateY(15px) translateX(5px) rotate(270deg);
     opacity: 1;
@@ -189,9 +198,11 @@
     stroke-dasharray: 0 100;
     opacity: 0.3;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     stroke-dasharray: 100 0;
     opacity: 0.5;
@@ -202,9 +213,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -215,9 +228,11 @@
   0% {
     transform: translateY(0px) scale(1);
   }
+
   50% {
     transform: translateY(-30px) scale(1.1);
   }
+
   100% {
     transform: translateY(-15px) scale(1.05);
   }
@@ -227,9 +242,11 @@
   0% {
     transform: translateY(0px) scale(1);
   }
+
   50% {
     transform: translateY(30px) scale(1.1);
   }
+
   100% {
     transform: translateY(15px) scale(1.05);
   }
@@ -239,9 +256,11 @@
   0% {
     transform: translateX(0px) rotate(0deg);
   }
+
   50% {
     transform: translateX(-30px) rotate(-10deg);
   }
+
   100% {
     transform: translateX(-15px) rotate(-5deg);
   }
@@ -251,9 +270,11 @@
   0% {
     transform: translateX(0px) rotate(0deg);
   }
+
   50% {
     transform: translateX(30px) rotate(10deg);
   }
+
   100% {
     transform: translateX(15px) rotate(5deg);
   }
@@ -317,13 +338,11 @@
 
 .animate-background-shift {
   animation: background-shift 8s ease-in-out infinite;
-  background: linear-gradient(
-    -45deg,
-    rgba(56, 182, 255, 0.1),
-    rgba(14, 165, 233, 0.1),
-    rgba(56, 182, 255, 0.05),
-    rgba(0, 0, 0, 0.02)
-  );
+  background: linear-gradient(-45deg,
+      rgba(56, 182, 255, 0.1),
+      rgba(14, 165, 233, 0.1),
+      rgba(56, 182, 255, 0.05),
+      rgba(0, 0, 0, 0.02));
   background-size: 400% 400%;
 }
 
@@ -460,6 +479,7 @@
 
 /* Responsive Enhancements */
 @media (max-width: 768px) {
+
   .animate-floating-up,
   .animate-floating-down {
     animation-duration: 6s;
@@ -571,7 +591,7 @@
   border-color: var(--color-primary);
 }
 
-.form-field-glow:focus + .field-circuit {
+.form-field-glow:focus+.field-circuit {
   opacity: 1;
   animation: circuit-pulse 1s ease-in-out;
 }
@@ -585,8 +605,16 @@
 .btn-iot {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   transition: all 0.3s ease;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+}
+
+.btn-connect {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #161F33, #161F33);
+
 }
 
 .btn-iot::before {

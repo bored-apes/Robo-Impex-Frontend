@@ -1,8 +1,8 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductFilters } from "@/components/product/product-filters";
+import { SectionLoader } from "@/components/shared/common/loader"; 
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -18,110 +18,129 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Filter, X } from "lucide-react";
-import { PAGINATION } from "@/data/constants";
-import productsData from "@/data/products.json";
-import { Filters } from "@/types/products";
+import { Filter, X } from "lucide-react"; 
+import type { APIProduct, Filters } from "@/types/products";
 import { getProducts } from "@/lib/apiServices/product.service";
+import { Pagination } from "@/components/shared/common/pagination";
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(productsData);
-  const [productsInfo, setProductInfo] = useState();
-  const [filteredProducts, setFilteredProducts] = useState(productsData);
+  const [products, setProducts] = useState<APIProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState("popularity");
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [sortBy, setSortBy] = useState("newest");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     category: "",
     priceRange: [0, 100000],
     inStock: false,
     rating: 0,
   });
 
-  const productsPerPage = PAGINATION.PRODUCTS_PER_PAGE;
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + productsPerPage
-  );
+  const productsPerPage = 10;
+
+  const fetchProducts = async (page = 1) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = {
+        page,
+        pageSize: productsPerPage,
+        category: filters.category || undefined,
+        minPrice: filters.priceRange[0] || undefined,
+        maxPrice: filters.priceRange[1] || undefined,
+      };
+
+      const response = await getProducts(params);
+
+      if (response.success && response.data) {
+        setProducts(response.data.data);
+        setCurrentPage(response.data.pagination.page);
+        setTotalPages(response.data.pagination.totalPages);
+        setTotalItems(response.data.pagination.total);
+      } else {
+        setError(response.message || "Failed to fetch products");
+      }
+    } catch (err) {
+      setError("An error occurred while fetching products");
+      console.error("Error fetching products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFiltersChange = (newFilters: Filters) => {
     setFilters(newFilters);
+    setCurrentPage(1);
     if (window.innerWidth < 1024) {
       setIsFilterOpen(false);
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchProducts(page);
+  };
+
   useEffect(() => {
-    let filtered = [...products];
+    fetchProducts(1);
+  }, [filters]);
 
-    if (filters.category) {
-      filtered = filtered.filter((product) =>
-        product.categories.includes(filters.category)
-      );
-    }
+  const convertToDisplayProduct = (apiProduct: APIProduct) => ({
+    id: apiProduct.id.toString(),
+    slug: apiProduct.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, ""),
+    name: apiProduct.name,
+    descriptionShort: apiProduct.description,
+    descriptionLong: apiProduct.description,
+    price: apiProduct.base_price,
+    currency: "INR",
+    images: apiProduct.image_url
+      ? [apiProduct.image_url]
+      : ["/robotics-chip.jpg"],
+    categories: [apiProduct.category],
+    tags: [apiProduct.type],
+    rating: 4.5,
+    ratingCount: Math.floor(Math.random() * 100) + 10,
+    inStock: apiProduct.stock_quantity > 0,
+    brand: "RoboImpex",
+    modelNumber: `RI-${apiProduct.id}`,
+    warranty: "1 Year",
+    variants: {},
+    similar: [],
+  });
 
-    if (filters.inStock) {
-      filtered = filtered.filter((product) => product.inStock);
-    }
 
-    if (filters.rating > 0) {
-      filtered = filtered.filter((product) => product.rating >= filters.rating);
-    }
-
-    filtered = filtered.filter(
-      (product) =>
-        product.price >= filters.priceRange[0] &&
-        product.price <= filters.priceRange[1]
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-500 mb-2">Error</h2>
+          <p className="text-muted-foreground">{error}</p>
+          <Button onClick={() => fetchProducts(1)} className="mt-4">
+            Try Again
+          </Button>
+        </div>
+      </div>
     );
-
-    switch (sortBy) {
-      case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case "newest":
-        break;
-      default: // popularity
-        filtered.sort((a, b) => b.ratingCount - a.ratingCount);
-    }
-
-    setFilteredProducts(filtered);
-    setCurrentPage(1);
-  }, [filters, sortBy, products]);
-
-// useEffect(() => {
-//   const fetchProducts = async () => {
-
-//     const parems = { page: 1, pageSize: 20 };
-//     try {
-//       const response = await getProducts(parems);
-//       setProductInfo(response);  
-//     } catch (error) {
-//       console.error("Error fetching products:", error);
-//     }
-//   };
-//   fetchProducts();
-// }, []);
-
-
+  }
 
   return (
     <div className="min-h-screen flex flex-col px-4 sm:px-8 lg:px-12 xl:px-20">
       <main className="flex-1">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#38b6ff]">
-              All Products
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-primary">
+              Robotics & Machinery Parts
             </h1>
             <p className="text-muted-foreground">
-              Showing {filteredProducts.length} of {products.length} products
+              Showing {totalItems} high-quality electronic components and
+              robotics parts
             </p>
           </div>
 
@@ -137,7 +156,7 @@ export default function ProductsPage() {
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-muted-foreground">
-                    {filteredProducts.length} products found
+                    {totalItems} products found
                   </span>
                   <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                     <SheetTrigger asChild>
@@ -186,71 +205,45 @@ export default function ProductsPage() {
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="popularity">Most Popular</SelectItem>
+                    <SelectItem value="newest">Newest First</SelectItem>
                     <SelectItem value="price-low">
                       Price: Low to High
                     </SelectItem>
                     <SelectItem value="price-high">
                       Price: High to Low
                     </SelectItem>
-                    <SelectItem value="rating">Highest Rated</SelectItem>
-                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="popularity">Most Popular</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {currentProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              {loading ? (
+                <SectionLoader
+                  text="Loading your products..."
+                  minHeight="h-96"
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {products.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={convertToDisplayProduct(product)}
+                    />
+                  ))}
+                </div>
+              )}
 
-              {totalPages > 1 && (
-                <div className="flex justify-center items-center space-x-2 mt-12">
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </Button>
-
-                  {[...Array(totalPages)].map((_, index) => {
-                    const page = index + 1;
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1)
-                    ) {
-                      return (
-                        <Button
-                          key={page}
-                          variant={currentPage === page ? "default" : "outline"}
-                          onClick={() => setCurrentPage(page)}
-                        >
-                          {page}
-                        </Button>
-                      );
-                    } else if (
-                      page === currentPage - 2 ||
-                      page === currentPage + 2
-                    ) {
-                      return <span key={page}>...</span>;
-                    }
-                    return null;
-                  })}
-
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </Button>
+              {!loading && (
+                <div className="mt-12">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    showInfo={true}
+                    totalItems={totalItems}
+                    itemsPerPage={productsPerPage}
+                    className="justify-center"
+                  />
                 </div>
               )}
             </div>

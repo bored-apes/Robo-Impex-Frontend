@@ -31,7 +31,7 @@ export default function CartPage(): ReactElement {
     const timer = setTimeout(() => {
       setCartItems(cartStorage.getItems());
       setIsLoading(false);
-    }, 1000); // Reduced loading time for better UX
+    }, 5000); // Reduced loading time for better UX
 
     return () => clearTimeout(timer);
   }, []);
@@ -152,7 +152,7 @@ export default function CartPage(): ReactElement {
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8 bg-transparent"
+                              className="h-8 w-8 bg-transparent cursor-pointer"
                               onClick={() =>
                                 updateQuantity(
                                   item.id,
@@ -179,7 +179,7 @@ export default function CartPage(): ReactElement {
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8 bg-transparent"
+                              className="h-8 w-8 bg-transparent cursor-pointer"
                               onClick={() =>
                                 updateQuantity(
                                   item.id,
@@ -209,7 +209,7 @@ export default function CartPage(): ReactElement {
                             variant="ghost"
                             size="sm"
                             onClick={() => moveToWishlist(item)}
-                            className="text-xs"
+                            className="text-xs cursor-pointer"
                           >
                             <Heart className="h-3 w-3 mr-1" />
                             Save for Later
@@ -218,7 +218,7 @@ export default function CartPage(): ReactElement {
                             variant="ghost"
                             size="sm"
                             onClick={() => removeItem(item.id, item.variant)}
-                            className="text-destructive hover:text-destructive text-xs"
+                            className="text-destructive hover:text-destructive text-xs cursor-pointer"
                           >
                             <Trash2 className="h-3 w-3 mr-1" />
                             Remove
@@ -273,7 +273,7 @@ export default function CartPage(): ReactElement {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <Button className="w-full" size="lg">
+                    <Button className="w-full cursor-pointer" size="lg">
                       Proceed to Checkout
                     </Button>
                     <Button
