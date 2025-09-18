@@ -1,51 +1,68 @@
-"use client";
+// Updated frontend: components/product/product-card.tsx (added rating placeholders)
+"use client"
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Star, Heart, ShoppingCart, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { wishlistStorage, cartStorage } from "@/lib/utils/storage";
-import { CURRENCY } from "@/data/constants";
-import { ProductCardProps } from "@/types/products";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { Star, Heart, ShoppingCart, Eye, Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { wishlistStorage, cartStorage } from "@/lib/utils/storage"
+import { CURRENCY } from "@/data/constants"
+import type { ProductCardProps } from "@/types/products"
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false)
+  const [isAddingToCart, setIsAddingToCart] = useState(false)
+  const [isTogglingWishlist, setIsTogglingWishlist] = useState(false)
 
   useEffect(() => {
-    setIsInWishlist(wishlistStorage.isInWishlist(product.id));
-  }, [product.id]);
+    setIsInWishlist(wishlistStorage.isInWishlist(product.id))
+  }, [product.id])
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = async () => {
+    setIsTogglingWishlist(true)
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
     if (isInWishlist) {
-      wishlistStorage.removeItem(product.id);
-      setIsInWishlist(false);
+      wishlistStorage.removeItem(product.id)
+      setIsInWishlist(false)
     } else {
       const wishlistItem = {
         id: product.id,
         name: product.name,
         price: product.price,
         image: product.images[0],
-      };
-      wishlistStorage.addItem(wishlistItem);
-      setIsInWishlist(true);
+      }
+      wishlistStorage.addItem(wishlistItem)
+      setIsInWishlist(true)
     }
-  };
 
-  const handleAddToCart = () => {
+    setIsTogglingWishlist(false)
+  }
+
+  const handleAddToCart = async () => {
+    setIsAddingToCart(true)
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     const cartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.images[0],
       qty: 1,
-    };
-    cartStorage.addItem(cartItem);
-  };
+    }
+    cartStorage.addItem(cartItem)
+
+    setIsAddingToCart(false)
+  }
 
   return (
-    <Card className="product-card group">
+    <Card className="product-card group h-full">
       <div className="relative overflow-hidden">
         <img
           src={product.images[0] || "/placeholder.svg"}
@@ -63,17 +80,20 @@ export function ProductCard({ product }: ProductCardProps) {
           variant="ghost"
           size="icon"
           className={`absolute top-2 right-2 bg-background/80 hover:bg-background transition-colors ${
-            isInWishlist
-              ? "text-red-500"
-              : "text-muted-foreground hover:text-red-500"
+            isInWishlist ? "text-red-500" : "text-muted-foreground hover:text-red-500"
           }`}
           onClick={handleWishlistToggle}
+          disabled={isTogglingWishlist}
         >
-          <Heart className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`} />
+          {isTogglingWishlist ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Heart className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`} />
+          )}
         </Button>
       </div>
 
-      <CardContent className="p-4">
+      <CardContent className="p-4 flex-1 flex flex-col">
         <div className="mb-2">
           <Link
             href={`/products/${product.id}`}
@@ -83,9 +103,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </Link>
         </div>
 
-        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-          {product.descriptionShort}
-        </p>
+        <p className="text-muted-foreground text-sm mb-3 line-clamp-2 flex-1">{product.descriptionShort}</p>
 
         <div className="flex items-center mb-3">
           <div className="flex items-center">
@@ -93,9 +111,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <Star
                 key={i}
                 className={`h-4 w-4 ${
-                  i < Math.floor(product.rating)
-                    ? "text-yellow-400 fill-current"
-                    : "text-muted-foreground/30"
+                  i < Math.floor(product.rating || 0) ? "text-yellow-400 fill-current" : "text-muted-foreground/30"
                 }`}
               />
             ))}
@@ -119,10 +135,19 @@ export function ProductCard({ product }: ProductCardProps) {
         <Button
           className="flex-1 cursor-pointer"
           onClick={handleAddToCart}
-          disabled={!product.inStock}
+          disabled={!product.inStock || isAddingToCart}
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Add to Cart
+          {isAddingToCart ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Adding...
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Add to Cart
+            </>
+          )}
         </Button>
         <Button variant="outline" size="icon" asChild>
           <Link href={`/products/${product.slug}`}>
@@ -131,5 +156,5 @@ export function ProductCard({ product }: ProductCardProps) {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

@@ -1,52 +1,57 @@
-import type { RoleEnum } from "./enums";
+import type { RoleEnum } from "./enums"
 
 export interface User {
-  id: number;
-  firstname?: string;
-  lastname?: string;
-  email?: string;
-  mobile?: string;
-  password?: string;
-  role: RoleEnum;
-  created_at: Date;
+  id: number
+  firstname?: string
+  lastname?: string
+  email?: string
+  mobile?: string
+  password?: string
+  avatar?: string
+  role: RoleEnum
+  created_at: Date
 }
 
 export interface Passkey {
-  id: number;
-  userId: number;
-  credentialId: string;
-  publicKey: string;
-  counter: number;
-  createdAt: Date;
+  id: number
+  userId: number
+  credentialId: string
+  publicKey: string
+  counter: number
+  createdAt: Date
 }
 
 // Form types for login/signup
 export interface LoginFormData {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
+  email: string
+  password: string
+  rememberMe?: boolean
 }
-// types/user.ts
+
 export interface SignupData {
-  email: string;
-  password: string;
-  role?: string;
-  [key: string]: any; // For additional fields
+  email: string
+  password: string
+  role?: string
+  [key: string]: any // For additional fields
 }
 
 export interface LoginData {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface AuthResponse {
-  success: boolean;
-  message: string;
-  token?: string;
+  success: boolean
+  message: string
+  token?: string
   user?: {
-    id: string;
-    email: string;
-    role: string;
-    [key: string]: any;
-  };
+    id: number
+    firstname?: string
+    lastname?: string
+    email: string
+    mobile?: string
+    avatar?: string
+    role: string
+    [key: string]: any
+  }
 }

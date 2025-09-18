@@ -145,7 +145,7 @@ export function FeaturedCategories(): JSX.Element {
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
           {CATEGORIES.map((category, index) => (
             <motion.div
               key={category.id}
