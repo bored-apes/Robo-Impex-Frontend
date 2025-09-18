@@ -9,21 +9,28 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { cartStorage, wishlistStorage } from "@/lib/utils/storage"
 import { CURRENCY } from "@/data/constants"
-import type {ProductData} from "@/types/products"
+import type { APIProduct } from "@/types/products"
 import { getProductById, getProducts } from "@/lib/apiServices/product.service"
 import { SectionLoader } from "@/components/shared/common/loader"
 
 export default function ProductPage() {
   const params = useParams()
   const router = useRouter()
-  const [product, setProduct] = useState<ProductData | null>(null)
+  const [product, setProduct] = useState<APIProduct | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [isInWishlist, setIsInWishlist] = useState(false)
-  const [relatedProducts, setRelatedProducts] = useState<ProductData[]>([])
+  const [relatedProducts, setRelatedProducts] = useState<APIProduct[]>([])
   const [activeTab, setActiveTab] = useState("description")
+
+  const tabs = [
+    { id: "description", label: "Description" },
+    { id: "specifications", label: "Specifications" },
+    { id: "reviews", label: `Reviews (${Math.floor(Math.random() * 50) + 10})` },
+    { id: "shipping", label: "Shipping & Returns" },
+  ]
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -35,21 +42,31 @@ export default function ProductPage() {
       try {
         const productId = Array.isArray(params.id) ? params.id[0] : params.id
 
-        const response = await getProductById(productId) as any;
+        const response = await getProductById(productId)
         console.log("🚀 ~ fetchProduct ~ response:", response)
 
         if (response.success && response.data) {
-          setProduct(response.data)
-          setIsInWishlist(wishlistStorage.getItems().some((item) => item.id === response.data!.id.toString()))
+          const productData = response.data as APIProduct
+          setProduct(productData)
+          setIsInWishlist(wishlistStorage.getItems().some((item) => item.id === productData.id.toString()))
 
           const relatedResponse = await getProducts({
             pageSize: 4,
-            category: response.data.category,
-          }) as any;
+            category: productData.category || undefined,
+          })
           console.log("🚀 ~ fetchProduct ~ relatedResponse:", relatedResponse)
 
           if (relatedResponse.success && relatedResponse.data) {
-            const filtered = relatedResponse.data.data.filter((p : any) => p.id !== response.data!.id)
+            const responseData = relatedResponse.data as {
+              data: APIProduct[]
+              pagination: {
+                page: number
+                pageSize: number
+                total: number
+                totalPages: number
+              }
+            }
+            const filtered = responseData.data.filter((p) => p.id !== productData.id)
             setRelatedProducts(filtered.slice(0, 4))
           }
         } else {
@@ -64,15 +81,21 @@ export default function ProductPage() {
     }
 
     fetchProduct()
-  }, [params.slug])
+  }, [params.id])
+
+  useEffect(() => {
+    if (product) {
+      setQuantity(product.min_order_qty || 1)
+    }
+  }, [product])
 
   const handleAddToCart = () => {
     if (!product) return
 
     const cartItem = {
       id: product.id.toString(),
-      name: product.name,
-      price: product.base_price,
+      name: product.name || "Unknown Product",
+      price: product.base_price || 0,
       image: product.image_url || "/placeholder.svg?key=robotics-chip",
       qty: quantity,
     }
@@ -90,8 +113,8 @@ export default function ProductPage() {
     } else {
       const wishlistItem = {
         id: product.id.toString(),
-        name: product.name,
-        price: product.base_price,
+        name: product.name || "Unknown Product",
+        price: product.base_price || 0,
         image: product.image_url || "/placeholder.svg?key=robotics-chip",
       }
       wishlistStorage.addItem(wishlistItem)
@@ -103,8 +126,8 @@ export default function ProductPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: product?.name,
-          text: product?.description,
+          title: product?.name || "Product",
+          text: product?.description || "Check out this product",
           url: window.location.href,
         })
       } catch (err) {
@@ -120,30 +143,33 @@ export default function ProductPage() {
     return <SectionLoader text="Loading your product..." minHeight="h-96" />
   }
 
-
+  if (error || !product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Product Not Found</h2>
+          <p className="text-muted-foreground mb-6">{error || "The product you're looking for doesn't exist."}</p>
+          <Button onClick={() => router.push("/products")}>Back to Products</Button>
+        </div>
+      </div>
+    )
+  }
 
   const displayProduct = {
-    id: product?.id.toString(),
-    name: product?.name,
-    description: product?.description,
-    price: product?.base_price,
-    images: product?.image_url ? [product?.image_url] : ["/placeholder.svg?key=robotics-chip"],
-    category: product?.category,
-    type: product?.type,
-    inStock: product?.stock_quantity! > 0,
-    stockQuantity: product?.stock_quantity,
-    minOrderQty: product?.min_order_qty,
-    gstRate: product?.gst_rate,
+    id: product.id.toString(),
+    name: product.name || "Unknown Product",
+    description: product.description || "No description available",
+    price: product.base_price || 0,
+    images: product.image_url ? [product.image_url] : ["/placeholder.svg?key=robotics-chip"],
+    category: product.category || "Unknown",
+    type: product.type || "Unknown",
+    inStock: (product.stock_quantity || 0) > 0,
+    stockQuantity: product.stock_quantity || 0,
+    minOrderQty: product.min_order_qty || 1,
+    gstRate: product.gst_rate || 0,
     rating: 4.5, // Default rating since not in API
     ratingCount: Math.floor(Math.random() * 50) + 10, // Mock rating count
   }
-
-  const tabs = [
-    { id: "description", label: "Description" },
-    { id: "specifications", label: "Specifications" },
-    { id: "reviews", label: `Reviews (${displayProduct.ratingCount})` },
-    { id: "shipping", label: "Shipping & Returns" },
-  ]
 
   return (
     <div className="min-h-screen bg-background">
@@ -214,7 +240,7 @@ export default function ProductPage() {
             <div>
               <div className="flex items-center space-x-2 mb-2">
                 <Badge variant="secondary">{displayProduct.type}</Badge>
-                <Badge variant="outline" className="text-blue-600 border-blue-600">
+                <Badge variant="outline" className="text-primary border-primary">
                   {displayProduct.category}
                 </Badge>
                 {displayProduct.inStock ? (
@@ -253,7 +279,7 @@ export default function ProductPage() {
               <div className="flex items-baseline space-x-2 mb-2">
                 <span className="text-4xl font-bold text-primary">
                   {CURRENCY.SYMBOL}
-                  {displayProduct?.price?.toLocaleString()}
+                  {displayProduct.price.toLocaleString()}
                 </span>
                 <span className="text-sm text-muted-foreground">+ {displayProduct.gstRate}% GST</span>
               </div>
@@ -267,7 +293,7 @@ export default function ProductPage() {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center border rounded-lg">
                   <button
-                    onClick={() => setQuantity(Math.max(displayProduct.minOrderQty!, quantity - 1))}
+                    onClick={() => setQuantity(Math.max(displayProduct.minOrderQty, quantity - 1))}
                     className="p-2 hover:bg-muted transition-colors"
                   >
                     <Minus className="h-4 w-4" />
@@ -367,10 +393,10 @@ export default function ProductPage() {
                   <div>
                     <h3 className="font-semibold text-lg mb-3">Pricing</h3>
                     <ul className="space-y-2 text-muted-foreground">
-                      <li>• Base Price: ₹{displayProduct?.price?.toLocaleString()}</li>
+                      <li>• Base Price: ₹{displayProduct.price.toLocaleString()}</li>
                       <li>• GST Rate: {displayProduct.gstRate}%</li>
                       <li>
-                        • Total Price: ₹{(displayProduct?.price! * (1 + displayProduct?.gstRate! / 100)).toLocaleString()}
+                        • Total Price: ₹{(displayProduct.price * (1 + displayProduct.gstRate / 100)).toLocaleString()}
                       </li>
                     </ul>
                   </div>
@@ -402,7 +428,7 @@ export default function ProductPage() {
                 </div>
                 <div className="flex justify-between py-3 border-b">
                   <span className="font-medium">Status</span>
-                  <span className="text-muted-foreground">{product?.status}</span>
+                  <span className="text-muted-foreground">{product.status}</span>
                 </div>
               </div>
             )}
@@ -450,7 +476,7 @@ export default function ProductPage() {
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
                       src={relatedProduct.image_url || "/placeholder.svg?key=robotics-chip"}
-                      alt={relatedProduct.name}
+                      alt={relatedProduct.name || "Product"}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -464,7 +490,7 @@ export default function ProductPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
                         {CURRENCY.SYMBOL}
-                        {relatedProduct.base_price.toLocaleString()}
+                        {(relatedProduct.base_price || 0).toLocaleString()}
                       </span>
                       <div className="flex items-center">
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />

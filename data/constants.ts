@@ -1,18 +1,12 @@
-import { Headphones, Mail, MessageCircle, Phone } from "lucide-react";
+import { Headphones, Mail, MessageCircle, Phone } from "lucide-react"
 
 export const SITE = {
   NAME: "Robo Impex",
   URL: process.env.NEXT_PUBLIC_SITE_URL || "https://roboimpex.com",
-  DESCRIPTION:
-    "Leading B2B marketplace for industrial machinery, equipment, and manufacturing solutions",
-  KEYWORDS: [
-    "industrial machinery",
-    "B2B marketplace",
-    "manufacturing equipment",
-    "suppliers",
-  ],
+  DESCRIPTION: "Leading B2B marketplace for industrial machinery, equipment, and manufacturing solutions",
+  KEYWORDS: ["industrial machinery", "B2B marketplace", "manufacturing equipment", "suppliers"],
   TAGLINE: "Industrial Solutions",
-};
+}
 
 export const CONTACT = {
   ADDRESS: "35, khodiyar krupa soc., shyamdham mandir, sarthana jakatnaka, surat - 395006",
@@ -23,7 +17,7 @@ export const CONTACT = {
   BUSINESS_HOURS: "Mon-Sat: 9AM-6PM IST",
   CITY: "Surat Office",
   HOURS: "Mon-Sat: 9AM-6PM IST",
-};
+}
 
 export const SOCIAL = {
   TWITTER: "https://x.com/roboimpex",
@@ -38,59 +32,89 @@ export const FEATURES = {
   ENABLE_REVIEWS: true,
   ENABLE_COMPARISON: true,
   ENABLE_NEWSLETTER: true,
-};
+}
 
 export const CURRENCY = {
   CODE: "INR",
   SYMBOL: "₹",
   LOCALE: "en-IN",
-};
+}
 
 export const PAGINATION = {
   PRODUCTS_PER_PAGE: 12,
   REVIEWS_PER_PAGE: 5,
   ORDERS_PER_PAGE: 10,
-};
+}
 
 export const NAVIGATION = [
   { name: "Home", href: "/" },
   { name: "Products", href: "/products" },
   { name: "About", href: "/about-us" },
   { name: "Contact", href: "/contact-us" },
-];
+]
 
 export const CATEGORIES = [
   {
-    id: "plastic-machinery",
-    name: "Plastic Machinery",
-    icon: "mdi:factory",
-    description: "Injection molding, extrusion, and blow molding machines",
+    id: "Mobile",
+    name: "Mobile",
+    icon: "mdi:cellphone",
+    description: "Mobile phones and accessories",
   },
   {
-    id: "packaging-machinery",
-    name: "Packaging Machinery",
-    icon: "mdi:package-variant",
-    description: "Filling, sealing, and labeling machines",
+    id: "Laptop",
+    name: "Laptop",
+    icon: "mdi:laptop",
+    description: "Laptops and computer accessories",
   },
   {
-    id: "food-machinery",
-    name: "Food Machinery",
-    icon: "mdi:food",
-    description: "Food processing and packaging equipment",
+    id: "Headphone",
+    name: "Headphone",
+    icon: "mdi:headphones",
+    description: "Audio equipment and headphones",
   },
   {
-    id: "construction-machinery",
-    name: "Construction Machinery",
-    icon: "mdi:excavator",
-    description: "Heavy construction and earthmoving equipment",
+    id: "Watch",
+    name: "Watch",
+    icon: "mdi:watch",
+    description: "Smart watches and timepieces",
+  },
+]
+
+// export const PRODUCT_TYPES = [
+//   {
+//     id: "Electronic",
+//     name: "Electronic",
+//     description: "Electronic devices and components",
+//   },
+//   {
+//     id: "Mechanical",
+//     name: "Mechanical",
+//     description: "Mechanical parts and equipment",
+//   },
+//   {
+//     id: "Software",
+//     name: "Software",
+//     description: "Software products and licenses",
+//   },
+// ]
+
+export const PRODUCT_STATUS = [
+  {
+    id: "Active",
+    name: "Active",
+    description: "Currently available products",
   },
   {
-    id: "printing-machinery",
-    name: "Printing Machinery",
-    icon: "mdi:printer",
-    description: "Digital and offset printing equipment",
+    id: "Inactive",
+    name: "Inactive",
+    description: "Temporarily unavailable products",
   },
-];
+  {
+    id: "Discontinued",
+    name: "Discontinued",
+    description: "No longer available products",
+  },
+]
 
 export const heroContent = {
   badge: "Premium Electronics Components",
@@ -103,7 +127,7 @@ export const heroContent = {
     { value: "500+", label: "Arduino Kits", icon: "mdi:developer-board" },
     { value: "50+", label: "Sensors", icon: "mdi:radar" },
   ],
-};
+}
 
 export const stats = [
   {
@@ -138,7 +162,7 @@ export const stats = [
     color: "text-[#38b6ff]",
     bgColor: "bg-[#38b6ff]/10",
   },
-] as const;
+] as const
 
 export const contactMethods = [
   {
@@ -177,4 +201,31 @@ export const contactMethods = [
     color: "text-primary",
     bgColor: "bg-primary/10",
   },
+] as const
+
+
+export const PRODUCT_CATEGORIES = [
+  { id: "Semiconductor", name: "Semiconductor" },
+  { id: "IoT", name: "IoT" },
+  { id: "Robotics", name: "Robotics" },
+  { id: "Power", name: "Power" },
+  { id: "Industrial", name: "Industrial" },
+] as const;
+
+export const PRODUCT_TYPES = [
+  { id: "IC", name: "IC" },
+  { id: "Microcontroller", name: "Microcontroller" },
+  { id: "Sensor", name: "Sensor" },
+  { id: "Module", name: "Module" },
+  { id: "DevBoard", name: "DevBoard" },
+  { id: "PCB", name: "PCB" },
+  { id: "Connector", name: "Connector" },
+  { id: "PowerSupply", name: "PowerSupply" },
+  { id: "Display", name: "Display" },
+] as const;
+
+export const PRODUCT_STATUSES = [
+  { id: "Active", name: "Active" },
+  { id: "Inactive", name: "Inactive" },
+  { id: "OutOfStock", name: "Out of Stock" },
 ] as const;

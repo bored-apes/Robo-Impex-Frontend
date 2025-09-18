@@ -25,15 +25,9 @@ import { SectionLoader } from "@/components/shared/common/loader";
 
 export default function CartPage(): ReactElement {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
       setCartItems(cartStorage.getItems());
-      setIsLoading(false);
-    }, 5000); // Reduced loading time for better UX
-
-    return () => clearTimeout(timer);
   }, []);
 
   const updateQuantity = (
@@ -82,9 +76,7 @@ export default function CartPage(): ReactElement {
           <p className="text-muted-foreground">Review your selected items</p>
         </div>
 
-        {isLoading ? (
-          <SectionLoader text="Loading your cart..." minHeight="h-96" />
-        ) : cartItems.length === 0 ? (
+        { cartItems.length === 0 ? (
           <div className="empty-state rounded-xl p-16 text-center animate-fade-in-up">
             <div className="max-w-md mx-auto space-y-6">
               <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center animate-gentle-float">

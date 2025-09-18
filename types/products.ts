@@ -1,3 +1,5 @@
+// types/products.ts
+
 export interface Product {
   id: string;
   slug: string;
@@ -17,61 +19,59 @@ export interface Product {
   modelNumber: string;
   warranty: string;
   specifications?: Specifications;
-  variants: Variants;
+  variants?: Variants;
   similar: string[];
 }
 
 export interface Specifications {
-  screwDiameter: string;
-  automation: string;
-  computerized: string;
-  machineWeight: string;
-  certification: string;
-  dieHead: string;
-  screwLDRatio: string;
-  maxOutput: string;
-  mainMotor: string;
-  inverterBrand: string;
-  trademark: string;
-  transportPackage: string;
-  specification: string;
-  origin: string;
-  hsCode: string;
+  [key: string]: string;
 }
 
 export interface Variants {
-  model?: string[];
-  output?: string[];
-  layers?: string[];
-  width?: string[];
-  capacity?: string[];
-  filmWidth?: string[];
-  screwSize?: string[];
-  thickness?: string[];
-  clampingForce?: string[];
-  injectionVolume?: string[];
+  [key: string]: string[];
+}
+
+export enum ProductTypeEnum {
+  IC = "IC",
+  Microcontroller = "Microcontroller",
+  Sensor = "Sensor",
+  Module = "Module",
+  DevBoard = "DevBoard",
+  PCB = "PCB",
+  Connector = "Connector",
+  PowerSupply = "PowerSupply",
+  Display = "Display",
+}
+
+export enum ProductCategoryEnum {
+  Semiconductor = "Semiconductor",
+  IoT = "IoT",
+  Robotics = "Robotics",
+  Power = "Power",
+  Industrial = "Industrial",
+}
+
+export enum ProductStatusEnum {
+  Active = "Active",
+  Inactive = "Inactive",
+  OutOfStock = "OutOfStock",
 }
 
 export interface ProductResponse {
   success: boolean;
   message: string;
-  data?: Product | Product[] | null;
-  pagination?: {
-    currentPage: number;
-    pageSize: number;
-    totalPages: number;
-    totalCount: number;
-  };
-}
-
-export interface PaginationParams {
-  page?: number;
-  pageSize?: number;
-  search?: string;
-  category?: string;
-  tags?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  data?:
+    | {
+        data: APIProduct[];
+        pagination: {
+          page: number;
+          pageSize: number;
+          total: number;
+          totalPages: number;
+        };
+      }
+    | APIProduct
+    | null;
 }
 
 export interface ProductCardProps {
@@ -94,69 +94,46 @@ export interface WishlistItem {
   image: string;
 }
 
-export type Filters = {
-  category: string;
-  priceRange: number[];
+export interface Filters {
+  category: string[];
+  type: string[];
+  status: string[];
+  priceRange: [number, number];
   inStock: boolean;
-  rating: number;
-};
+}
+
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+  search?: string;
+  category?: string | string[];
+  type?: string | string[];
+  status?: string | string[];
+  minPrice?: number;
+  maxPrice?: number;
+  inStock?: boolean;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
 
 export type ProductFiltersProps = {
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 };
 
-export interface foundProduct {
-  id: string;
-  slug: string;
+export interface APIProduct {
+  id: number;
   name: string;
-  descriptionShort: string;
-  descriptionLong: string;
-  price: number;
-  currency: string;
-  images: string[];
-  categories: string[];
-  tags: string[];
-  rating: number;
-  ratingCount: number;
-  inStock: boolean;
-  brand: string;
-  modelNumber: string;
-  warranty: string;
-  variants: Variants;
-  similar: string[];
-  specifications?: Specifications; 
-}
-
-export interface Variants {
-  filmWidth?: string[];
-  thickness?: string[];
-}
-
-
-export interface ProductResponse {
-  data: ProductData[]
-  pagination: Pagination
-}
-
-export interface ProductData {
-  id: number
-  name: string
-  description: string
-  type: string
-  category: string
-  base_price: number
-  gst_rate: number
-  min_order_qty: number
-  stock_quantity: number
-  image_url: any
-  status: string
-  created_at: string
-}
-
-export interface Pagination {
-  page: number
-  pageSize: number
-  total: number
-  totalPages: number
+  description: string | null;
+  type: ProductTypeEnum | null;
+  category: ProductCategoryEnum | null;
+  base_price: number | null;
+  gst_rate: number | null;
+  min_order_qty: number | null;
+  stock_quantity: number | null;
+  image_url: string | null;
+  status: ProductStatusEnum;
+  created_at: string;
+  averageRating?: number;
+  ratingCount?: number;
 }

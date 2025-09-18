@@ -61,7 +61,7 @@ export default function SignupPage() {
             "Welcome to RoboImpex! Your account has been created successfully.",
         });
 
-        router.push("/");
+        router.push("/login");
       } else {
         showToast({
           type: "error",

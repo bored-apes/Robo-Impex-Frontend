@@ -26,8 +26,8 @@ import {
 import { AnimatedHeroSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons";
 import { useRouter } from "next/navigation";
 import { useCustomToast } from "@/components/shared/common/customToast";
-import { tokenManager } from "@/lib/tokenManager";
 import { loginUser } from "@/lib/apiServices/auth.service";
+import { useAuth } from "@/context/authContext";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,36 +39,37 @@ export default function LoginPage() {
 
   const { showToast } = useCustomToast();
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const response = await loginUser(formData);
+    const response = await loginUser(formData);
+      console.log("🚀 ~ handleSubmit ~ response:", response);
 
-      if (response.success && response.token) {
-        tokenManager.setToken(response.token);
+      if (response.success && response.token && response.user) {
+        login(response.token, response.user);
+
         showToast({
           type: "success",
-          title: "Login Successful!",
-          message: response.message || "Welcome back to RoboImpex",
+          title: "Welcome back!",
+          message: "You have been successfully logged in.",
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
+        router.push("/cart");
       } else {
         showToast({
           type: "error",
           title: "Login Failed",
-          message: response.message || "Invalid credentials",
+          message: "Invalid email or password. Please try again.",
         });
       }
     } catch (error) {
       showToast({
         type: "error",
-        title: "Login Error",
-        message: "Network error occurred. Please try again.",
+        title: "Connection Error",
+        message: "Unable to connect to server. Please try again.",
       });
     } finally {
       setIsLoading(false);
