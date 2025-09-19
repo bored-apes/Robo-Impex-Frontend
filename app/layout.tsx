@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import type { ReactNode, JSX } from "react";
 import { FloatingWhatsApp } from "@/components/shared/common/floatingWhatsapp";
 import { AuthProvider } from "@/context/authContext";
+import { FloatingScrollToTop } from "@/components/shared/common/floatingScrollToTop";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -42,8 +43,8 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/logos/logo_transparent.png", 
-    apple: "/logos/logo_transparent.png", 
+    icon: "/logos/logo_transparent.png",
+    apple: "/logos/logo_transparent.png",
     shortcut: "/logos/logo_transparent.png",
   },
 };
@@ -71,6 +72,7 @@ export default function RootLayout({
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>
+              <FloatingScrollToTop />
               <FloatingWhatsApp />
             </ToastProvider>
           </AuthProvider>

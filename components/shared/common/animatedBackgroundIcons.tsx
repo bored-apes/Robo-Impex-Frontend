@@ -556,7 +556,6 @@ export function AnimatedFooterSectionBackgroundIcons() {
 export function GrowthAnimation() {
   return (
     <div className="absolute inset-0 opacity-15 dark:opacity-25 pointer-events-none overflow-hidden">
-      {/* Growth trajectory lines */}
       <svg className="absolute inset-0 w-full h-full">
         <motion.path
           d="M 50 400 Q 200 300 350 200 T 650 100"
@@ -589,7 +588,6 @@ export function GrowthAnimation() {
         />
       </svg>
 
-      {/* Animated gears representing company machinery */}
       <motion.div
         className="absolute top-20 left-20 w-16 h-16"
         animate={{ rotate: 360 }}
@@ -624,7 +622,6 @@ export function GrowthAnimation() {
         <Cog className="w-full h-full text-primary opacity-50" />
       </motion.div>
 
-      {/* Team collaboration icons */}
       <motion.div
         className="absolute top-1/2 right-20 w-10 h-10"
         animate={{ y: [-5, 5], rotate: [0, 10, -10, 0] }}
@@ -656,7 +653,6 @@ export function GrowthAnimation() {
 export function ConnectivityAnimation() {
   return (
     <div className="absolute inset-0 opacity-10 dark:opacity-20 pointer-events-none overflow-hidden">
-      {/* Network nodes */}
       <motion.div
         className="absolute top-20 left-20 w-4 h-4 bg-primary rounded-full animate-network-pulse"
         animate={{ scale: [1, 1.2, 1] }}
@@ -686,7 +682,6 @@ export function ConnectivityAnimation() {
         }}
       />
 
-      {/* Connecting lines */}
       <svg className="absolute inset-0 w-full h-full">
         <motion.line
           x1="20%"
@@ -740,7 +735,6 @@ export function ConnectivityAnimation() {
         />
       </svg>
 
-      {/* IoT devices */}
       <motion.div
         className="absolute top-16 right-16 w-12 h-12"
         animate={{ rotate: 360, y: [-2, 2] }}
@@ -792,7 +786,6 @@ export function CommunicationAnimation() {
 
   return (
     <div className="absolute inset-0 opacity-15 dark:opacity-25 pointer-events-none overflow-hidden">
-      {/* Data packets flowing */}
       <motion.div
         className="absolute top-20 left-0 w-4 h-2 bg-primary rounded-full"
         animate={{ x: [0, width] }}
@@ -824,7 +817,6 @@ export function CommunicationAnimation() {
         }}
       />
 
-      {/* Communication towers */}
       <motion.div
         className="absolute top-16 right-20 w-12 h-12"
         animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
@@ -847,7 +839,6 @@ export function CommunicationAnimation() {
         <Icon icon="mdi:antenna" className="w-full h-full text-accent" />
       </motion.div>
 
-      {/* Circuit patterns */}
       <svg className="absolute inset-0 w-full h-full">
         <motion.circle
           cx="25%"
@@ -890,7 +881,6 @@ export function CommunicationAnimation() {
         />
       </svg>
 
-      {/* Rotating gears */}
       <motion.div
         className="absolute top-1/3 left-1/4 w-8 h-8"
         animate={{ rotate: 360 }}

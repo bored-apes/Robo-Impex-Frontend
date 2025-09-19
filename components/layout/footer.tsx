@@ -39,7 +39,7 @@ export function Footer() {
       />
       <AnimatedFooterSectionBackgroundIcons />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
           <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             <Link

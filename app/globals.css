@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to Sky Blue (#38b6ff) theme colors */
+  /* Sky Blue (#38b6ff) theme colors */
   --background: #ffffff;
   --foreground: #1f2937;
   --card: #f8fafc;
@@ -107,6 +107,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
   }
 
   body {
@@ -123,14 +126,11 @@
 
 /* Enhanced IoT Electronics Animations */
 @keyframes circuit-pulse {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.4;
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(56, 182, 255, 0.4);
   }
-
   50% {
     opacity: 1;
     transform: scale(1.05);
@@ -143,11 +143,9 @@
     transform: translateX(-100%);
     opacity: 0;
   }
-
   50% {
     opacity: 1;
   }
-
   100% {
     transform: translateX(100%);
     opacity: 0;
@@ -155,38 +153,29 @@
 }
 
 @keyframes chip-glow {
-
-  0%,
-  100% {
+  0%, 100% {
     box-shadow: 0 0 5px rgba(56, 182, 255, 0.3);
     transform: scale(1);
   }
-
   50% {
     box-shadow: 0 0 20px rgba(56, 182, 255, 0.8), 0 0 30px rgba(56, 182, 255, 0.4);
     transform: scale(1.02);
   }
 }
 
-/* New interactive particle animations for background */
 @keyframes particle-float {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
     opacity: 0.6;
   }
-
   25% {
     transform: translateY(-20px) translateX(10px) rotate(90deg);
     opacity: 1;
   }
-
   50% {
     transform: translateY(-10px) translateX(-15px) rotate(180deg);
     opacity: 0.8;
   }
-
   75% {
     transform: translateY(15px) translateX(5px) rotate(270deg);
     opacity: 1;
@@ -198,11 +187,9 @@
     stroke-dasharray: 0 100;
     opacity: 0.3;
   }
-
   50% {
     opacity: 1;
   }
-
   100% {
     stroke-dasharray: 100 0;
     opacity: 0.5;
@@ -213,26 +200,21 @@
   0% {
     background-position: 0% 50%;
   }
-
   50% {
     background-position: 100% 50%;
   }
-
   100% {
     background-position: 0% 50%;
   }
 }
 
-/* Arrow key responsive animations */
 @keyframes arrow-up-response {
   0% {
     transform: translateY(0px) scale(1);
   }
-
   50% {
     transform: translateY(-30px) scale(1.1);
   }
-
   100% {
     transform: translateY(-15px) scale(1.05);
   }
@@ -242,11 +224,9 @@
   0% {
     transform: translateY(0px) scale(1);
   }
-
   50% {
     transform: translateY(30px) scale(1.1);
   }
-
   100% {
     transform: translateY(15px) scale(1.05);
   }
@@ -256,11 +236,9 @@
   0% {
     transform: translateX(0px) rotate(0deg);
   }
-
   50% {
     transform: translateX(-30px) rotate(-10deg);
   }
-
   100% {
     transform: translateX(-15px) rotate(-5deg);
   }
@@ -270,13 +248,31 @@
   0% {
     transform: translateX(0px) rotate(0deg);
   }
-
   50% {
     transform: translateX(30px) rotate(10deg);
   }
-
   100% {
     transform: translateX(15px) rotate(5deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -327,7 +323,6 @@
   background-size: 200px 100%;
 }
 
-/* New animation classes for interactive background */
 .animate-particle-float {
   animation: particle-float 6s ease-in-out infinite;
 }
@@ -338,11 +333,7 @@
 
 .animate-background-shift {
   animation: background-shift 8s ease-in-out infinite;
-  background: linear-gradient(-45deg,
-      rgba(56, 182, 255, 0.1),
-      rgba(14, 165, 233, 0.1),
-      rgba(56, 182, 255, 0.05),
-      rgba(0, 0, 0, 0.02));
+  background: linear-gradient(-45deg, rgba(56, 182, 255, 0.1), rgba(14, 165, 233, 0.1), rgba(56, 182, 255, 0.05), rgba(0, 0, 0, 0.02));
   background-size: 400% 400%;
 }
 
@@ -416,7 +407,6 @@
   box-shadow: 0 0 30px rgba(56, 182, 255, 0.4), inset 0 0 30px rgba(56, 182, 255, 0.15);
 }
 
-/* Interactive background pattern with Sky Blue */
 .interactive-bg-pattern {
   background-image: radial-gradient(circle at 20% 20%, rgba(56, 182, 255, 0.1) 2px, transparent 2px),
     radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.1) 2px, transparent 2px),
@@ -426,7 +416,6 @@
   animation: background-shift 12s ease-in-out infinite;
 }
 
-/* Particle system for interactive background */
 .particle-system {
   position: absolute;
   width: 100%;
@@ -456,7 +445,6 @@
   animation-duration: 12s;
 }
 
-/* Arrow Key Interaction Styles */
 .arrow-interactive {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -477,25 +465,124 @@
   transform: translateX(15px);
 }
 
-/* Responsive Enhancements */
-@media (max-width: 768px) {
-
-  .animate-floating-up,
-  .animate-floating-down {
-    animation-duration: 6s;
-  }
-
-  .iot-card:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-muted);
+}
+
+.scrollbar-thumb-muted {
+  scrollbar-color: var(--color-muted-foreground) transparent;
+}
+
+.scrollbar-track-transparent {
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Swiper Component Styles */
+.product-swiper {
+  padding: 20px 0 40px 0;
+  overflow: visible;
+}
+
+.product-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+  align-items: stretch;
+}
+
+.product-swiper .swiper-pagination {
+  bottom: 0;
+  position: relative;
+  margin-top: 20px;
+}
+
+.product-swiper .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: var(--color-muted-foreground);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.product-swiper .swiper-pagination-bullet-active {
+  background: var(--color-primary);
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.product-swiper .swiper-pagination-bullet:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.swiper-button-prev-custom:hover,
+.swiper-button-next-custom:hover {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(56, 182, 255, 0.3);
+}
+
+.swiper-button-prev-custom:active,
+.swiper-button-next-custom:active {
+  transform: scale(0.95);
 }
 
 /* Industrial Design Effects */
@@ -540,29 +627,16 @@
   animation: gradient-shift 3s ease infinite;
 }
 
-/* Enhanced custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-muted);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-}
-
-/* Interactive IoT Elements */
-.iot-device {
-  position: relative;
-  transition: all 0.3s ease;
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Circuit Board Pattern */
@@ -591,7 +665,7 @@
   border-color: var(--color-primary);
 }
 
-.form-field-glow:focus+.field-circuit {
+.form-field-glow:focus + .field-circuit {
   opacity: 1;
   animation: circuit-pulse 1s ease-in-out;
 }
@@ -614,7 +688,6 @@
   overflow: hidden;
   transition: all 0.3s ease;
   background: linear-gradient(135deg, #161F33, #161F33);
-
 }
 
 .btn-iot::before {
@@ -637,441 +710,7 @@
   box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
 }
 
-/* Page Transition Effects */
-.page-transition {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.motion-item {
-  will-change: transform;
-}
-
-
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-:root {
-  /* Updated to Sky Blue (#38b6ff) theme colors */
-  --background: #ffffff;
-  --foreground: #1f2937;
-  --card: #f8fafc;
-  --card-foreground: #1f2937;
-  --popover: #ffffff;
-  --popover-foreground: #1f2937;
-  --primary: #38b6ff;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #374151;
-  --muted: #f1f5f9;
-  --muted-foreground: #6b7280;
-  --accent: #0ea5e9;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #e5e7eb;
-  --input: #ffffff;
-  --ring: rgba(56, 182, 255, 0.3);
-  --radius: 0.5rem;
-  --chart-1: #38b6ff;
-  --chart-2: #0ea5e9;
-  --chart-3: #1f2937;
-  --chart-4: #ef4444;
-  --chart-5: #f97316;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #1f2937;
-  --sidebar-primary: #f1f5f9;
-  --sidebar-primary-foreground: #374151;
-  --sidebar-accent: #38b6ff;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: rgba(56, 182, 255, 0.3);
-}
-
-.dark {
-  /* Enhanced dark mode with Sky Blue accents */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #111827;
-  --card-foreground: #ffffff;
-  --popover: #111827;
-  --popover-foreground: #ffffff;
-  --primary: #38b6ff;
-  --primary-foreground: #000000;
-  --secondary: #1f2937;
-  --secondary-foreground: #ffffff;
-  --muted: #1f2937;
-  --muted-foreground: #9ca3af;
-  --accent: #0ea5e9;
-  --accent-foreground: #ffffff;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: #374151;
-  --input: #1f2937;
-  --ring: rgba(56, 182, 255, 0.5);
-}
-
-@theme inline {
-  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
-  }
-}
-
-/* Enhanced custom scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-muted);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 2px;
-  transition: background-color 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-}
-
-/* Scrollbar utility classes */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-primary) var(--color-muted);
-}
-
-.scrollbar-thumb-muted {
-  scrollbar-color: var(--color-muted-foreground) transparent;
-}
-
-.scrollbar-track-transparent {
-  scrollbar-color: var(--color-primary) transparent;
-}
-
-.scrollbar-hide {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Custom scrollbar for filter sections */
-.filter-scroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.filter-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* Enhanced IoT Electronics Animations */
-@keyframes circuit-pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(56, 182, 255, 0.4);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(56, 182, 255, 0);
-  }
-}
-
-@keyframes chip-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(56, 182, 255, 0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(56, 182, 255, 0.8), 0 0 30px rgba(56, 182, 255, 0.4);
-    transform: scale(1.02);
-  }
-}
-
-@keyframes particle-float {
-  0%,
-  100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
-    opacity: 0.6;
-  }
-  25% {
-    transform: translateY(-20px) translateX(10px) rotate(90deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-10px) translateX(-15px) rotate(180deg);
-    opacity: 0.8;
-  }
-  75% {
-    transform: translateY(15px) translateX(5px) rotate(270deg);
-    opacity: 1;
-  }
-}
-
-@keyframes background-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* IoT Electronics Animation Classes */
-.animate-circuit-pulse {
-  animation: circuit-pulse 2s ease-in-out infinite;
-}
-
-.animate-chip-glow {
-  animation: chip-glow 3s ease-in-out infinite;
-}
-
-.animate-particle-float {
-  animation: particle-float 6s ease-in-out infinite;
-}
-
-.animate-background-shift {
-  animation: background-shift 8s ease-in-out infinite;
-  background: linear-gradient(
-    -45deg,
-    rgba(56, 182, 255, 0.1),
-    rgba(14, 165, 233, 0.1),
-    rgba(56, 182, 255, 0.05),
-    rgba(0, 0, 0, 0.02)
-  );
-  background-size: 400% 400%;
-}
-
-/* Enhanced Interactive Elements */
-.iot-card {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.iot-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
-  transition: left 0.5s;
-}
-
-.iot-card:hover::before {
-  left: 100%;
-}
-
-.iot-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
-}
-
-.electronics-glow {
-  box-shadow: 0 0 20px rgba(56, 182, 255, 0.3), inset 0 0 20px rgba(56, 182, 255, 0.1);
-}
-
-.dark .electronics-glow {
-  box-shadow: 0 0 30px rgba(56, 182, 255, 0.4), inset 0 0 30px rgba(56, 182, 255, 0.15);
-}
-
-/* Interactive background pattern with Sky Blue */
-.interactive-bg-pattern {
-  background-image: radial-gradient(circle at 20% 20%, rgba(56, 182, 255, 0.1) 2px, transparent 2px),
-    radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.1) 2px, transparent 2px),
-    linear-gradient(90deg, rgba(56, 182, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(rgba(56, 182, 255, 0.05) 1px, transparent 1px);
-  background-size: 60px 60px, 80px 80px, 20px 20px, 20px 20px;
-  animation: background-shift 12s ease-in-out infinite;
-}
-
-/* Particle system for interactive background */
-.particle-system {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(56, 182, 255, 0.6);
-  border-radius: 50%;
-  animation: particle-float 8s ease-in-out infinite;
-}
-
-.particle:nth-child(2n) {
-  background: rgba(14, 165, 233, 0.4);
-  animation-delay: -2s;
-  animation-duration: 10s;
-}
-
-.particle:nth-child(3n) {
-  background: rgba(56, 182, 255, 0.3);
-  animation-delay: -4s;
-  animation-duration: 12s;
-}
-
-/* Swiper Component Styles */
-.product-swiper {
-  padding: 20px 0 40px 0;
-  overflow: visible;
-}
-
-.product-swiper .swiper-slide {
-  height: auto;
-  display: flex;
-  align-items: stretch;
-}
-
-.product-swiper .swiper-pagination {
-  bottom: 0;
-  position: relative;
-  margin-top: 20px;
-}
-
-.product-swiper .swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-  background: var(--color-muted-foreground);
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-
-.product-swiper .swiper-pagination-bullet-active {
-  background: var(--color-primary);
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-.product-swiper .swiper-pagination-bullet:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-/* Custom navigation button styles */
-.swiper-button-prev-custom,
-.swiper-button-next-custom {
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
-  background: var(--color-background);
-  color: var(--color-foreground);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
-  z-index: 10;
-}
-
-.swiper-button-prev-custom:hover,
-.swiper-button-next-custom:hover {
-  background: var(--color-primary);
-  color: var(--color-primary-foreground);
-  border-color: var(--color-primary);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(56, 182, 255, 0.3);
-}
-
-.swiper-button-prev-custom:active,
-.swiper-button-next-custom:active {
-  transform: scale(0.95);
-}
-
-/* Responsive adjustments for Swiper */
-@media (max-width: 640px) {
-  .product-swiper {
-    padding: 10px 0 30px 0;
-  }
-
-  .swiper-button-prev-custom,
-  .swiper-button-next-custom {
-    width: 36px;
-    height: 36px;
-  }
-
-  .product-swiper .swiper-pagination-bullet {
-    width: 8px;
-    height: 8px;
-  }
-}
-
-/* Enhanced smooth scrolling utilities */
-/* Enhanced Smooth Scrolling */
+/* Smooth Scrolling */
 .smooth-scroll {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
@@ -1081,22 +720,14 @@
   scroll-margin-top: 100px;
 }
 
-/* Smooth transitions for all interactive elements */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow,
-    transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-/* Enhanced focus states for accessibility */
+/* Enhanced Focus States */
 *:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
-/* Improved button and interactive element animations */
+/* Button and Clickable Animations */
 button,
 .clickable {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1112,20 +743,11 @@ button:active,
   transform: translateY(0);
 }
 
-/* Loading states */
+/* Loading States */
 .loading-shimmer {
   background: linear-gradient(90deg, var(--color-muted) 0%, var(--color-muted-foreground) 50%, var(--color-muted) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /* Page Transition Effects */
@@ -1133,15 +755,8 @@ button:active,
   animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.motion-item {
+  will-change: transform;
 }
 
 /* Responsive Enhancements */
@@ -1160,6 +775,21 @@ button:active,
   .grid > * {
     min-width: 0;
   }
+
+  .product-swiper {
+    padding: 10px 0 30px 0;
+  }
+
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    width: 36px;
+    height: 36px;
+  }
+
+  .product-swiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1175,6 +805,15 @@ button:active,
   .space-y-4 > * + * {
     margin-top: 1rem;
   }
+
+  .animate-floating-up,
+  .animate-floating-down {
+    animation-duration: 6s;
+  }
+
+  .iot-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
 }
 
 @media (min-width: 1536px) {
@@ -1183,36 +822,10 @@ button:active,
   }
 }
 
-/* Industrial Design Effects */
-.glass-morphism {
-  backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .glass-morphism {
-  background-color: rgba(17, 25, 40, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.125);
-}
-
-.hover-lift {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.dark .hover-lift:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

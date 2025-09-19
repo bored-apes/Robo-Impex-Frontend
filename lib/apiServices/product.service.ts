@@ -5,16 +5,13 @@ export async function getProducts(params?: PaginationParams): Promise<ProductRes
   try {
     const queryParams = new URLSearchParams()
 
-    // Add basic pagination
     queryParams.append("page", String(params?.page || 1))
     queryParams.append("pageSize", String(params?.pageSize || 20))
 
-    // Add search parameter
     if (params?.search) {
       queryParams.append("search", params.search)
     }
 
-    // Handle array parameters for categories, types, and statuses
     if (params?.category && Array.isArray(params.category)) {
       params.category.forEach((cat) => queryParams.append("category", cat))
     } else if (params?.category && typeof params.category === "string") {
@@ -33,7 +30,6 @@ export async function getProducts(params?: PaginationParams): Promise<ProductRes
       queryParams.append("status", params.status)
     }
 
-    // Add price range parameters
     if (params?.minPrice !== undefined && params.minPrice > 0) {
       queryParams.append("minPrice", String(params.minPrice))
     }
@@ -41,12 +37,10 @@ export async function getProducts(params?: PaginationParams): Promise<ProductRes
       queryParams.append("maxPrice", String(params.maxPrice))
     }
 
-    // Add stock filter
     if (params?.inStock !== undefined) {
       queryParams.append("inStock", String(params.inStock))
     }
 
-    // Add sorting parameters
     if (params?.sortBy) {
       queryParams.append("sortBy", params.sortBy)
     }
@@ -54,7 +48,7 @@ export async function getProducts(params?: PaginationParams): Promise<ProductRes
       queryParams.append("sortOrder", params.sortOrder)
     }
 
-    const response = await api.get(`/products?${queryParams.toString()}`)
+    const response = await api.get(`/product?${queryParams.toString()}`)
 
     return {
       success: true,
@@ -72,7 +66,7 @@ export async function getProducts(params?: PaginationParams): Promise<ProductRes
 
 export async function getProductById(id: string): Promise<ProductResponse> {
   try {
-    const response = await api.get(`/products/${id}`)
+    const response = await api.get(`/product/${id}`)
     return {
       success: true,
       message: "Product fetched successfully",

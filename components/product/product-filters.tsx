@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
@@ -92,28 +92,36 @@ export function ProductFilters({
   }, [isMobile, onFiltersChange, onApply])
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Filters</h2>
-        <Button variant="ghost" size="sm" onClick={clearFilters}>
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">Filters</h2>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearFilters}
+          className="text-xs sm:text-sm h-8 sm:h-9"
+        >
           Clear All
         </Button>
       </div>
 
-      {/* Categories */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Categories</CardTitle>
+      <Card className="border-2 glass-morphism">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-sm sm:text-base">Categories</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-2 sm:space-y-3">
           {PRODUCT_CATEGORIES.map((category) => (
             <div key={category.id} className="flex items-center space-x-2">
               <Checkbox
                 id={`category-${category.id}`}
                 checked={isSelected("category", category.id)}
                 onCheckedChange={() => handleMultipleSelection("category", category.id)}
+                className="h-4 w-4 sm:h-5 sm:w-5"
               />
-              <Label htmlFor={`category-${category.id}`} className="text-sm cursor-pointer">
+              <Label
+                htmlFor={`category-${category.id}`}
+                className="text-xs sm:text-sm cursor-pointer"
+              >
                 {category.name}
               </Label>
             </div>
@@ -121,20 +129,20 @@ export function ProductFilters({
         </CardContent>
       </Card>
 
-      {/* Product Types */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Product Types</CardTitle>
+      <Card className="border-2 glass-morphism">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-sm sm:text-base">Product Types</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-2 sm:space-y-3">
           {PRODUCT_TYPES.map((type) => (
             <div key={type.id} className="flex items-center space-x-2">
               <Checkbox
                 id={`type-${type.id}`}
                 checked={isSelected("type", type.id)}
                 onCheckedChange={() => handleMultipleSelection("type", type.id)}
+                className="h-4 w-4 sm:h-5 sm:w-5"
               />
-              <Label htmlFor={`type-${type.id}`} className="text-sm cursor-pointer">
+              <Label htmlFor={`type-${type.id}`} className="text-xs sm:text-sm cursor-pointer">
                 {type.name}
               </Label>
             </div>
@@ -142,20 +150,23 @@ export function ProductFilters({
         </CardContent>
       </Card>
 
-      {/* Status */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Status</CardTitle>
+      <Card className="border-2 glass-morphism">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-sm sm:text-base">Status</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-2 sm:space-y-3">
           {PRODUCT_STATUSES.map((status) => (
             <div key={status.id} className="flex items-center space-x-2">
               <Checkbox
                 id={`status-${status.id}`}
                 checked={isSelected("status", status.id)}
                 onCheckedChange={() => handleMultipleSelection("status", status.id)}
+                className="h-4 w-4 sm:h-5 sm:w-5"
               />
-              <Label htmlFor={`status-${status.id}`} className="text-sm cursor-pointer">
+              <Label
+                htmlFor={`status-${status.id}`}
+                className="text-xs sm:text-sm cursor-pointer"
+              >
                 {status.name}
               </Label>
             </div>
@@ -163,13 +174,12 @@ export function ProductFilters({
         </CardContent>
       </Card>
 
-      {/* Price Range */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Price Range</CardTitle>
+      <Card className="border-2 glass-morphism">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-sm sm:text-base">Price Range</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Slider
               value={tempFilters.priceRange}
               onValueChange={(value: [number, number]) => handleFilterChange("priceRange", value)}
@@ -178,7 +188,7 @@ export function ProductFilters({
               step={1000}
               className="w-full"
             />
-            <div className="flex justify-between text-sm text-muted-foreground">
+            <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
               <span>₹{tempFilters.priceRange[0].toLocaleString()}</span>
               <span>₹{tempFilters.priceRange[1].toLocaleString()}</span>
             </div>
@@ -186,10 +196,9 @@ export function ProductFilters({
         </CardContent>
       </Card>
 
-      {/* Availability */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Availability</CardTitle>
+      <Card className="border-2 glass-morphism">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-sm sm:text-base">Availability</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2">
@@ -197,8 +206,9 @@ export function ProductFilters({
               id="inStock"
               checked={tempFilters.inStock}
               onCheckedChange={(checked: boolean) => handleFilterChange("inStock", checked)}
+              className="h-4 w-4 sm:h-5 sm:w-5"
             />
-            <Label htmlFor="inStock" className="text-sm cursor-pointer">
+            <Label htmlFor="inStock" className="text-xs sm:text-sm cursor-pointer">
               In Stock Only
             </Label>
           </div>
@@ -206,11 +216,18 @@ export function ProductFilters({
       </Card>
 
       {isMobile && (
-        <div className="space-y-3 pt-6 border-t">
-          <Button onClick={handleApply} className="w-full">
+        <div className="space-y-3 pt-4 sm:pt-6 border-t">
+          <Button
+            onClick={handleApply}
+            className="w-full h-9 sm:h-10 text-xs sm:text-sm"
+          >
             Apply Filters
           </Button>
-          <Button variant="outline" onClick={clearFilters} className="w-full bg-transparent">
+          <Button
+            variant="outline"
+            onClick={clearFilters}
+            className="w-full h-9 sm:h-10 bg-transparent text-xs sm:text-sm"
+          >
             Clear All
           </Button>
         </div>

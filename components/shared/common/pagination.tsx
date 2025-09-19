@@ -64,7 +64,6 @@ export function Pagination({
       )}
 
       <div className="flex items-center space-x-2">
-        {/* Previous Button */}
         <Button
           variant="outline"
           size="sm"
@@ -76,7 +75,6 @@ export function Pagination({
           Previous
         </Button>
 
-        {/* Page Numbers */}
         <div className="flex items-center space-x-1">
           {visiblePages.map((page, index) => {
             if (page === "...") {
@@ -109,7 +107,6 @@ export function Pagination({
           })}
         </div>
 
-        {/* Next Button */}
         <Button
           variant="outline"
           size="sm"
@@ -122,7 +119,6 @@ export function Pagination({
         </Button>
       </div>
 
-      {/* Page Info */}
       <div className="text-xs text-muted-foreground">
         Page {currentPage} of {totalPages}
       </div>

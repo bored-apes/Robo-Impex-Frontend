@@ -7,7 +7,6 @@ export async function signupUser(data: SignupData): Promise<AuthResponse> {
       ...data,
       role: "User",
     })
-    console.log("🚀 ~ signupUser ~ response:", response)
 
     return {
       success: true,
@@ -24,13 +23,12 @@ export async function signupUser(data: SignupData): Promise<AuthResponse> {
 export async function loginUser(data: LoginData): Promise<AuthResponse> {
   try {
     const response = await api.post("/auth/login", data)
-    console.log("🚀 ~ loginUser ~ response:", response)
 
     return {
       success: true,
       message: response.data.data.message || "Login successful",
       token: response.data.data.token,
-      user: response.data.data,
+      user: response.data.data.user,
     }
   } catch (error) {
     return {

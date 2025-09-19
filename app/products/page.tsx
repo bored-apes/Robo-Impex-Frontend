@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect, useCallback } from "react"
 import { ProductCard } from "@/components/product/product-card"
 import { ProductFilters } from "@/components/product/product-filters"
@@ -59,7 +60,6 @@ export default function ProductsPage() {
           ...(filters.inStock && { inStock: true }),
         }
 
-        // Add sorting
         switch (sortBy) {
           case "price-low":
             params.sortBy = "base_price"
@@ -173,25 +173,31 @@ export default function ProductsPage() {
     brand: "RoboImpex",
     modelNumber: `RI-${apiProduct.id}`,
     warranty: "1 Year",
-    rating: 4.5, // Placeholder
-    ratingCount: 120, // Placeholder
+    rating: 4.5,
+    ratingCount: 120,
     similar: [],
   })
 
   if (error && !loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
-          <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8">
+        <div className="text-center max-w-md sm:max-w-lg">
+          <AlertCircle className="h-12 sm:h-16 w-12 sm:w-16 text-destructive mx-auto mb-4 sm:mb-6" />
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2 sm:mb-4">
             Oops! Something went wrong
           </h2>
-          <p className="text-muted-foreground mb-6">{error}</p>
-          <div className="space-y-3">
-            <Button onClick={() => fetchProducts(1, true)} className="w-full">
+          <p className="text-muted-foreground text-sm sm:text-base mb-4 sm:mb-6">
+            {error}
+          </p>
+          <div className="space-y-3 sm:space-y-4">
+            <Button onClick={() => fetchProducts(1, true)} className="w-full h-10 sm:h-11 text-xs sm:text-sm">
               Try Again
             </Button>
-            <Button variant="outline" onClick={clearFilters} className="w-full bg-transparent">
+            <Button
+              variant="outline"
+              onClick={clearFilters}
+              className="w-full h-10 sm:h-11 bg-transparent text-xs sm:text-sm"
+            >
               Clear Filters & Retry
             </Button>
           </div>
@@ -201,77 +207,87 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col px-4 sm:px-6 md:px-8 lg:px-12">
       <main className="flex-1">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="mb-6 sm:mb-8">
-            <div className="text-center mb-4 sm:mb-6">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">Our Products</h1>
-              <p className="text-muted-foreground text-base sm:text-lg">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+          <div className="mb-6 sm:mb-8 md:mb-12">
+            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2 sm:mb-3">
+                Our Products
+              </h1>
+              <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-xl sm:max-w-2xl mx-auto">
                 Discover premium robotics and machinery components
               </p>
             </div>
 
-            <div className="max-w-2xl mx-auto mb-4 sm:mb-6">
-              <div className="flex gap-2">
+            <div className="max-w-xl sm:max-w-2xl mx-auto mb-4 sm:mb-6 md:mb-8">
+              <div className="flex gap-2 sm:gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 sm:h-5 sm:w-5" />
                   <Input
                     type="text"
                     placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-10 sm:h-11"
+                    className="pl-9 sm:pl-10 h-10 sm:h-11 text-xs sm:text-sm focus-ring"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-4 gap-6 lg:gap-8">
-            {/* Desktop and Tablet Filter Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             <div className="hidden md:block lg:col-span-1">
               <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
                 <ProductFilters filters={filters} onFiltersChange={handleFiltersChange} />
               </div>
             </div>
 
-            {/* Main Content Area */}
-            <div className="col-span-1 md:col-span-1 lg:col-span-4 xl:col-span-3">
-              <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 mb-6">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">{totalItems} products found</span>
+            <div className="col-span-1 lg:col-span-3">
+              <div className="flex flex-col space-y-3 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 mb-4 sm:mb-6 md:mb-8">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                    {totalItems} products found
+                  </span>
                   {((filters.category?.length ?? 0) > 0 ||
                     (filters.type?.length ?? 0) > 0 ||
                     (filters.status?.length ?? 0) > 0 ||
                     searchQuery) && (
-                    <Button variant="outline" size="sm" onClick={clearFilters} className="text-xs bg-transparent h-8">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="text-xs sm:text-sm h-8 sm:h-9 bg-transparent"
+                    >
                       Clear Filters
                     </Button>
                   )}
-                  {/* Mobile Filter Sheet */}
                   <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                     <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="md:hidden bg-transparent h-8">
-                        <Filter className="h-4 w-4 mr-2" />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="md:hidden bg-transparent h-8 sm:h-9 text-xs sm:text-sm"
+                      >
+                        <Filter className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
                         Filters
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-full sm:w-96 flex flex-col p-0 overflow-hidden">
-                      <SheetHeader className="flex-shrink-0 p-6 pb-4 border-b">
-                        <SheetTitle className="flex items-center justify-between text-lg">
+                    <SheetContent side="left" className="w-full sm:w-80 md:w-96 p-4 sm:p-6">
+                      <SheetHeader className="flex-shrink-0 pb-3 sm:pb-4 border-b">
+                        <SheetTitle className="flex items-center justify-between text-base sm:text-lg">
                           Filter Products
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsFilterOpen(false)}
-                            className="h-8 w-8 p-0"
+                            className="h-7 sm:h-8 w-7 sm:w-8 p-0"
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-4 w-4 sm:h-5 sm:w-5" />
                           </Button>
                         </SheetTitle>
                       </SheetHeader>
-                      <div className="flex-1 overflow-y-auto p-6 pt-4 scrollbar-hide">
+                      <div className="flex-1 overflow-y-auto pt-3 sm:pt-4 scrollbar-hide">
                         <ProductFilters
                           filters={filters}
                           onFiltersChange={() => {}}
@@ -286,27 +302,29 @@ export default function ProductsPage() {
 
                 <div className="w-full sm:w-auto">
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-48 h-10">
+                    <SelectTrigger className="w-full sm:w-40 md:w-48 h-9 sm:h-10 text-xs sm:text-sm">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                      <SelectItem value="price-low">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high">Price: High to Low</SelectItem>
+                      <SelectItem value="newest" className="text-xs sm:text-sm">Newest First</SelectItem>
+                      <SelectItem value="price-low" className="text-xs sm:text-sm">Price: Low to High</SelectItem>
+                      <SelectItem value="price-high" className="text-xs sm:text-sm">Price: High to Low</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               {loading ? (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <ProductGridSkeleton count={productsPerPage} />
                 </div>
               ) : products.length === 0 ? (
-                <div className="text-center py-12 sm:py-16 px-4">
-                  <Package className="h-16 sm:h-24 w-16 sm:w-24 text-muted-foreground mx-auto mb-4 sm:mb-6" />
-                  <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">No products found</h3>
-                  <p className="text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto text-sm sm:text-base">
+                <div className="text-center py-8 sm:py-12 md:py-16 px-4">
+                  <Package className="h-12 sm:h-16 md:h-20 w-12 sm:w-16 md:w-20 text-muted-foreground mx-auto mb-4 sm:mb-6" />
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground mb-2 sm:mb-3">
+                    No products found
+                  </h3>
+                  <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-4 sm:mb-6 max-w-md sm:max-w-lg mx-auto">
                     {searchQuery ||
                     (filters.category?.length ?? 0) > 0 ||
                     (filters.type?.length ?? 0) > 0 ||
@@ -318,14 +336,18 @@ export default function ProductsPage() {
                     (filters.category?.length ?? 0) > 0 ||
                     (filters.type?.length ?? 0) > 0 ||
                     (filters.status?.length ?? 0) > 0) && (
-                    <Button onClick={clearFilters} variant="outline" size="sm">
+                    <Button
+                      onClick={clearFilters}
+                      variant="outline"
+                      size="sm"
+                      className="h-8 sm:h-9 text-xs sm:text-sm"
+                    >
                       Clear All Filters
                     </Button>
                   )}
                 </div>
               ) : (
-                /* Improved responsive grid layout for better tablet and desktop display */
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={convertToDisplayProduct(product)} />
                   ))}
@@ -333,7 +355,7 @@ export default function ProductsPage() {
               )}
 
               {!loading && products.length > 0 && (
-                <div className="mt-8 sm:mt-12">
+                <div className="mt-6 sm:mt-8 md:mt-12">
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
