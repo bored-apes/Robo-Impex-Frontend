@@ -1,4 +1,3 @@
-// Updated frontend: components/product/product-card.tsx (added rating placeholders)
 "use client"
 
 import { useState, useEffect } from "react"
@@ -23,7 +22,6 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleWishlistToggle = async () => {
     setIsTogglingWishlist(true)
 
-    // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 300))
 
     if (isInWishlist) {
@@ -46,7 +44,6 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = async () => {
     setIsAddingToCart(true)
 
-    // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     const cartItem = {
@@ -62,68 +59,72 @@ export function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <Card className="product-card group h-full">
-      <div className="relative overflow-hidden">
+    <Card className="product-card group h-full hover:shadow-lg transition-all duration-300 hover-lift glass-morphism">
+      <div className="relative overflow-hidden rounded-t-lg">
         <img
           src={product.images[0] || "/placeholder.svg"}
           alt={product.name}
-          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute top-2 left-2">
+        <div className="absolute top-1 sm:top-1.5 left-1 sm:left-1.5">
           {product.inStock ? (
-            <Badge className="bg-green-500 text-white">In Stock</Badge>
+            <Badge className="bg-green-500 text-white text-xs sm:text-sm">In Stock</Badge>
           ) : (
-            <Badge variant="destructive">Out of Stock</Badge>
+            <Badge variant="destructive" className="text-xs sm:text-sm">
+              Out of Stock
+            </Badge>
           )}
         </div>
         <Button
           variant="ghost"
           size="icon"
-          className={`absolute top-2 right-2 bg-background/80 hover:bg-background transition-colors ${
+          className={`absolute top-1 sm:top-1.5 right-1 sm:right-1.5 bg-background/80 hover:bg-background transition-colors w-7 h-7 sm:w-8 sm:h-8 ${
             isInWishlist ? "text-red-500" : "text-muted-foreground hover:text-red-500"
           }`}
           onClick={handleWishlistToggle}
           disabled={isTogglingWishlist}
         >
           {isTogglingWishlist ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
           ) : (
-            <Heart className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`} />
+            <Heart className={`h-3 w-3 sm:h-4 sm:w-4 ${isInWishlist ? "fill-current" : ""}`} />
           )}
         </Button>
       </div>
 
-      <CardContent className="p-4 flex-1 flex flex-col">
-        <div className="mb-2">
+      <CardContent className="p-2 sm:p-3 md:p-4 flex-1 flex flex-col">
+        <div className="mb-1 sm:mb-2">
           <Link
             href={`/products/${product.id}`}
-            className="font-semibold hover:text-primary transition-colors line-clamp-2"
+            className="font-semibold hover:text-primary transition-colors line-clamp-2 text-xs sm:text-sm md:text-base"
           >
             {product.name}
           </Link>
         </div>
 
-        <p className="text-muted-foreground text-sm mb-3 line-clamp-2 flex-1">{product.descriptionShort}</p>
+        <p className="text-muted-foreground text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2 flex-1">
+          {product.descriptionShort}
+        </p>
 
-        <div className="flex items-center mb-3">
+        <div className="flex items-center mb-1 sm:mb-2">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-4 w-4 ${
+                className={`h-3 w-3 sm:h-4 sm:w-4 ${
                   i < Math.floor(product.rating || 0) ? "text-yellow-400 fill-current" : "text-muted-foreground/30"
                 }`}
               />
             ))}
           </div>
-          <span className="text-sm text-muted-foreground ml-2">
+          <span className="text-xs sm:text-sm text-muted-foreground ml-1 sm:ml-2">
             {product.rating} ({product.ratingCount})
           </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-xl font-semibold">
+            <span className="text-sm sm:text-base md:text-lg font-semibold">
               {CURRENCY.SYMBOL}
               {product.price.toLocaleString()}
             </span>
@@ -131,27 +132,32 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 flex gap-2">
+      <CardFooter className="p-2 sm:p-3 md:p-4 pt-0 flex gap-1 sm:gap-2">
         <Button
-          className="flex-1 cursor-pointer"
+          className="flex-1 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3 cursor-pointer"
           onClick={handleAddToCart}
           disabled={!product.inStock || isAddingToCart}
         >
           {isAddingToCart ? (
             <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 animate-spin" />
               Adding...
             </>
           ) : (
             <>
-              <ShoppingCart className="h-4 w-4 mr-2" />
+              <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Add to Cart
             </>
           )}
         </Button>
-        <Button variant="outline" size="icon" asChild>
-          <Link href={`/products/${product.slug}`}>
-            <Eye className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          asChild
+          className="w-8 h-8 sm:w-9 sm:h-9 bg-transparent"
+        >
+          <Link href={`/products/${product.id}`}>
+            <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
           </Link>
         </Button>
       </CardFooter>

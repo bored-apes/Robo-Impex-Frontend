@@ -1,25 +1,16 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import {
-  ShoppingCart,
-  Heart,
-  Menu,
-  Search,
-  Zap,
-  LogIn,
-  User,
-  LogOut,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { useTheme } from "@/components/theme-provider";
-import { cartStorage, wishlistStorage } from "@/lib/utils/storage";
-import { motion, AnimatePresence } from "framer-motion";
-import { NAVIGATION } from "@/data/constants";
+"use client"
+import { useState, useEffect, useRef } from "react"
+import Link from "next/link"
+import { ShoppingCart, Heart, Menu, Search, Zap, LogIn, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Sheet, SheetTrigger } from "@/components/ui/sheet"
+import { Input } from "@/components/ui/input"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { useTheme } from "@/components/theme-provider"
+import { cartStorage, wishlistStorage } from "@/lib/utils/storage"
+import { motion, AnimatePresence } from "framer-motion"
+import { NAVIGATION } from "@/data/constants"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,29 +18,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/context/authContext";
-import { useRouter, usePathname } from "next/navigation";
-import { TopBar } from "./hederSections/topBar";
-import { MobileMenu } from "./hederSections/mobileMenu";
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useAuth } from "@/context/authContext"
+import { useRouter, usePathname } from "next/navigation"
+import { TopBar } from "./hederSections/topBar"
+import { MobileMenu } from "./hederSections/mobileMenu"
+import { Icon } from "@iconify/react/dist/iconify.js"
 
 export function Header() {
-  const { theme } = useTheme();
-  const { user, isAuthenticated, logout, isLoading } = useAuth();
-  const [cartCount, setCartCount] = useState<number>(0);
-  const [wishlistCount, setWishlistCount] = useState<number>(0);
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
-  const [showTopBar, setShowTopBar] = useState<boolean>(true);
-  const [lastScrollY, setLastScrollY] = useState<number>(0);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const router = useRouter();
-  const pathname = usePathname();
-  const headerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme()
+  const { user, isAuthenticated, logout, isLoading } = useAuth()
+  const [cartCount, setCartCount] = useState<number>(0)
+  const [wishlistCount, setWishlistCount] = useState<number>(0)
+  const [isScrolled, setIsScrolled] = useState<boolean>(false)
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false)
+  const [showTopBar, setShowTopBar] = useState<boolean>(true)
+  const [lastScrollY, setLastScrollY] = useState<number>(0)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
+  const router = useRouter()
+  const pathname = usePathname()
+  const headerRef = useRef<HTMLDivElement>(null)
 
-  const logoPath = theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png";
+  const logoPath = theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png"
 
   const logoDimensions = {
     notScrolled: {
@@ -65,75 +57,75 @@ export function Header() {
       smWidth: "sm:w-38",
     },
     mobile: { height: "h-12", width: "w-42" },
-  };
+  }
 
   const getUserDisplayName = () => {
     if (!user) return "User";
-    if (user.firstname && user.lastname) {
-      return `${user.firstname} ${user.lastname}`;
+    if (user?.firstname && user?.lastname) {
+      return `${user?.firstname} ${user?.lastname}`
     }
-    if (user.firstname) return user.firstname;
-    if (user.email) return user.email.split("@")[0];
-    return "User";
-  };
+    if (user?.firstname) return user?.firstname
+    if (user?.email) return user?.email.split("@")[0]
+    return "User"
+  }
 
   const getUserAvatar = () => {
-    return "/images/default-avatar.jpg";
-  };
+    return "/images/default-avatar.jpg"
+  }
 
   const handleLogout = async () => {
-    await logout();
-    router.push("/");
-  };
+    await logout()
+    router.push("/")
+  }
 
   const isActiveLink = (href: string) => {
     if (href === "/") {
-      return pathname === href;
+      return pathname === href
     }
-    return pathname.startsWith(href);
-  };
+    return pathname.startsWith(href)
+  }
 
   useEffect(() => {
     const updateCounts = () => {
-      setCartCount(cartStorage.getItemCount());
-      setWishlistCount(wishlistStorage.getItems().length);
-    };
+      setCartCount(cartStorage.getItemCount())
+      setWishlistCount(wishlistStorage.getItems().length)
+    }
 
-    updateCounts();
+    updateCounts()
 
-    const handleStorageChange = () => updateCounts();
-    window.addEventListener("storage", handleStorageChange);
+    const handleStorageChange = () => updateCounts()
+    window.addEventListener("storage", handleStorageChange)
 
-    let ticking = false;
+    let ticking = false
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          setIsScrolled(currentScrollY > 0);
+          const currentScrollY = window.scrollY
+          setIsScrolled(currentScrollY > 0)
 
           if (currentScrollY === 0) {
-            setShowTopBar(true);
+            setShowTopBar(true)
           } else {
             if (currentScrollY > lastScrollY && currentScrollY > 80) {
-              setShowTopBar(false);
+              setShowTopBar(false)
             } else if (currentScrollY < lastScrollY || currentScrollY <= 80) {
-              setShowTopBar(true);
+              setShowTopBar(true)
             }
           }
-          setLastScrollY(currentScrollY);
-          ticking = false;
-        });
-        ticking = true;
+          setLastScrollY(currentScrollY)
+          ticking = false
+        })
+        ticking = true
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true })
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+      window.removeEventListener("storage", handleStorageChange)
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [lastScrollY])
 
   return (
     <>
@@ -152,16 +144,12 @@ export function Header() {
       >
         <div
           className={`absolute inset-0 bg-gradient-to-r from-[#38b6ff]/2 via-transparent to-[#38b6ff]/2 ${
-            isScrolled
-              ? "opacity-100 transition-opacity duration-100"
-              : "opacity-0 transition-opacity duration-100"
+            isScrolled ? "opacity-100 transition-opacity duration-100" : "opacity-0 transition-opacity duration-100"
           }`}
         />
         <div
           className={`absolute inset-0 bg-gradient-to-br from-slate-50/50 via-white/80 to-slate-50/50 dark:from-slate-900/50 dark:via-slate-800/80 dark:to-slate-900/50 ${
-            isScrolled
-              ? "opacity-100 transition-opacity duration-100"
-              : "opacity-0 transition-opacity duration-100"
+            isScrolled ? "opacity-100 transition-opacity duration-100" : "opacity-0 transition-opacity duration-100"
           }`}
         />
 
@@ -171,10 +159,7 @@ export function Header() {
               isScrolled ? "h-14 sm:h-16" : "h-16 sm:h-20"
             }`}
           >
-            <Link
-              href="/"
-              className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0"
-            >
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0">
               <motion.img
                 src={logoPath}
                 alt="Robo Impex Logo"
@@ -206,14 +191,35 @@ export function Header() {
                     {item.name}
                     <span
                       className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 ${
-                        isActiveLink(item.href)
-                          ? "w-full"
-                          : "w-0 group-hover:w-full"
+                        isActiveLink(item.href) ? "w-full" : "w-0 group-hover:w-full"
                       } transition-all duration-300`}
                     ></span>
                   </Link>
                 </motion.div>
               ))}
+              {isAuthenticated && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: NAVIGATION.length * 0.1 + 0.2, duration: 0.6 }}
+                >
+                  <Link
+                    href="/orders"
+                    className={`relative text-sm font-medium transition-all duration-300 group ${
+                      isActiveLink("/orders")
+                        ? "text-[#38b6ff]"
+                        : "text-slate-700 dark:text-slate-300 hover:text-[#38b6ff]"
+                    }`}
+                  >
+                    Orders
+                    <span
+                      className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 ${
+                        isActiveLink("/orders") ? "w-full" : "w-0 group-hover:w-full"
+                      } transition-all duration-300`}
+                    ></span>
+                  </Link>
+                </motion.div>
+              )}
             </nav>
 
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -233,9 +239,7 @@ export function Header() {
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
                     className={`pl-10 pr-4 py-2 w-48 xl:w-64 text-sm bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full focus:bg-white dark:focus:bg-slate-800 transition-all duration-300 ${
-                      isSearchFocused
-                        ? "ring-2 ring-[#38b6ff]/20 border-[#38b6ff]"
-                        : ""
+                      isSearchFocused ? "ring-2 ring-[#38b6ff]/20 border-[#38b6ff]" : ""
                     }`}
                   />
                 </div>
@@ -243,11 +247,7 @@ export function Header() {
 
               <ThemeToggle />
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="hidden sm:block"
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden sm:block">
                 <div className="relative">
                   <Button
                     variant="ghost"
@@ -279,11 +279,7 @@ export function Header() {
                 </div>
               </motion.div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="hidden sm:block"
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden sm:block">
                 <div className="relative">
                   <Button
                     variant="ghost"
@@ -337,20 +333,14 @@ export function Header() {
                 ) : isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         <Button
                           variant="ghost"
                           size="icon"
                           className="relative h-10 w-10 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-[#38b6ff]/10"
                         >
                           <Avatar className="h-8 w-8">
-                            <AvatarImage
-                              src={getUserAvatar()}
-                              alt={getUserDisplayName()}
-                            />
+                            <AvatarImage src={getUserAvatar() || "/placeholder.svg"} alt={getUserDisplayName()} />
                             <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                               <User className="h-4 w-4" />
                             </AvatarFallback>
@@ -368,22 +358,29 @@ export function Header() {
                           <p className="text-sm font-medium leading-none text-slate-900 dark:text-slate-100">
                             {getUserDisplayName()}
                           </p>
-                          <p className="text-xs leading-none text-slate-600 dark:text-slate-400">
-                            {user.email}
-                          </p>
+                          <p className="text-xs leading-none text-slate-600 dark:text-slate-400">{user.email}</p>
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
 
                       <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
-                      <DropdownMenuItem
-                        onClick={handleLogout}
-                        className="cursor-pointer p-2"
-                      >
-                        <LogOut className="mr-2 h-4 w-4 dark:text-[#fff]" />
-                        <span className="text-sm dark:text-[#fff]">
-                          Log out
-                        </span>
+                      <DropdownMenuItem onClick={() => router.push("/orders")} className="cursor-pointer p-2">
+                        <Icon
+                          icon="material-symbols-light:orders-outline-rounded"
+                          width="28"
+                          height="28"
+                          className="mr-2 w-12 h-12 dark:text-[#fff]"
+                        />{" "}
+                        <span className="text-sm dark:text-[#fff]">My Order</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleLogout} className="cursor-pointer p-2">
+                        <Icon
+                          icon="clarity:logout-line"
+                          width="28"
+                          height="28"
+                          className="mr-2 w-8 h-8 dark:text-[#fff]"
+                        />{" "}
+                        <span className="text-sm dark:text-[#fff]">Log out</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -402,15 +399,8 @@ export function Header() {
 
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild className="lg:hidden w-[80%]">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="hover:bg-[#38b6ff]/10 dark:hover:bg-[#38b6ff]/20"
-                    >
+                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                    <Button variant="ghost" size="icon" className="hover:bg-[#38b6ff]/10 dark:hover:bg-[#38b6ff]/20 cursor-pointer">
                       <Menu className="h-5 w-5" />
                     </Button>
                   </motion.div>
@@ -434,5 +424,5 @@ export function Header() {
         </div>
       </motion.header>
     </>
-  );
+  )
 }

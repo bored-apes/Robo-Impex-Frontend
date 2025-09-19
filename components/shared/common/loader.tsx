@@ -11,17 +11,17 @@ interface LoaderProps {
 
 export function Loader({ size = "md", className, text }: LoaderProps) {
   const sizeClasses = {
-    sm: "w-8 h-8", // Reduced from w-16 h-16
-    md: "w-12 h-12", // Reduced from w-24 h-24
-    lg: "w-16 h-16", // Reduced from w-32 h-32
-    xl: "w-20 h-20", // Reduced from w-40 h-40
+    sm: "w-8 h-8",
+    md: "w-12 h-12",
+    lg: "w-16 h-16",
+    xl: "w-20 h-20",
   };
 
   const textSizeClasses = {
-    sm: "text-xs", // Reduced from text-sm
-    md: "text-sm", // Reduced from text-base
-    lg: "text-base", // Reduced from text-lg
-    xl: "text-lg", // Reduced from text-xl
+    sm: "text-xs",
+    md: "text-sm",
+    lg: "text-base",
+    xl: "text-lg",
   };
 
   return (
@@ -32,11 +32,10 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
       )}
     >
       {" "}
-      {/* Reduced space-y-8 to space-y-4 */}
       <div className="relative">
         <motion.div
           className={cn(
-            "border-2 rounded-full", // Reduced border-4 to border-2
+            "border-2 rounded-full",
             "border-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400",
             "bg-clip-border",
             sizeClasses[size]
@@ -157,7 +156,6 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
       {text && (
         <motion.div className="text-center space-y-2">
           {" "}
-          {/* Reduced space-y-3 to space-y-2 */}
           <motion.p
             className={cn(
               "font-bold tracking-wider bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent",
@@ -165,7 +163,7 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
             )}
             animate={{
               opacity: [0.7, 1, 0.7],
-              scale: [1, 1.01, 1], // Reduced 1.02 to 1.01
+              scale: [1, 1.01, 1], 
             }}
             transition={{
               duration: 2.5,
@@ -177,7 +175,6 @@ export function Loader({ size = "md", className, text }: LoaderProps) {
           </motion.p>
           <motion.div className="flex justify-center space-x-1">
             {" "}
-            {/* Reduced space-x-2 to space-x-1 */}
             {[...Array(5)].map((_, i) => (
               <motion.div
                 key={i}
@@ -223,7 +220,6 @@ export function SectionLoader({
       transition={{ duration: 0.3 }}
     >
       <Loader size="md" text={text} />{" "}
-      {/* Changed from size="lg" to size="md" */}
     </motion.div>
   );
 }

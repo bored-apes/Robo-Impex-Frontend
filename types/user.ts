@@ -21,7 +21,6 @@ export interface Passkey {
   createdAt: Date
 }
 
-// Form types for login/signup
 export interface LoginFormData {
   email: string
   password: string
@@ -32,7 +31,7 @@ export interface SignupData {
   email: string
   password: string
   role?: string
-  [key: string]: any // For additional fields
+  [key: string]: any 
 }
 
 export interface LoginData {

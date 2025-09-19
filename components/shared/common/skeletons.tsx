@@ -1,7 +1,12 @@
-"use client"
+"use client";
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function ProductCardSkeleton() {
   return (
@@ -38,7 +43,7 @@ export function ProductCardSkeleton() {
         <Skeleton className="w-9 h-9 bg-muted" />
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
@@ -48,7 +53,7 @@ export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
         <ProductCardSkeleton key={i} />
       ))}
     </div>
-  )
+  );
 }
 
 export function CartItemSkeleton() {
@@ -84,7 +89,7 @@ export function CartItemSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function WishlistItemSkeleton() {
@@ -108,7 +113,7 @@ export function WishlistItemSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function HeaderSkeleton() {
@@ -135,7 +140,7 @@ export function HeaderSkeleton() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
 export function FiltersSkeleton() {
@@ -172,5 +177,52 @@ export function FiltersSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+export function OrderCardSkeleton() {
+  return (
+    <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-[#38b6ff]/30 overflow-hidden">
+      <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex items-center gap-2 sm:gap-3">
+              <Skeleton className="w-8 sm:w-10 h-8 sm:h-10 rounded-full" />
+              <div className="min-w-0 flex-1">
+                <Skeleton className="h-3 sm:h-4 w-16 sm:w-20 mb-1" />
+                <Skeleton className="h-3 sm:h-4 w-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="h-px bg-muted/50" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
+          <div className="space-y-1.5 sm:space-y-2">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex justify-between">
+                <Skeleton className="h-3 sm:h-4 w-16 sm:w-20" />
+                <Skeleton className="h-3 sm:h-4 w-12 sm:w-16" />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-1.5 sm:space-y-2">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="flex justify-between">
+                <Skeleton className="h-3 sm:h-4 w-20 sm:w-24" />
+                <Skeleton className="h-3 sm:h-4 w-16 sm:w-20" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:items-center sm:justify-between sm:flex-row pt-3 sm:pt-4 gap-2 sm:gap-0">
+          <Skeleton className="h-3 sm:h-4 w-32 sm:w-40" />
+          <Skeleton className="h-8 sm:h-9 w-20 sm:w-24 rounded-md self-start sm:self-auto" />
+        </div>
+      </CardContent>
+    </Card>
+  );
 }

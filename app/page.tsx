@@ -14,7 +14,6 @@ export default function HomePage(): JSX.Element {
         <StatsSection />
         <NewsletterSection />
       </div>
-      {/* <ScrollToTop /> */}
     </div>
   );
 }

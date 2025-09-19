@@ -47,7 +47,10 @@ export function StatsSection(): JSX.Element {
   }, [isVisible]);
 
   return (
-    <section ref={sectionRef as any} className="py-20 relative overflow-hidden">
+    <section
+      ref={sectionRef as any}
+      className="py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 relative overflow-hidden"
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-black" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#38b6ff]/5 via-transparent to-[#38b6ff]/5" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,182,255,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(56,182,255,0.15),transparent_50%)]" />
@@ -55,23 +58,23 @@ export function StatsSection(): JSX.Element {
 
       <AnimatedStateSectionBackgroundIcons />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
             Trusted by Industry Leaders
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl sm:max-w-3xl mx-auto leading-relaxed">
             Join thousands of businesses worldwide who trust us for their
             industrial equipment needs and experience unmatched quality
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -81,23 +84,23 @@ export function StatsSection(): JSX.Element {
               className="text-center group cursor-pointer"
             >
               <motion.div
-                className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#38b6ff]/10 to-[#38b6ff]/20 dark:from-[#38b6ff]/20 dark:to-[#38b6ff]/30 backdrop-blur-sm mb-6 border border-[#38b6ff]/20 dark:border-[#38b6ff]/30 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#38b6ff]/25 transition-all duration-300"
+                className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#38b6ff]/10 to-[#38b6ff]/20 dark:from-[#38b6ff]/20 dark:to-[#38b6ff]/30 backdrop-blur-sm mb-4 sm:mb-6 border border-[#38b6ff]/20 dark:border-[#38b6ff]/30 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#38b6ff]/25 transition-all duration-300"
                 whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
                 transition={{ duration: 0.3 }}
               >
                 <Icon
                   icon={stat.icon}
-                  className="h-10 w-10 text-[#38b6ff] group-hover:animate-pulse"
+                  className="h-8 w-8 sm:h-10 sm:w-10 text-[#38b6ff] group-hover:animate-pulse"
                 />
               </motion.div>
               <motion.div
-                className="text-4xl md:text-5xl font-bold mb-3 text-gray-900 dark:text-white group-hover:scale-105 transition-transform duration-300"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 text-gray-900 dark:text-white group-hover:scale-105 transition-transform duration-300"
                 whileHover={{ scale: 1.05 }}
               >
                 {animatedValues[index] || 0}
                 {stat.suffix}
               </motion.div>
-              <div className="text-gray-600 dark:text-gray-300 text-lg font-medium">
+              <div className="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-lg font-medium">
                 {stat.label}
               </div>
               <motion.div
@@ -114,7 +117,7 @@ export function StatsSection(): JSX.Element {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8"
         >
           {[
             {
@@ -139,20 +142,20 @@ export function StatsSection(): JSX.Element {
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="p-6 rounded-xl bg-gradient-to-br from.white/50 to-gray-50/50 dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 group-hover:border-[#38b6ff]/30 transition-all duration-300">
+              <div className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-white/50 to-gray-50/50 dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 group-hover:border-[#38b6ff]/30 transition-all duration-300">
                 <motion.div
                   whileHover={{ rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 0.5 }}
                 >
                   <Icon
                     icon={item.icon}
-                    className="h-8 w-8 mx-auto mb-3 text-[#38b6ff] group-hover:scale-110 transition-transform duration-300"
+                    className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 sm:mb-3 text-[#38b6ff] group-hover:scale-110 transition-transform duration-300"
                   />
                 </motion.div>
-                <div className="font-semibold text-lg mb-1 text-gray-900 dark:text-white">
+                <div className="font-semibold text-base sm:text-lg mb-1 text-gray-900 dark:text-white">
                   {item.text}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400 text-sm">
+                <div className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                   {item.desc}
                 </div>
               </div>

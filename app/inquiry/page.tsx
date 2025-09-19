@@ -97,30 +97,20 @@ export default function InquiryPage(): ReactElement {
     setIsSubmitting(false);
   };
 
-  const officeLocation = [
-    {
-      city: "Surat Office",
-      address: "105, Dhara Arcade, Mota Varachha, Surat, Gujarat - 394101",
-      phone: "+91 77780 81772",
-      hours: "Mon-Sat: 9AM-6PM IST",
-    },
-  ] as const;
-
   return (
-    <div className="min-h-screen bg-background px-4 sm:px-12 lg:px-20 py-16 circuit-pattern">
+    <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 circuit-pattern">
       <CommunicationAnimation />
 
       <motion.div
-        className="text-center mb-12 relative z-10"
+        className="text-center mb-6 sm:mb-8 md:mb-12 relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient py-2">
-          {" "}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 text-[#38b6ff] py-2">
           Product Inquiry
         </h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+        <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-md sm:max-w-lg md:max-w-2xl mx-auto">
           Interested in our products? Fill out the form below and our team will
           provide you with detailed information, pricing, and technical
           specifications for your industrial automation needs.
@@ -128,34 +118,34 @@ export default function InquiryPage(): ReactElement {
       </motion.div>
 
       <section className="relative z-10">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div className="sm:col-span-2">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <Card className="glass-morphism">
-                  <CardHeader>
-                    <CardTitle className="text-2xl flex items-center">
+                <Card className="glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="pb-2 sm:pb-3">
+                    <CardTitle className="text-lg sm:text-xl md:text-2xl flex items-center">
                       <Icon
                         icon="mdi:form-select"
-                        className="h-6 w-6 mr-2 text-primary animate-circuit-pulse"
+                        className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-[#38b6ff] animate-circuit-pulse"
                       />
                       Product Inquiry Form
                     </CardTitle>
-                    <p className="text-muted-foreground">
+                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                       Provide details about the products you're interested in,
                       and our experts will get back to you with comprehensive
                       information and connectivity solutions.
                     </p>
                   </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <CardContent className="p-3 sm:p-4">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="name">Full Name *</Label>
+                          <Label htmlFor="name" className="text-xs sm:text-sm">Full Name *</Label>
                           <Input
                             id="name"
                             value={formData.name}
@@ -163,13 +153,13 @@ export default function InquiryPage(): ReactElement {
                               handleInputChange("name", e.target.value)
                             }
                             placeholder="Enter your full name"
-                            className="form-field-glow"
+                            className="form-field-glow h-9 sm:h-10 text-sm sm:text-base"
                             required
                           />
-                          <div className="field-circuit h-1 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+                          <div className="field-circuit h-1 bg-gradient-to-r from-[#38b6ff] to-accent rounded-full"></div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="email">Email Address *</Label>
+                          <Label htmlFor="email" className="text-xs sm:text-sm">Email Address *</Label>
                           <Input
                             id="email"
                             type="email"
@@ -178,16 +168,16 @@ export default function InquiryPage(): ReactElement {
                               handleInputChange("email", e.target.value)
                             }
                             placeholder="Enter your email"
-                            className="form-field-glow"
+                            className="form-field-glow h-9 sm:h-10 text-sm sm:text-base"
                             required
                           />
-                          <div className="field-circuit h-1 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+                          <div className="field-circuit h-1 bg-gradient-to-r from-[#38b6ff] to-accent rounded-full"></div>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="company">Company Name</Label>
+                          <Label htmlFor="company" className="text-xs sm:text-sm">Company Name</Label>
                           <Input
                             id="company"
                             value={formData.company}
@@ -195,10 +185,11 @@ export default function InquiryPage(): ReactElement {
                               handleInputChange("company", e.target.value)
                             }
                             placeholder="Enter your company name"
+                            className="h-9 sm:h-10 text-sm sm:text-base"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="phone">Phone Number</Label>
+                          <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number</Label>
                           <Input
                             id="phone"
                             type="tel"
@@ -207,20 +198,21 @@ export default function InquiryPage(): ReactElement {
                               handleInputChange("phone", e.target.value)
                             }
                             placeholder="Enter your phone number"
+                            className="h-9 sm:h-10 text-sm sm:text-base"
                           />
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="product">Product Interest</Label>
+                          <Label htmlFor="product" className="text-xs sm:text-sm">Product Interest</Label>
                           <Select
                             value={formData.product}
                             onValueChange={(value) =>
                               handleInputChange("product", value)
                             }
                           >
-                            <SelectTrigger className="w-full h-12 px-4 py-3 text-base border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
+                            <SelectTrigger className="w-full h-9 sm:h-10 px-3 sm:px-4 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#38b6ff] focus:border-transparent transition-all duration-200">
                               <SelectValue
                                 placeholder="Select a product"
                                 className="text-gray-500 dark:text-gray-400"
@@ -231,9 +223,9 @@ export default function InquiryPage(): ReactElement {
                               position="popper"
                               sideOffset={5}
                             >
-                              <div className="sticky top-0 bg-white dark:bg-gray-900 z-10 p-3 border-b border-gray-200 dark:border-gray-700">
+                              <div className="sticky top-0 bg-white dark:bg-gray-900 z-10 p-2 sm:p-3 border-b border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center justify-between mb-2">
-                                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                  <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Search Products
                                   </span>
                                   <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
@@ -245,20 +237,20 @@ export default function InquiryPage(): ReactElement {
                                 </div>
                                 <Input
                                   placeholder="Type to search products..."
-                                  className="w-full"
+                                  className="w-full h-9 sm:h-10 text-sm sm:text-base"
                                   value={searchTerm}
                                   onChange={handleSearchChange}
                                   onClick={(e) => e.stopPropagation()}
                                   onKeyDown={(e) => e.stopPropagation()}
                                 />
                               </div>
-                              <div className="p-1">
+                              <div className="p-1 sm:p-2">
                                 {filteredProducts.length > 0 ? (
                                   filteredProducts.map((product: Product) => (
                                     <SelectItem
                                       key={product.id}
                                       value={product.id}
-                                      className="px-3 py-2 text-base rounded-md focus:bg-[#38b6ff] dark:focus:bg-[#38b6ff]/20 transition-colors duration-150 cursor-pointer relative group"
+                                      className="px-3 py-2 text-sm sm:text-base rounded-md focus:bg-[#38b6ff] dark:focus:bg-[#38b6ff]/20 transition-colors duration-150 cursor-pointer"
                                     >
                                       <div className="truncate w-full">
                                         {product.name}
@@ -266,7 +258,7 @@ export default function InquiryPage(): ReactElement {
                                     </SelectItem>
                                   ))
                                 ) : (
-                                  <div className="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                  <div className="px-3 sm:px-4 py-2 sm:py-3 text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                                     No products found matching "{searchTerm}"
                                   </div>
                                 )}
@@ -275,7 +267,7 @@ export default function InquiryPage(): ReactElement {
                           </Select>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="quantity">Estimated Quantity</Label>
+                          <Label htmlFor="quantity" className="text-xs sm:text-sm">Estimated Quantity</Label>
                           <Input
                             id="quantity"
                             type="number"
@@ -285,20 +277,22 @@ export default function InquiryPage(): ReactElement {
                               handleInputChange("quantity", e.target.value)
                             }
                             placeholder="Enter quantity needed"
+                            className="h-9 sm:h-10 text-sm sm:text-base"
                           />
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="message">Specific Requirements *</Label>
+                        <Label htmlFor="message" className="text-xs sm:text-sm">Specific Requirements *</Label>
                         <Textarea
                           id="message"
-                          rows={6}
+                          rows={5}
                           value={formData.message}
                           onChange={(e) =>
                             handleInputChange("message", e.target.value)
                           }
                           placeholder="Tell us about your specific requirements, technical specifications needed, intended use, timeline, and any questions you have..."
+                          className="text-sm sm:text-base"
                           required
                         />
                       </div>
@@ -309,8 +303,7 @@ export default function InquiryPage(): ReactElement {
                       >
                         <Button
                           type="submit"
-                          className="w-full btn-iot animate-glow"
-                          size="lg"
+                          className="w-full h-9 sm:h-10 px-4 sm:px-5 text-sm sm:text-base bg-[#38b6ff] hover:bg-[#38b6ff]/90 animate-glow"
                           disabled={isSubmitting}
                         >
                           {isSubmitting ? (
@@ -320,7 +313,7 @@ export default function InquiryPage(): ReactElement {
                             </div>
                           ) : (
                             <>
-                              <Send className="h-5 w-5 mr-2" />
+                              <Send className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                               Submit Inquiry
                             </>
                           )}
@@ -332,43 +325,43 @@ export default function InquiryPage(): ReactElement {
               </motion.div>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <Card className="border-2">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <MapPin className="h-5 w-5 text-primary" />
+                <Card className="glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="pb-2 sm:pb-3">
+                    <CardTitle className="text-lg sm:text-xl md:text-2xl flex items-center space-x-2">
+                      <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-[#38b6ff]" />
                       <span>Our Location</span>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                      <motion.div
-                        className="space-y-2 p-4 rounded-lg hover:bg-muted/50 transition-colors"
-                        whileHover={{ scale: 1.01 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <h4 className="font-semibold text-primary">
-                          {CONTACT.CITY}
-                        </h4>
-                        <div className="space-y-1 text-sm text-muted-foreground">
-                          <p className="flex items-start space-x-2">
-                            <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                            <span>{CONTACT.ADDRESS}</span>
-                          </p>
-                          <p className="flex items-center space-x-2">
-                            <Phone className="h-4 w-4 flex-shrink-0" />
-                            <span>{CONTACT.PHONE}</span>
-                          </p>
-                          <p className="flex items-center space-x-2">
-                            <Clock className="h-4 w-4 flex-shrink-0" />
-                            <span>{CONTACT.HOURS}</span>
-                          </p>
-                        </div>
-                      </motion.div>
+                  <CardContent className="space-y-4 sm:space-y-6 p-3 sm:p-4">
+                    <motion.div
+                      className="space-y-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors"
+                      whileHover={{ scale: 1.01 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <h4 className="font-semibold text-[#38b6ff] text-sm sm:text-base">
+                        {CONTACT.CITY}
+                      </h4>
+                      <div className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+                        <p className="flex items-start space-x-2">
+                          <MapPin className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
+                          <span>{CONTACT.ADDRESS}</span>
+                        </p>
+                        <p className="flex items-center space-x-2">
+                          <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                          <span>{CONTACT.PHONE}</span>
+                        </p>
+                        <p className="flex items-center space-x-2">
+                          <Clock className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                          <span>{CONTACT.HOURS}</span>
+                        </p>
+                      </div>
+                    </motion.div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -378,11 +371,13 @@ export default function InquiryPage(): ReactElement {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <Card className="border-2">
-                  <CardHeader>
-                    <CardTitle>Why Inquire With Us?</CardTitle>
+                <Card className="glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="pb-2 sm:pb-3">
+                    <CardTitle className="text-lg sm:text-xl md:text-2xl">
+                      Why Inquire With Us?
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4">
                     {[
                       {
                         icon: Award,
@@ -407,16 +402,16 @@ export default function InquiryPage(): ReactElement {
                     ].map((item, index) => (
                       <motion.div
                         key={index}
-                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                        className="flex items-center space-x-3 p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-colors"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <item.icon className="h-4 w-4 text-primary" />
+                        <div className="p-2 bg-[#38b6ff]/10 rounded-lg">
+                          <item.icon className="h-4 w-4 sm:h-5 sm:w-5 text-[#38b6ff]" />
                         </div>
                         <div>
-                          <div className="font-medium text-sm">{item.text}</div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="font-medium text-sm sm:text-base">{item.text}</div>
+                          <div className="text-xs sm:text-sm text-muted-foreground">
                             {item.desc}
                           </div>
                         </div>
