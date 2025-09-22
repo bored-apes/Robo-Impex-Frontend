@@ -1,94 +1,120 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import { ArrowLeft, Heart, ShoppingCart, Share2, Star, Truck, Shield, Award, Zap, Eye, Plus, Minus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { cartStorage, wishlistStorage } from "@/lib/utils/storage"
-import { CURRENCY } from "@/data/constants"
-import type { APIProduct } from "@/types/products"
-import { getProductById, getProducts } from "@/lib/apiServices/product.service"
-import { SectionLoader } from "@/components/shared/common/loader"
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Heart,
+  ShoppingCart,
+  Share2,
+  Star,
+  Truck,
+  Shield,
+  Award,
+  Zap,
+  Plus,
+  Minus,
+  StarHalf,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cartStorage, wishlistStorage } from "@/lib/utils/storage";
+import { CURRENCY } from "@/data/constants";
+import type { APIProduct } from "@/types/products";
+import { getProductById, getProducts } from "@/lib/apiServices/product.service";
+import { StarRating } from "@/components/shared/common/starRating";
+import { DescriptionTab } from "@/components/product/productDescriptionTab";
+import { RelatedProducts } from "@/components/product/relatedProduct";
+import { SpecificationsTab } from "@/components/product/specificationsTab";
+import { ReviewsTab } from "@/components/product/reviewsTab";
+import { ShippingTab } from "@/components/product/shippingTab";
+import { ProductDetailSkeleton } from "@/components/shared/skeletons/productDetailSkeleton";
+import { useCustomToast } from "@/components/shared/common/customToast";
 
 export default function ProductPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [product, setProduct] = useState<APIProduct | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [quantity, setQuantity] = useState(1)
-  const [isInWishlist, setIsInWishlist] = useState(false)
-  const [relatedProducts, setRelatedProducts] = useState<APIProduct[]>([])
-  const [activeTab, setActiveTab] = useState("description")
-
-  const tabs = [
-    { id: "description", label: "Description" },
-    { id: "specifications", label: "Specifications" },
-    { id: "reviews", label: `Reviews (${Math.floor(Math.random() * 50) + 10})` },
-    { id: "shipping", label: "Shipping & Returns" },
-  ]
+  const params = useParams();
+  const router = useRouter();
+  const { showToast } = useCustomToast();
+  const [product, setProduct] = useState<APIProduct | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<APIProduct[]>([]);
+  const [activeTab, setActiveTab] = useState("description");
+  const [refreshReviews, setRefreshReviews] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!params.id) return
+      if (!params.id) return;
 
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       try {
-        const productId = Array.isArray(params.id) ? params.id[0] : params.id
+        const productId = Array.isArray(params.id) ? params.id[0] : params.id;
 
-        const response = await getProductById(productId)
+        const response = await getProductById(productId);
 
         if (response.success && response.data) {
-          const productData = response.data as APIProduct
-          setProduct(productData)
-          setIsInWishlist(wishlistStorage.getItems().some((item) => item.id === productData.id.toString()))
+          const productData = response.data as APIProduct;
+          setProduct(productData);
+          setIsInWishlist(
+            wishlistStorage
+              .getItems()
+              .some((item) => item.id === productData.id.toString())
+          );
+
+          // Set total reviews from API data
+          if (productData.total_ratings) {
+            setTotalReviews(productData.total_ratings);
+          }
 
           const relatedResponse = await getProducts({
             pageSize: 4,
             category: productData.category || undefined,
-          })
+          });
 
           if (relatedResponse.success && relatedResponse.data) {
             const responseData = relatedResponse.data as {
-              data: APIProduct[]
+              data: APIProduct[];
               pagination: {
-                page: number
-                pageSize: number
-                total: number
-                totalPages: number
-              }
-            }
-            const filtered = responseData.data.filter((p) => p.id !== productData.id)
-            setRelatedProducts(filtered.slice(0, 4))
+                page: number;
+                pageSize: number;
+                total: number;
+                totalPages: number;
+              };
+            };
+            const filtered = responseData.data.filter(
+              (p) => p.id !== productData.id
+            );
+            setRelatedProducts(filtered.slice(0, 4));
           }
         } else {
-          setError(response.message || "Product not found")
+          setError(response.message || "Product not found");
         }
       } catch (err) {
-        setError("Failed to load product")
-        console.error("Error fetching product:", err)
+        setError("Failed to load product");
+        console.error("Error fetching product:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchProduct()
-  }, [params.id])
+    fetchProduct();
+  }, [params.id]);
 
   useEffect(() => {
     if (product) {
-      setQuantity(product.min_order_qty || 1)
+      setQuantity(product.min_order_qty || 1);
     }
-  }, [product])
+  }, [product]);
 
   const handleAddToCart = () => {
-    if (!product) return
+    if (!product) return;
 
     const cartItem = {
       id: product.id.toString(),
@@ -96,29 +122,32 @@ export default function ProductPage() {
       price: product.base_price || 0,
       image: product.image_url || "/placeholder.svg?key=robotics-chip",
       qty: quantity,
-    }
-    cartStorage.addItem(cartItem)
-
-    alert("Product added to cart!")
-  }
+    };
+    cartStorage.addItem(cartItem);
+    showToast({
+      type: "success",
+      title: "Added to Cart",
+      message: `${product.name ?? "Product"} was added to your cart.`,
+    });
+  };
 
   const handleWishlistToggle = () => {
-    if (!product) return
+    if (!product) return;
 
     if (isInWishlist) {
-      wishlistStorage.removeItem(product.id.toString())
-      setIsInWishlist(false)
+      wishlistStorage.removeItem(product.id.toString());
+      setIsInWishlist(false);
     } else {
       const wishlistItem = {
         id: product.id.toString(),
         name: product.name || "Unknown Product",
         price: product.base_price || 0,
         image: product.image_url || "/placeholder.svg?key=robotics-chip",
-      }
-      wishlistStorage.addItem(wishlistItem)
-      setIsInWishlist(true)
+      };
+      wishlistStorage.addItem(wishlistItem);
+      setIsInWishlist(true);
     }
-  }
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -127,18 +156,29 @@ export default function ProductPage() {
           title: product?.name || "Product",
           text: product?.description || "Check out this product",
           url: window.location.href,
-        })
+        });
       } catch (err) {
-        console.log("Error sharing:", err)
+        console.log("Error sharing:", err);
       }
     } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert("Link copied to clipboard!")
+      navigator.clipboard.writeText(window.location.href);
+      showToast({
+        type: "info",
+        title: "Link Copied",
+        message: "The product link has been copied to your clipboard.",
+      });
     }
-  }
+  };
+
+  const handleReviewSubmitted = () => {
+    setRefreshReviews((prev) => prev + 1);
+    if (product) {
+      setTotalReviews((prev) => prev + 1);
+    }
+  };
 
   if (loading) {
-    return <SectionLoader text="Loading your product..." minHeight="min-h-[50vh]" />
+    return <ProductDetailSkeleton />;
   }
 
   if (error || !product) {
@@ -159,7 +199,7 @@ export default function ProductPage() {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   const displayProduct = {
@@ -167,31 +207,48 @@ export default function ProductPage() {
     name: product.name || "Unknown Product",
     description: product.description || "No description available",
     price: product.base_price || 0,
-    images: product.image_url ? [product.image_url] : ["/placeholder.svg?key=robotics-chip"],
+    images: product.image_url
+      ? [product.image_url]
+      : ["/placeholder.svg?key=robotics-chip"],
     category: product.category || "Unknown",
     type: product.type || "Unknown",
     inStock: (product.stock_quantity || 0) > 0,
     stockQuantity: product.stock_quantity || 0,
     minOrderQty: product.min_order_qty || 1,
     gstRate: product.gst_rate || 0,
-    rating: 4.5,
-    ratingCount: Math.floor(Math.random() * 50) + 10,
-  }
+    rating: product.average_rating || 0,
+    ratingCount: totalReviews,
+  };
+
+  const tabs = [
+    { id: "description", label: "Description" },
+    { id: "specifications", label: "Specifications" },
+    { id: "reviews", label: `Reviews (${totalReviews})` },
+    { id: "shipping", label: "Shipping & Returns" },
+  ];
 
   return (
     <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 lg:px-12">
       <div className="border-b bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center space-x-2 text-xs sm:text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
+            <Link
+              href="/"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
               Home
             </Link>
             <span className="text-muted-foreground">/</span>
-            <Link href="/products" className="text-muted-foreground hover:text-primary transition-colors">
+            <Link
+              href="/products"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
               Products
             </Link>
             <span className="text-muted-foreground">/</span>
-            <span className="text-foreground font-medium">{displayProduct.name}</span>
+            <span className="text-foreground font-medium">
+              {displayProduct.name}
+            </span>
           </div>
         </div>
       </div>
@@ -216,7 +273,10 @@ export default function ProductPage() {
               />
               {!displayProduct.inStock && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <Badge variant="destructive" className="text-sm sm:text-base px-4 sm:px-6 py-1.5 sm:py-2">
+                  <Badge
+                    variant="destructive"
+                    className="text-sm sm:text-base px-4 sm:px-6 py-1.5 sm:py-2"
+                  >
                     Out of Stock
                   </Badge>
                 </div>
@@ -229,7 +289,9 @@ export default function ProductPage() {
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`flex-shrink-0 w-16 sm:w-20 h-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                    selectedImage === index ? "border-primary" : "border-transparent hover:border-accent"
+                    selectedImage === index
+                      ? "border-primary"
+                      : "border-transparent hover:border-accent"
                   }`}
                 >
                   <img
@@ -245,17 +307,27 @@ export default function ProductPage() {
           <div className="space-y-4 sm:space-y-6">
             <div>
               <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
-                <Badge variant="secondary" className="text-xs sm:text-sm">{displayProduct.type}</Badge>
-                <Badge variant="outline" className="text-xs sm:text-sm text-primary border-primary">
+                <Badge variant="secondary" className="text-xs sm:text-sm">
+                  {displayProduct.type}
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs sm:text-sm text-primary border-primary"
+                >
                   {displayProduct.category}
                 </Badge>
                 {displayProduct.inStock ? (
-                  <Badge variant="outline" className="text-xs sm:text-sm text-green-600 border-green-600">
+                  <Badge
+                    variant="outline"
+                    className="text-xs sm:text-sm text-green-600 border-green-600"
+                  >
                     <div className="w-2 h-2 bg-green-600 rounded-full mr-1 sm:mr-2"></div>
                     In Stock ({displayProduct.stockQuantity})
                   </Badge>
                 ) : (
-                  <Badge variant="destructive" className="text-xs sm:text-sm">Out of Stock</Badge>
+                  <Badge variant="destructive" className="text-xs sm:text-sm">
+                    Out of Stock
+                  </Badge>
                 )}
               </div>
 
@@ -264,18 +336,13 @@ export default function ProductPage() {
               </h1>
 
               <div className="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                        i < Math.floor(displayProduct.rating) ? "text-yellow-400 fill-current" : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
+                <StarRating
+                  rating={displayProduct.rating ?? 0}
+                  size="h-3 w-3 sm:h-4 sm:w-4"
+                />
                 <span className="text-xs sm:text-sm text-muted-foreground">
-                  {displayProduct.rating} ({displayProduct.ratingCount} reviews)
+                  {displayProduct.rating.toFixed(1)} (
+                  {displayProduct.ratingCount} reviews)
                 </span>
               </div>
 
@@ -290,7 +357,9 @@ export default function ProductPage() {
                   {CURRENCY.SYMBOL}
                   {displayProduct.price.toLocaleString()}
                 </span>
-                <span className="text-xs sm:text-sm text-muted-foreground">+ {displayProduct.gstRate}% GST</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">
+                  + {displayProduct.gstRate}% GST
+                </span>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 Minimum order quantity: {displayProduct.minOrderQty} pieces
@@ -301,8 +370,12 @@ export default function ProductPage() {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="flex items-center border rounded-lg">
                   <button
-                    onClick={() => setQuantity(Math.max(displayProduct.minOrderQty, quantity - 1))}
-                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors"
+                    onClick={() =>
+                      setQuantity(
+                        Math.max(displayProduct.minOrderQty, quantity - 1)
+                      )
+                    }
+                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer"
                   >
                     <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
@@ -311,12 +384,14 @@ export default function ProductPage() {
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors"
+                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer"
                   >
                     <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
                 </div>
-                <span className="text-xs sm:text-sm text-muted-foreground">pieces</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">
+                  pieces
+                </span>
               </div>
 
               <div className="flex space-x-2 sm:space-x-3">
@@ -334,16 +409,22 @@ export default function ProductPage() {
                   variant="outline"
                   size="lg"
                   onClick={handleWishlistToggle}
-                  className={`h-9 sm:h-10 w-9 sm:w-10 ${isInWishlist ? "text-red-500 border-red-500" : ""}`}
+                  className={`h-9 sm:h-10 w-9 sm:w-10 ${
+                    isInWishlist ? "text-red-500 border-red-500" : ""
+                  }`}
                 >
-                  <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${isInWishlist ? "fill-current" : ""}`} />
+                  <Heart
+                    className={`h-4 w-4 sm:h-5 sm:w-5 ${
+                      isInWishlist ? "fill-current" : ""
+                    }`}
+                  />
                 </Button>
 
                 <Button
                   variant="outline"
                   size="lg"
                   onClick={handleShare}
-                  className="h-9 sm:h-10 w-9 sm:w-10"
+                  className="h-9 sm:h-10 w-9 sm:w-10 bg-transparent"
                 >
                   <Share2 className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
@@ -353,15 +434,26 @@ export default function ProductPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {[
                 { icon: Shield, text: "Secure Payment", desc: "SSL Encrypted" },
-                { icon: Truck, text: "Fast Shipping", desc: "Worldwide Delivery" },
+                {
+                  icon: Truck,
+                  text: "Fast Shipping",
+                  desc: "Worldwide Delivery",
+                },
                 { icon: Award, text: "Quality Assured", desc: "ISO Certified" },
                 { icon: Zap, text: "24/7 Support", desc: "Expert Assistance" },
               ].map((badge, index) => (
-                <div key={index} className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg bg-muted/30">
+                <div
+                  key={index}
+                  className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-lg bg-muted/30"
+                >
                   <badge.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <div>
-                    <div className="font-medium text-xs sm:text-sm">{badge.text}</div>
-                    <div className="text-xs text-muted-foreground">{badge.desc}</div>
+                    <div className="font-medium text-xs sm:text-sm">
+                      {badge.text}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {badge.desc}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -370,13 +462,14 @@ export default function ProductPage() {
         </div>
 
         <div className="mb-12 sm:mb-16 md:mb-20">
-          <div className="border-b">
+          {/* Desktop Tabs */}
+          <div className="hidden md:block border-b">
             <div className="flex space-x-4 sm:space-x-6 md:space-x-8 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-3 sm:py-4 px-2 sm:px-3 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap transition-colors ${
+                  className={`py-3 sm:py-4 px-2 sm:px-3 border-b-2 cursor-pointer font-medium text-xs sm:text-sm whitespace-nowrap transition-colors ${
                     activeTab === tab.id
                       ? "border-primary text-primary"
                       : "border-transparent text-muted-foreground hover:text-foreground"
@@ -388,146 +481,68 @@ export default function ProductPage() {
             </div>
           </div>
 
-          <div className="py-6 sm:py-8 md:py-12">
+          {/* Mobile Accordion */}
+          <div className="md:hidden space-y-4 mt-6">
+            {tabs.map((tab) => (
+              <div key={tab.id} className="border-b pb-4">
+                <button
+                  onClick={() =>
+                    setActiveTab(activeTab === tab.id ? "" : tab.id)
+                  }
+                  className="flex justify-between items-center w-full text-left font-medium text-sm cursor-pointer"
+                >
+                  {tab.label}
+                  <span>{activeTab === tab.id ? "−" : "+"}</span>
+                </button>
+                {activeTab === tab.id && (
+                  <div className="mt-4">
+                    {tab.id === "description" && (
+                      <DescriptionTab displayProduct={displayProduct} />
+                    )}
+                    {tab.id === "specifications" && (
+                      <SpecificationsTab
+                        displayProduct={displayProduct}
+                        product={product}
+                      />
+                    )}
+                    {tab.id === "reviews" && (
+                      <ReviewsTab
+                        productId={product.id}
+                        refreshReviews={refreshReviews}
+                        handleReviewSubmitted={handleReviewSubmitted}
+                      />
+                    )}
+                    {tab.id === "shipping" && <ShippingTab />}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Tab Content */}
+          <div className="hidden md:block py-6 sm:py-8 md:py-12">
             {activeTab === "description" && (
-              <div className="prose max-w-none">
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed">
-                  {displayProduct.description}
-                </p>
-                <div className="mt-4 sm:mt-6 grid sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3">Product Details</h3>
-                    <ul className="space-y-1.5 sm:space-y-2 text-muted-foreground text-xs sm:text-sm">
-                      <li>• Type: {displayProduct.type}</li>
-                      <li>• Category: {displayProduct.category}</li>
-                      <li>• Stock: {displayProduct.stockQuantity} units</li>
-                      <li>• Min Order: {displayProduct.minOrderQty} pieces</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3">Pricing</h3>
-                    <ul className="space-y-1.5 sm:space-y-2 text-muted-foreground text-xs sm:text-sm">
-                      <li>• Base Price: ₹{displayProduct.price.toLocaleString()}</li>
-                      <li>• GST Rate: {displayProduct.gstRate}%</li>
-                      <li>
-                        • Total Price: ₹{(displayProduct.price * (1 + displayProduct.gstRate / 100)).toLocaleString()}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <DescriptionTab displayProduct={displayProduct} />
             )}
-
             {activeTab === "specifications" && (
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">Product Type</span>
-                  <span className="text-muted-foreground">{displayProduct.type}</span>
-                </div>
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">Category</span>
-                  <span className="text-muted-foreground">{displayProduct.category}</span>
-                </div>
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">Stock Quantity</span>
-                  <span className="text-muted-foreground">{displayProduct.stockQuantity} units</span>
-                </div>
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">Minimum Order</span>
-                  <span className="text-muted-foreground">{displayProduct.minOrderQty} pieces</span>
-                </div>
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">GST Rate</span>
-                  <span className="text-muted-foreground">{displayProduct.gstRate}%</span>
-                </div>
-                <div className="flex justify-between py-2 sm:py-3 border-b text-xs sm:text-sm">
-                  <span className="font-medium">Status</span>
-                  <span className="text-muted-foreground">{product.status}</span>
-                </div>
-              </div>
+              <SpecificationsTab
+                displayProduct={displayProduct}
+                product={product}
+              />
             )}
-
             {activeTab === "reviews" && (
-              <div className="text-center py-8 sm:py-12 md:py-16">
-                <Eye className="h-10 sm:h-12 w-10 sm:w-12 mx-auto text-muted-foreground mb-3 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3">
-                  Reviews Coming Soon
-                </h3>
-                <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
-                  Customer reviews will be available shortly.
-                </p>
-              </div>
+              <ReviewsTab
+                productId={product.id}
+                refreshReviews={refreshReviews}
+                handleReviewSubmitted={handleReviewSubmitted}
+              />
             )}
-
-            {activeTab === "shipping" && (
-              <div className="space-y-4 sm:space-y-6">
-                <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3">Shipping Information</h3>
-                  <ul className="space-y-1.5 sm:space-y-2 text-muted-foreground text-xs sm:text-sm">
-                    <li>• Free shipping on orders over ₹50,000</li>
-                    <li>• Standard delivery: 7-15 business days</li>
-                    <li>• Express delivery: 3-7 business days</li>
-                    <li>• Installation support available</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3">Returns & Warranty</h3>
-                  <ul className="space-y-1.5 sm:space-y-2 text-muted-foreground text-xs sm:text-sm">
-                    <li>• 1 Year manufacturer warranty</li>
-                    <li>• 30-day return policy</li>
-                    <li>• Technical support included</li>
-                    <li>• Spare parts availability guaranteed</li>
-                  </ul>
-                </div>
-              </div>
-            )}
+            {activeTab === "shipping" && <ShippingTab />}
           </div>
         </div>
 
-        {relatedProducts.length > 0 && (
-          <div className="px-4 sm:px-6 lg:px-8">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-6 sm:mb-8 md:mb-10">
-              Related Products
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-              {relatedProducts.map((relatedProduct) => (
-                <Card
-                  key={relatedProduct.id}
-                  className="group hover:shadow-lg transition-all duration-300 hover-lift"
-                >
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img
-                      src={relatedProduct.image_url || "/placeholder.svg?key=robotics-chip"}
-                      alt={relatedProduct.name || "Product"}
-                      className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <CardContent className="p-3 sm:p-4">
-                    <Link
-                      href={`/products/${relatedProduct.id}`}
-                      className="font-semibold hover:text-primary transition-colors line-clamp-2 text-sm sm:text-base"
-                    >
-                      {relatedProduct.name}
-                    </Link>
-                    <div className="flex items-center justify-between mt-2 sm:mt-3">
-                      <span className="text-base sm:text-lg font-bold text-primary">
-                        {CURRENCY.SYMBOL}
-                        {(relatedProduct.base_price || 0).toLocaleString()}
-                      </span>
-                      <div className="flex items-center">
-                        <Star className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 fill-current" />
-                        <span className="text-xs sm:text-sm text-muted-foreground ml-1 sm:ml-2">
-                          4.5
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
+        <RelatedProducts products={relatedProducts} />
       </div>
     </div>
-  )
+  );
 }

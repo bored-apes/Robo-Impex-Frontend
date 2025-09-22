@@ -1,50 +1,54 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Star, Heart, ShoppingCart, Eye, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { wishlistStorage, cartStorage } from "@/lib/utils/storage"
-import { CURRENCY } from "@/data/constants"
-import type { ProductCardProps } from "@/types/products"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Star, Heart, ShoppingCart, Eye, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { wishlistStorage, cartStorage } from "@/lib/utils/storage";
+import { CURRENCY } from "@/data/constants";
+import type { ProductCardProps } from "@/types/products";
+import { StarRating } from "../shared/common/starRating";
+import { useCustomToast } from "../shared/common/customToast";
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [isInWishlist, setIsInWishlist] = useState(false)
-  const [isAddingToCart, setIsAddingToCart] = useState(false)
-  const [isTogglingWishlist, setIsTogglingWishlist] = useState(false)
+  const { showToast } = useCustomToast();
+
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
 
   useEffect(() => {
-    setIsInWishlist(wishlistStorage.isInWishlist(product.id))
-  }, [product.id])
+    setIsInWishlist(wishlistStorage.isInWishlist(product.id));
+  }, [product.id]);
 
   const handleWishlistToggle = async () => {
-    setIsTogglingWishlist(true)
+    setIsTogglingWishlist(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 300))
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     if (isInWishlist) {
-      wishlistStorage.removeItem(product.id)
-      setIsInWishlist(false)
+      wishlistStorage.removeItem(product.id);
+      setIsInWishlist(false);
     } else {
       const wishlistItem = {
         id: product.id,
         name: product.name,
         price: product.price,
         image: product.images[0],
-      }
-      wishlistStorage.addItem(wishlistItem)
-      setIsInWishlist(true)
+      };
+      wishlistStorage.addItem(wishlistItem);
+      setIsInWishlist(true);
     }
 
-    setIsTogglingWishlist(false)
-  }
+    setIsTogglingWishlist(false);
+  };
 
   const handleAddToCart = async () => {
-    setIsAddingToCart(true)
+    setIsAddingToCart(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const cartItem = {
       id: product.id,
@@ -52,23 +56,30 @@ export function ProductCard({ product }: ProductCardProps) {
       price: product.price,
       image: product.images[0],
       qty: 1,
-    }
-    cartStorage.addItem(cartItem)
-
-    setIsAddingToCart(false)
-  }
+    };
+    cartStorage.addItem(cartItem);
+    showToast({
+      type: "success",
+      title: "Added to Cart",
+      message: `${product.name ?? "Product"} was added to your cart.`,
+    });
+    setIsAddingToCart(false);
+  };
 
   return (
     <Card className="product-card group h-full hover:shadow-lg transition-all duration-300 hover-lift glass-morphism">
       <div className="relative overflow-hidden rounded-t-lg">
         <img
-          src={product.images[0] || "/placeholder.svg"}
-          alt={product.name}
+          src={product?.images?.[0] || "/placeholder.svg"}
+          alt={product?.name || "Product image"}
           className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
         />
+
         <div className="absolute top-1 sm:top-1.5 left-1 sm:left-1.5">
           {product.inStock ? (
-            <Badge className="bg-green-500 text-white text-xs sm:text-sm">In Stock</Badge>
+            <Badge className="bg-green-500 text-white text-xs sm:text-sm">
+              In Stock
+            </Badge>
           ) : (
             <Badge variant="destructive" className="text-xs sm:text-sm">
               Out of Stock
@@ -79,7 +90,9 @@ export function ProductCard({ product }: ProductCardProps) {
           variant="ghost"
           size="icon"
           className={`absolute top-1 sm:top-1.5 right-1 sm:right-1.5 bg-background/80 hover:bg-background transition-colors w-7 h-7 sm:w-8 sm:h-8 ${
-            isInWishlist ? "text-red-500" : "text-muted-foreground hover:text-red-500"
+            isInWishlist
+              ? "text-red-500"
+              : "text-muted-foreground hover:text-red-500"
           }`}
           onClick={handleWishlistToggle}
           disabled={isTogglingWishlist}
@@ -87,7 +100,11 @@ export function ProductCard({ product }: ProductCardProps) {
           {isTogglingWishlist ? (
             <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
           ) : (
-            <Heart className={`h-3 w-3 sm:h-4 sm:w-4 ${isInWishlist ? "fill-current" : ""}`} />
+            <Heart
+              className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                isInWishlist ? "fill-current" : ""
+              }`}
+            />
           )}
         </Button>
       </div>
@@ -107,18 +124,12 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
 
         <div className="flex items-center mb-1 sm:mb-2">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                  i < Math.floor(product.rating || 0) ? "text-yellow-400 fill-current" : "text-muted-foreground/30"
-                }`}
-              />
-            ))}
-          </div>
+          <StarRating
+            rating={product.rating ?? 0}
+            size="h-3 w-3 sm:h-4 sm:w-4"
+          />
           <span className="text-xs sm:text-sm text-muted-foreground ml-1 sm:ml-2">
-            {product.rating} ({product.ratingCount})
+            {Number(product.rating).toFixed(1)} ({product.ratingCount})
           </span>
         </div>
 
@@ -126,7 +137,9 @@ export function ProductCard({ product }: ProductCardProps) {
           <div>
             <span className="text-sm sm:text-base md:text-lg font-semibold">
               {CURRENCY.SYMBOL}
-              {product.price.toLocaleString()}
+              {typeof product?.price === "number"
+                ? product.price.toLocaleString()
+                : "0"}
             </span>
           </div>
         </div>
@@ -162,5 +175,5 @@ export function ProductCard({ product }: ProductCardProps) {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

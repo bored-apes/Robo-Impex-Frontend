@@ -11,8 +11,10 @@ import {
   WishlistItem,
 } from "@/lib/utils/storage";
 import { CURRENCY } from "@/data/constants";
+import { useCustomToast } from "@/components/shared/common/customToast";
 
 export default function WishlistPage() {
+  const { showToast } = useCustomToast();
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,8 +37,13 @@ export default function WishlistPage() {
       qty: 1,
     };
     cartStorage.addItem(cartItem);
+    showToast({
+      type: "success",
+      title: "moved to Cart",
+      message: `${item.name ?? "Product"} was moved to your cart.`,
+    });
     removeFromWishlist(item.id);
-  };
+  }
 
   const addAllToCart = () => {
     wishlistItems.forEach((item) => {
@@ -74,7 +81,7 @@ export default function WishlistPage() {
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
           <div className="mb-6 sm:mb-8 md:mb-12">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 text-[#38b6ff]">
-               WishList
+              WishList
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
               Review your wishlist Items

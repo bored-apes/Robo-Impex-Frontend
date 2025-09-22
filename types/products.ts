@@ -133,6 +133,7 @@ export interface APIProduct {
   image_url: string | null;
   status: ProductStatusEnum;
   created_at: string;
-  averageRating?: number;
+  average_rating?:number;
+  total_ratings?:number;
   ratingCount?: number;
 }

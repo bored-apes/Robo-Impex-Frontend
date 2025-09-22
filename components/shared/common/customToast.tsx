@@ -86,8 +86,8 @@ export function CustomToast({ id, title, message, type, duration = 5000, onClose
         <div className="flex-shrink-0 mt-0.5">{getIcon()}</div>
 
         <div className="flex-1 min-w-0">
-          {title && <h4 className="text-xs sm:text-sm md:text-base font-semibold text-foreground mb-0.5 sm:mb-1 line-clamp-1">{title}</h4>}
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-none">{message}</p>
+          {title && <h4 className="text-xs sm:text-xs md:text-sm font-semibold text-foreground mb-0.5 sm:mb-1 line-clamp-1">{title}</h4>}
+          <p className="text-xs sm:text-xs md:text-sm text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-none">{message}</p>
         </div>
 
         <button

@@ -1,19 +1,23 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Button } from "@/components/ui/button"
-import { PRODUCT_CATEGORIES, PRODUCT_TYPES, PRODUCT_STATUSES } from "@/data/constants"
-import type { Filters, ProductFiltersProps } from "@/types/products"
-import { useDebounce } from "../shared/hooks/use-debounce"
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_TYPES,
+  PRODUCT_STATUSES,
+} from "@/data/constants";
+import type { Filters, ProductFiltersProps } from "@/types/products";
+import { useDebounce } from "../shared/hooks/use-debounce";
 
 interface ExtendedProductFiltersProps extends ProductFiltersProps {
-  isMobile?: boolean
-  localFilters?: Filters
-  onApply?: (filters: Filters) => void
+  isMobile?: boolean;
+  localFilters?: Filters;
+  onApply?: (filters: Filters) => void;
 }
 
 export function ProductFilters({
@@ -23,57 +27,66 @@ export function ProductFilters({
   localFilters = filters,
   onApply,
 }: ExtendedProductFiltersProps) {
-  const [tempFilters, setTempFilters] = useState<Filters>(localFilters)
+  const [tempFilters, setTempFilters] = useState<Filters>(localFilters);
 
-  const debouncedPriceRange = useDebounce(tempFilters.priceRange, 1200)
-
-  useEffect(() => {
-    setTempFilters(localFilters)
-  }, [localFilters])
+  const debouncedPriceRange = useDebounce(tempFilters.priceRange, 1200);
 
   useEffect(() => {
-    if (!isMobile && JSON.stringify(debouncedPriceRange) !== JSON.stringify(filters.priceRange)) {
-      const newFilters = { ...tempFilters, priceRange: debouncedPriceRange }
-      onFiltersChange(newFilters)
+    setTempFilters(localFilters);
+  }, [localFilters]);
+
+  useEffect(() => {
+    if (
+      !isMobile &&
+      JSON.stringify(debouncedPriceRange) !== JSON.stringify(filters.priceRange)
+    ) {
+      const newFilters = { ...tempFilters, priceRange: debouncedPriceRange };
+      onFiltersChange(newFilters);
     }
-  }, [debouncedPriceRange, isMobile, onFiltersChange, tempFilters, filters.priceRange])
+  }, [
+    debouncedPriceRange,
+    isMobile,
+    onFiltersChange,
+    tempFilters,
+    filters.priceRange,
+  ]);
 
   const handleFilterChange = useCallback(
     (key: keyof Filters, value: Filters[keyof Filters]) => {
-      const newFilters = { ...tempFilters, [key]: value }
-      setTempFilters(newFilters)
+      const newFilters = { ...tempFilters, [key]: value };
+      setTempFilters(newFilters);
       if (!isMobile && key !== "priceRange") {
-        onFiltersChange(newFilters)
+        onFiltersChange(newFilters);
       }
     },
-    [tempFilters, isMobile, onFiltersChange],
-  )
+    [tempFilters, isMobile, onFiltersChange]
+  );
 
   const handleMultipleSelection = useCallback(
     (key: "category" | "type" | "status", value: string) => {
-      const currentValues = tempFilters[key] as string[]
+      const currentValues = tempFilters[key] as string[];
       const newValues = currentValues?.includes(value)
         ? currentValues.filter((v) => v !== value)
-        : [...(currentValues || []), value]
+        : [...(currentValues || []), value];
 
-      handleFilterChange(key, newValues as any)
+      handleFilterChange(key, newValues as any);
     },
-    [tempFilters, handleFilterChange],
-  )
+    [tempFilters, handleFilterChange]
+  );
 
   const isSelected = useCallback(
     (key: "category" | "type" | "status", value: string) => {
-      const currentValues = tempFilters[key] as string[]
-      return currentValues?.includes(value) || false
+      const currentValues = tempFilters[key] as string[];
+      return currentValues?.includes(value) || false;
     },
-    [tempFilters],
-  )
+    [tempFilters]
+  );
 
   const handleApply = useCallback(() => {
     if (isMobile && onApply) {
-      onApply(tempFilters)
+      onApply(tempFilters);
     }
-  }, [isMobile, onApply, tempFilters])
+  }, [isMobile, onApply, tempFilters]);
 
   const clearFilters = useCallback(() => {
     const clearedFilters: Filters = {
@@ -82,19 +95,21 @@ export function ProductFilters({
       status: [],
       priceRange: [0, 100000],
       inStock: false,
-    }
-    setTempFilters(clearedFilters)
+    };
+    setTempFilters(clearedFilters);
     if (!isMobile) {
-      onFiltersChange(clearedFilters)
+      onFiltersChange(clearedFilters);
     } else if (onApply) {
-      onApply(clearedFilters)
+      onApply(clearedFilters);
     }
-  }, [isMobile, onFiltersChange, onApply])
+  }, [isMobile, onFiltersChange, onApply]);
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-base sm:text-lg md:text-xl font-semibold">Filters</h2>
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">
+          Filters
+        </h2>
         <Button
           variant="ghost"
           size="sm"
@@ -115,8 +130,10 @@ export function ProductFilters({
               <Checkbox
                 id={`category-${category.id}`}
                 checked={isSelected("category", category.id)}
-                onCheckedChange={() => handleMultipleSelection("category", category.id)}
-                className="h-4 w-4 sm:h-5 sm:w-5"
+                onCheckedChange={() =>
+                  handleMultipleSelection("category", category.id)
+                }
+                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
               />
               <Label
                 htmlFor={`category-${category.id}`}
@@ -140,9 +157,12 @@ export function ProductFilters({
                 id={`type-${type.id}`}
                 checked={isSelected("type", type.id)}
                 onCheckedChange={() => handleMultipleSelection("type", type.id)}
-                className="h-4 w-4 sm:h-5 sm:w-5"
+                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
               />
-              <Label htmlFor={`type-${type.id}`} className="text-xs sm:text-sm cursor-pointer">
+              <Label
+                htmlFor={`type-${type.id}`}
+                className="text-xs sm:text-sm cursor-pointer"
+              >
                 {type.name}
               </Label>
             </div>
@@ -160,8 +180,10 @@ export function ProductFilters({
               <Checkbox
                 id={`status-${status.id}`}
                 checked={isSelected("status", status.id)}
-                onCheckedChange={() => handleMultipleSelection("status", status.id)}
-                className="h-4 w-4 sm:h-5 sm:w-5"
+                onCheckedChange={() =>
+                  handleMultipleSelection("status", status.id)
+                }
+                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
               />
               <Label
                 htmlFor={`status-${status.id}`}
@@ -182,11 +204,13 @@ export function ProductFilters({
           <div className="space-y-3 sm:space-y-4">
             <Slider
               value={tempFilters.priceRange}
-              onValueChange={(value: [number, number]) => handleFilterChange("priceRange", value)}
+              onValueChange={(value: [number, number]) =>
+                handleFilterChange("priceRange", value)
+              }
               max={100000}
               min={0}
               step={1000}
-              className="w-full"
+              className="w-full cursor-pointer"
             />
             <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
               <span>₹{tempFilters.priceRange[0].toLocaleString()}</span>
@@ -205,10 +229,15 @@ export function ProductFilters({
             <Checkbox
               id="inStock"
               checked={tempFilters.inStock}
-              onCheckedChange={(checked: boolean) => handleFilterChange("inStock", checked)}
-              className="h-4 w-4 sm:h-5 sm:w-5"
+              onCheckedChange={(checked: boolean) =>
+                handleFilterChange("inStock", checked)
+              }
+              className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
             />
-            <Label htmlFor="inStock" className="text-xs sm:text-sm cursor-pointer">
+            <Label
+              htmlFor="inStock"
+              className="text-xs sm:text-sm cursor-pointer"
+            >
               In Stock Only
             </Label>
           </div>
@@ -233,5 +262,5 @@ export function ProductFilters({
         </div>
       )}
     </div>
-  )
+  );
 }

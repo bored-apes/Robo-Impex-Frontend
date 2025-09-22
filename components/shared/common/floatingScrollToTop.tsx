@@ -39,7 +39,7 @@ export function FloatingScrollToTop() {
 
         <button
           onClick={scrollToTop}
-          className="relative bg-gradient-to-br from-[#38b6ff] to-[#2a8cc7] hover:from-[#2a8cc7] hover:to-[#1e6b9e] text-white rounded-full p-2 shadow-2xl hover:shadow-[#38b6ff]/25 transition-all duration-300 transform hover:scale-110 active:scale-95 group border-2 border-[#38b6ff]/20 dark:from-[#2a8cc7] dark:to-[#1e6b9e] dark:hover:from-[#38b6ff] dark:hover:to-[#2a8cc7]"
+          className="relative bg-gradient-to-br cursor-pointer from-[#38b6ff] to-[#2a8cc7] hover:from-[#2a8cc7] hover:to-[#1e6b9e] text-white rounded-full p-2 shadow-2xl hover:shadow-[#38b6ff]/25 transition-all duration-300 transform hover:scale-110 active:scale-95 group border-2 border-[#38b6ff]/20 dark:from-[#2a8cc7] dark:to-[#1e6b9e] dark:hover:from-[#38b6ff] dark:hover:to-[#2a8cc7]"
           aria-label="Scroll to top"
         >
           <Icon
