@@ -1,46 +1,47 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/context/authContext"
-import { useRouter } from "next/navigation"
-import { useEffect, type ReactNode } from "react"
-import { SectionLoader } from "@/components/shared/common/loader"
-import { useToast } from "../shared/hooks/use-toast"
+import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/navigation";
+import { useEffect, type ReactNode } from "react";
+import { useCustomToast } from "../shared/common/customToast";
 
 interface PrivateRouteProps {
-  children: ReactNode
-  redirectTo?: string
-  showToast?: boolean
+  children: ReactNode;
+  redirectTo?: string;
+  showToastError?: boolean;
 }
 
-export function PrivateRoute({ children, redirectTo = "/login", showToast = true }: PrivateRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth()
-  const router = useRouter()
-  const { toast } = useToast()
+export function PrivateRoute({
+  children,
+  redirectTo = "/login",
+  showToastError = true,
+}: PrivateRouteProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+  const { showToast } = useCustomToast();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      if (showToast) {
-        toast({
+      if (showToastError) {
+        showToast({
+          type: "warning",
           title: "Authentication Required",
-          description: "Please login to access this page.",
-          variant: "destructive",
-        })
+          message: "Please login to access this page.",
+        });
       }
-      router.push(redirectTo)
+      router.push(redirectTo);
     }
-  }, [isAuthenticated, isLoading, router, redirectTo, showToast, toast])
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <SectionLoader />
-      </div>
-    )
-  }
-
+  }, [
+    isAuthenticated,
+    isLoading,
+    router,
+    redirectTo,
+    showToastError,
+    showToast,
+  ]);
   if (!isAuthenticated) {
-    return null
+    return null;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }

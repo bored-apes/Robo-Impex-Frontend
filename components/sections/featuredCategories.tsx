@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { CATEGORIES } from "@/data/constants";
+import { PRODUCT_CATEGORIES } from "@/data/constants";
 import { Card, CardContent } from "../ui/card";
 import { motion } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { JSX } from "react/jsx-runtime";
 import { AnimatedFeatureCategoryBackgroundIcons } from "../shared/common/animatedBackgroundIcons";
+
+const categoryIcons = {
+  Semiconductor: "mdi:chip",
+  IoT: "mdi:wifi",
+  Robotics: "mdi:robot",
+  Power: "mdi:lightning-bolt",
+  Industrial: "mdi:factory",
+};
 
 export function FeaturedCategories(): JSX.Element {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
@@ -139,13 +147,13 @@ export function FeaturedCategories(): JSX.Element {
             }}
             transition={{ duration: 0.5 }}
           >
-            Discover our comprehensive range of industrial machinery and
-            equipment across multiple specialized categories
+            Discover our comprehensive range of electronics components across
+            specialized categories
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
-          {CATEGORIES.map((category, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
+          {PRODUCT_CATEGORIES.map((category, index) => (
             <motion.div
               key={category.id}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -155,7 +163,7 @@ export function FeaturedCategories(): JSX.Element {
             >
               <Card className="group relative overflow-hidden border border-primary/20 bg-background/90 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:ring-2 hover:ring-primary/30 cursor-pointer">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/15 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
 
                 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   {Array.from({ length: 6 }).map((_, i) => (
@@ -180,7 +188,14 @@ export function FeaturedCategories(): JSX.Element {
                 </div>
 
                 <CardContent className="p-8 text-center relative">
-                  <Link href="/products" className="block">
+                  <Link
+                    href="/products"
+                    className="block"
+                    onClick={() => {
+                      // Store the selected category in sessionStorage for filter state management
+                      sessionStorage.setItem("selectedCategory", category.id);
+                    }}
+                  >
                     <div className="relative z-10">
                       <div className="mb-6 relative">
                         <motion.div
@@ -205,7 +220,11 @@ export function FeaturedCategories(): JSX.Element {
                             }}
                           />
                           <Icon
-                            icon={category.icon}
+                            icon={
+                              categoryIcons[
+                                category.id as keyof typeof categoryIcons
+                              ]
+                            }
                             className="h-16 w-16 mx-auto text-primary group-hover:text-primary relative z-10 drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500"
                           />
                         </motion.div>

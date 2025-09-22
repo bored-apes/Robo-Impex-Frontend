@@ -2,30 +2,48 @@
 import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import Link from "next/link";
-import { Minus, Plus, Trash2, Heart, ShoppingBag, ArrowLeft, Lock, User } from "lucide-react";
+import {
+  Minus,
+  Plus,
+  Trash2,
+  Heart,
+  ShoppingBag,
+  ArrowLeft,
+  Lock,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { cartStorage, wishlistStorage, type CartItem, type Variant } from "@/lib/utils/storage";
+import {
+  cartStorage,
+  wishlistStorage,
+  type CartItem,
+  type Variant,
+} from "@/lib/utils/storage";
 import { CURRENCY } from "@/data/constants";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { createOrder } from "@/lib/apiServices/order.service";
-import { useToast } from "@/components/shared/hooks/use-toast";
+import { useCustomToast } from "@/components/shared/common/customToast";
 
 export default function CartPage(): ReactElement {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
-  const { toast } = useToast();
+  const { showToast } = useCustomToast();
 
   useEffect(() => {
     setCartItems(cartStorage.getItems());
   }, []);
 
-  const updateQuantity = (id: string, variant: Variant, newQty: number): void => {
+  const updateQuantity = (
+    id: string,
+    variant: Variant,
+    newQty: number
+  ): void => {
     if (newQty <= 0) {
       removeItem(id, variant);
       return;
@@ -50,26 +68,29 @@ export default function CartPage(): ReactElement {
     removeItem(item.id, item.variant);
   };
 
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.qty, 0);
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.qty,
+    0
+  );
   const shipping = subtotal > 1000 ? 0 : 50;
   const total = subtotal + shipping;
 
   const handleCheckout = async () => {
     if (!isAuthenticated || !user) {
-      toast({
+      showToast({
+        type: "warning",
         title: "Login Required",
-        description: "Please login to proceed with checkout.",
-        variant: "destructive",
+        message: `Please login to proceed with checkout.`,
       });
       router.push("/login");
       return;
     }
 
     if (cartItems.length === 0) {
-      toast({
+      showToast({
+        type: "info",
         title: "Empty Cart",
-        description: "Please add items to your cart before checkout.",
-        variant: "destructive",
+        message: "Please add items to your cart before checkout.",
       });
       return;
     }
@@ -100,28 +121,31 @@ export default function CartPage(): ReactElement {
       const failedOrders = results.filter((result) => !result.success);
 
       if (failedOrders.length > 0) {
-        toast({
+        showToast({
+          type: "error",
           title: "Partial Order Creation Failed",
-          description: `${failedOrders.length} out of ${cartItems.length} orders failed to create.`,
-          variant: "destructive",
+          message: `${failedOrders.length} out of ${cartItems.length} orders failed to create.`,
         });
       } else {
         cartStorage.clear();
         setCartItems([]);
 
-        toast({
+        showToast({
+          type: "success",
           title: "Orders Created Successfully!",
-          description: `${cartItems.length} order${cartItems.length > 1 ? "s" : ""} created successfully.`,
+          message: `${cartItems.length} order${
+            cartItems.length > 1 ? "s" : ""
+          } created successfully.`,
         });
 
         router.push("/orders");
       }
     } catch (error) {
       console.error("Checkout error:", error);
-      toast({
+      showToast({
+        type: "error",
         title: "Checkout Failed",
-        description: "An error occurred during checkout. Please try again.",
-        variant: "destructive",
+        message: "An error occurred during checkout. Please try again.",
       });
     } finally {
       setIsCheckingOut(false);
@@ -152,7 +176,8 @@ export default function CartPage(): ReactElement {
                     Your Cart is Empty
                   </h2>
                   <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-md">
-                    Discover our industrial equipment and add items to get started.
+                    Discover our industrial equipment and add items to get
+                    started.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
@@ -199,11 +224,15 @@ export default function CartPage(): ReactElement {
                       </div>
                       <div className="flex-1 space-y-2 sm:space-y-3">
                         <div>
-                          <h3 className="font-semibold text-sm sm:text-base md:text-lg line-clamp-2">{item.name}</h3>
+                          <h3 className="font-semibold text-sm sm:text-base md:text-lg line-clamp-2">
+                            {item.name}
+                          </h3>
                           {item.variant && (
                             <p className="text-xs sm:text-sm text-muted-foreground">
                               {Object.entries(item.variant)
-                                .map(([key, value]) => `${key}: ${String(value)}`)
+                                .map(
+                                  ([key, value]) => `${key}: ${String(value)}`
+                                )
                                 .join(", ")}
                             </p>
                           )}
@@ -215,7 +244,13 @@ export default function CartPage(): ReactElement {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8 sm:h-9 sm:w-9 bg-transparent cursor-pointer"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty - 1)}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  item.qty - 1
+                                )
+                              }
                             >
                               <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
@@ -223,7 +258,11 @@ export default function CartPage(): ReactElement {
                               type="number"
                               value={item.qty}
                               onChange={(e) =>
-                                updateQuantity(item.id, item.variant, Number.parseInt(e.target.value) || 1)
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  Number.parseInt(e.target.value) || 1
+                                )
                               }
                               className="w-12 sm:w-16 text-center h-8 sm:h-9 text-sm sm:text-base"
                               min={1}
@@ -232,7 +271,13 @@ export default function CartPage(): ReactElement {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8 sm:h-9 sm:w-9 bg-transparent cursor-pointer"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty + 1)}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  item.variant,
+                                  item.qty + 1
+                                )
+                              }
                             >
                               <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
@@ -280,7 +325,9 @@ export default function CartPage(): ReactElement {
             <div className="sm:col-span-2 lg:col-span-1">
               <Card className="sticky top-4 glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-3 sm:p-4 space-y-3 sm:space-y-4">
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">Order Summary</h2>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">
+                    Order Summary
+                  </h2>
                   <div className="space-y-2 sm:space-y-3">
                     <div className="flex justify-between text-sm sm:text-base">
                       <span>Subtotal ({cartItems.length} items)</span>
@@ -305,7 +352,8 @@ export default function CartPage(): ReactElement {
                     {subtotal < 1000 && (
                       <p className="text-xs sm:text-sm text-muted-foreground bg-muted p-2 rounded-lg">
                         Add {CURRENCY.SYMBOL}
-                        {(1000 - subtotal).toLocaleString()} more for free shipping
+                        {(1000 - subtotal).toLocaleString()} more for free
+                        shipping
                       </p>
                     )}
                     <Separator />
@@ -326,8 +374,14 @@ export default function CartPage(): ReactElement {
                             Please login to proceed with checkout
                           </p>
                         </div>
-                        <Button asChild className="w-full h-9 sm:h-10 px-4 sm:px-5 text-sm sm:text-base bg-[#38b6ff] hover:bg-[#38b6ff]/90 animate-glow">
-                          <Link href="/login" className="flex items-center gap-1.5 sm:gap-2">
+                        <Button
+                          asChild
+                          className="w-full h-9 sm:h-10 px-4 sm:px-5 text-sm sm:text-base bg-[#38b6ff] hover:bg-[#38b6ff]/90 animate-glow"
+                        >
+                          <Link
+                            href="/login"
+                            className="flex items-center gap-1.5 sm:gap-2"
+                          >
                             <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
                             Login to Checkout
                           </Link>

@@ -16,7 +16,7 @@ export function FloatingWhatsApp() {
 
         <button
           onClick={handleWhatsAppClick}
-          className="relative bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-full p-2 shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-110 active:scale-95 group border-2 border-green-300/20"
+          className="relative bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-full p-2 shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-110 active:scale-95 group border-2 border-green-300/20 cursor-pointer"
           aria-label="Contact us on WhatsApp"
         >
           <Icon

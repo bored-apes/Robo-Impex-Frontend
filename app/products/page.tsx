@@ -1,159 +1,190 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { ProductCard } from "@/components/product/product-card"
-import { ProductFilters } from "@/components/product/product-filters"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Filter, X, Search, Package, AlertCircle } from "lucide-react"
-import type { APIProduct, Filters, PaginationParams } from "@/types/products"
-import { getProducts } from "@/lib/apiServices/product.service"
-import { Pagination } from "@/components/shared/common/pagination"
-import { Input } from "@/components/ui/input"
-import { useCustomToast } from "@/components/shared/common/customToast"
-import { ProductGridSkeleton } from "@/components/shared/common/skeletons"
-import { useDebounce } from "@/components/shared/hooks/use-debounce"
+import { useState, useEffect, useCallback } from "react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Filter, X, Search, Package, AlertCircle } from "lucide-react";
+import type { APIProduct, Filters, PaginationParams } from "@/types/products";
+import { getProducts } from "@/lib/apiServices/product.service";
+import { Pagination } from "@/components/shared/common/pagination";
+import { Input } from "@/components/ui/input";
+import { useCustomToast } from "@/components/shared/common/customToast";
+import { useDebounce } from "@/components/shared/hooks/use-debounce";
+import { ProductFilters } from "@/components/product/productFilters";
+import { ProductCard } from "@/components/product/productCard";
+import { ProductsListSkeleton } from "@/components/shared/skeletons/productsListSkeleton";
+import { useSearchParams } from "next/navigation";
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<APIProduct[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalItems, setTotalItems] = useState(0)
-  const [sortBy, setSortBy] = useState("newest")
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [products, setProducts] = useState<APIProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [sortBy, setSortBy] = useState("newest");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<Filters>({
     category: [],
     type: [],
     status: [],
     priceRange: [0, 100000],
     inStock: false,
-  })
+  });
 
-  const { showToast } = useCustomToast()
-  const productsPerPage = 12
+  const { showToast } = useCustomToast();
+  const productsPerPage = 12;
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 500)
-  const debouncedPriceRange = useDebounce(filters.priceRange, 1200)
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedPriceRange = useDebounce(filters.priceRange, 1200);
+
 
   const fetchProducts = useCallback(
     async (page = 1, resetProducts = false) => {
       if (resetProducts) {
-        setProducts([])
+        setProducts([]);
       }
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       try {
         const params: PaginationParams = {
           page,
           pageSize: productsPerPage,
           ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
-          ...((filters.category?.length ?? 0) > 0 && { category: filters.category }),
+          ...((filters.category?.length ?? 0) > 0 && {
+            category: filters.category,
+          }),
           ...((filters.type?.length ?? 0) > 0 && { type: filters.type }),
           ...((filters.status?.length ?? 0) > 0 && { status: filters.status }),
-          ...(debouncedPriceRange[0] > 0 && { minPrice: debouncedPriceRange[0] }),
-          ...(debouncedPriceRange[1] < 100000 && { maxPrice: debouncedPriceRange[1] }),
+          ...(debouncedPriceRange[0] > 0 && {
+            minPrice: debouncedPriceRange[0],
+          }),
+          ...(debouncedPriceRange[1] < 100000 && {
+            maxPrice: debouncedPriceRange[1],
+          }),
           ...(filters.inStock && { inStock: true }),
-        }
+        };
 
         switch (sortBy) {
           case "price-low":
-            params.sortBy = "base_price"
-            params.sortOrder = "asc"
-            break
+            params.sortBy = "base_price";
+            params.sortOrder = "asc";
+            break;
           case "price-high":
-            params.sortBy = "base_price"
-            params.sortOrder = "desc"
-            break
+            params.sortBy = "base_price";
+            params.sortOrder = "desc";
+            break;
           default:
-            params.sortBy = "created_at"
-            params.sortOrder = "desc"
+            params.sortBy = "created_at";
+            params.sortOrder = "desc";
         }
 
-        console.log("[v0] API Request params:", params)
-        const response = await getProducts(params)
+        console.log(" API Request params:", params);
+        const response = await getProducts(params);
 
         if (response.success && response.data) {
           const responseData = response.data as {
-            data: APIProduct[]
+            data: APIProduct[];
             pagination: {
-              page: number
-              pageSize: number
-              total: number
-              totalPages: number
-            }
-          }
+              page: number;
+              pageSize: number;
+              total: number;
+              totalPages: number;
+            };
+          };
 
-          setProducts(responseData.data)
-          setCurrentPage(responseData.pagination.page)
-          setTotalPages(responseData.pagination.totalPages)
-          setTotalItems(responseData.pagination.total)
+          setProducts(responseData.data);
+          setCurrentPage(responseData.pagination.page);
+          setTotalPages(responseData.pagination.totalPages);
+          setTotalItems(responseData.pagination.total);
         } else {
-          setError(response.message || "Failed to fetch products")
+          setError(response.message || "Failed to fetch products");
           showToast({
             type: "error",
             title: "Error",
-            message: response.message || "Failed to load products. Please try again.",
-          })
+            message:
+              response.message || "Failed to load products. Please try again.",
+          });
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "An error occurred while fetching products"
-        setError(errorMessage)
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "An error occurred while fetching products";
+        setError(errorMessage);
         showToast({
           type: "error",
           title: "Network Error",
           message: errorMessage,
-        })
-        console.error("Error fetching products:", err)
+        });
+        console.error("Error fetching products:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     },
-    [debouncedSearchQuery, filters, debouncedPriceRange, sortBy, productsPerPage],
-  )
+    [
+      debouncedSearchQuery,
+      filters,
+      debouncedPriceRange,
+      sortBy,
+      productsPerPage,
+    ]
+  );
 
   const handleFiltersChange = useCallback((newFilters: Filters) => {
-    setFilters(newFilters)
-    setCurrentPage(1)
-  }, [])
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, []);
 
   const handleMobileApplyFilters = useCallback((newFilters: Filters) => {
-    setFilters(newFilters)
-    setCurrentPage(1)
-    setIsFilterOpen(false)
-  }, [])
+    setFilters(newFilters);
+    setCurrentPage(1);
+    setIsFilterOpen(false);
+  }, []);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    fetchProducts(page)
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    setCurrentPage(page);
+    fetchProducts(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const clearFilters = useCallback(() => {
-    setSearchQuery("")
+    setSearchQuery("");
     setFilters({
       category: [],
       type: [],
       status: [],
       priceRange: [0, 100000],
       inStock: false,
-    })
-    setCurrentPage(1)
-  }, [])
+    });
+    setCurrentPage(1);
+  }, []);
 
   useEffect(() => {
-    fetchProducts(1, true)
-  }, [fetchProducts])
+    fetchProducts(1, true);
+  }, [fetchProducts]);
 
   useEffect(() => {
     if (currentPage > 1) {
-      fetchProducts(currentPage)
+      fetchProducts(currentPage);
     }
-  }, [currentPage, fetchProducts])
+  }, [currentPage, fetchProducts]);
 
   const convertToDisplayProduct = (apiProduct: APIProduct) => ({
     id: apiProduct.id.toString(),
@@ -164,19 +195,19 @@ export default function ProductsPage() {
     name: apiProduct.name,
     descriptionShort: apiProduct.description || "",
     descriptionLong: apiProduct.description || "",
-    price: apiProduct.base_price || 0,
+    price: apiProduct.base_price ?? 0, // fallback to 0
     currency: "INR",
     images: apiProduct.image_url ? [apiProduct.image_url] : [""],
     categories: apiProduct.category ? [apiProduct.category] : [],
     tags: apiProduct.type ? [apiProduct.type] : [],
-    inStock: (apiProduct.stock_quantity || 0) > 0,
+    inStock: (apiProduct.stock_quantity ?? 0) > 0,
     brand: "RoboImpex",
     modelNumber: `RI-${apiProduct.id}`,
     warranty: "1 Year",
-    rating: 4.5,
-    ratingCount: 120,
+    rating: apiProduct.average_rating ?? 4.5, // fallback to 4.5
+    ratingCount: apiProduct.ratingCount ?? apiProduct.total_ratings ?? 0, // fallback to 0
     similar: [],
-  })
+  });
 
   if (error && !loading) {
     return (
@@ -190,7 +221,10 @@ export default function ProductsPage() {
             {error}
           </p>
           <div className="space-y-3 sm:space-y-4">
-            <Button onClick={() => fetchProducts(1, true)} className="w-full h-10 sm:h-11 text-xs sm:text-sm">
+            <Button
+              onClick={() => fetchProducts(1, true)}
+              className="w-full h-10 sm:h-11 text-xs sm:text-sm"
+            >
               Try Again
             </Button>
             <Button
@@ -203,7 +237,7 @@ export default function ProductsPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -239,7 +273,10 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             <div className="hidden md:block lg:col-span-1">
               <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
-                <ProductFilters filters={filters} onFiltersChange={handleFiltersChange} />
+                <ProductFilters
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                />
               </div>
             </div>
 
@@ -273,7 +310,10 @@ export default function ProductsPage() {
                         Filters
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-full sm:w-80 md:w-96 p-4 sm:p-6">
+                    <SheetContent
+                      side="left"
+                      className="w-full sm:w-80 md:w-96 p-4 sm:p-6"
+                    >
                       <SheetHeader className="flex-shrink-0 pb-3 sm:pb-4 border-b">
                         <SheetTitle className="flex items-center justify-between text-base sm:text-lg">
                           Filter Products
@@ -302,22 +342,35 @@ export default function ProductsPage() {
 
                 <div className="w-full sm:w-auto">
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-40 md:w-48 h-9 sm:h-10 text-xs sm:text-sm">
+                    <SelectTrigger className="w-full sm:w-40 md:w-48 h-9 sm:h-10 text-xs sm:text-sm cursor-pointer">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="newest" className="text-xs sm:text-sm">Newest First</SelectItem>
-                      <SelectItem value="price-low" className="text-xs sm:text-sm">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high" className="text-xs sm:text-sm">Price: High to Low</SelectItem>
+                      <SelectItem
+                        value="newest"
+                        className="text-xs sm:text-sm cursor-pointer"
+                      >
+                        Newest First
+                      </SelectItem>
+                      <SelectItem
+                        value="price-low"
+                        className="text-xs sm:text-sm cursor-pointer"
+                      >
+                        Price: Low to High
+                      </SelectItem>
+                      <SelectItem
+                        value="price-high"
+                        className="text-xs sm:text-sm cursor-pointer"
+                      >
+                        Price: High to Low
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               {loading ? (
-                <div className="space-y-4 sm:space-y-6">
-                  <ProductGridSkeleton count={productsPerPage} />
-                </div>
+                <ProductsListSkeleton count={productsPerPage} />
               ) : products.length === 0 ? (
                 <div className="text-center py-8 sm:py-12 md:py-16 px-4">
                   <Package className="h-12 sm:h-16 md:h-20 w-12 sm:w-16 md:w-20 text-muted-foreground mx-auto mb-4 sm:mb-6" />
@@ -340,16 +393,19 @@ export default function ProductsPage() {
                       onClick={clearFilters}
                       variant="outline"
                       size="sm"
-                      className="h-8 sm:h-9 text-xs sm:text-sm"
+                      className="h-8 sm:h-9 text-xs sm:text-sm bg-transparent"
                     >
                       Clear All Filters
                     </Button>
                   )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                   {products.map((product) => (
-                    <ProductCard key={product.id} product={convertToDisplayProduct(product)} />
+                    <ProductCard
+                      key={product.id}
+                      product={convertToDisplayProduct(product)}
+                    />
                   ))}
                 </div>
               )}
@@ -372,5 +428,5 @@ export default function ProductsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
