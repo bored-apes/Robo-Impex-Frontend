@@ -107,7 +107,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow,
+      transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -126,7 +127,8 @@
 
 /* Enhanced IoT Electronics Animations */
 @keyframes circuit-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(56, 182, 255, 0.4);
@@ -153,7 +155,8 @@
 }
 
 @keyframes chip-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(56, 182, 255, 0.3);
     transform: scale(1);
   }
@@ -164,7 +167,8 @@
 }
 
 @keyframes particle-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
     opacity: 0.6;
   }
@@ -333,7 +337,13 @@
 
 .animate-background-shift {
   animation: background-shift 8s ease-in-out infinite;
-  background: linear-gradient(-45deg, rgba(56, 182, 255, 0.1), rgba(14, 165, 233, 0.1), rgba(56, 182, 255, 0.05), rgba(0, 0, 0, 0.02));
+  background: linear-gradient(
+    -45deg,
+    rgba(56, 182, 255, 0.1),
+    rgba(14, 165, 233, 0.1),
+    rgba(56, 182, 255, 0.05),
+    rgba(0, 0, 0, 0.02)
+  );
   background-size: 400% 400%;
 }
 
@@ -687,7 +697,7 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #161F33, #161F33);
+  background: linear-gradient(135deg, #161f33, #161f33);
 }
 
 .btn-iot::before {

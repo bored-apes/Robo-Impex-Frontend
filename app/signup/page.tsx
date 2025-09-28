@@ -113,23 +113,23 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-6 relative overflow-hidden">
       <AnimatedProductSectionBackgroundIcons />
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-20 sm:-top-30 -right-20 sm:-right-30 w-48 sm:w-64 h-48 sm:h-64 bg-primary/10 rounded-full blur-3xl animate-float" />
+        <div className="absolute -top-16 sm:-top-24 md:-top-30 -right-16 sm:-right-24 md:-right-30 w-40 sm:w-52 md:w-64 h-40 sm:h-52 md:h-64 bg-primary/10 rounded-full blur-2xl sm:blur-3xl animate-float" />
         <div
-          className="absolute -bottom-20 sm:-bottom-30 -left-20 sm:-left-30 w-48 sm:w-64 h-48 sm:h-64 bg-accent/10 rounded-full blur-3xl animate-float"
+          className="absolute -bottom-16 sm:-bottom-24 md:-bottom-30 -left-16 sm:-left-24 md:-left-30 w-40 sm:w-52 md:w-64 h-40 sm:h-52 md:h-64 bg-accent/10 rounded-full blur-2xl sm:blur-3xl animate-float"
           style={{ animationDelay: "2s" }}
         />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 sm:w-80 h-64 sm:h-80 bg-secondary/5 rounded-full blur-3xl animate-scale-pulse" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-56 sm:w-64 md:w-80 h-56 sm:h-64 md:h-80 bg-secondary/5 rounded-full blur-2xl sm:blur-3xl animate-scale-pulse" />
       </div>
 
-      <div className="w-full max-w-4xl sm:max-w-5xl md:max-w-6xl grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center relative z-10">
+      <div className="w-full max-w-3xl sm:max-w-4xl md:max-w-5xl lg:max-w-6xl grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="hidden lg:flex flex-col items-center justify-center space-y-6 sm:space-y-8"
+          className="hidden lg:flex flex-col items-center justify-center space-y-4 sm:space-y-6"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -137,7 +137,7 @@ export default function SignupPage() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="relative"
           >
-            <div className="w-48 sm:w-64 lg:w-80 h-48 sm:h-64 lg:h-80 relative">
+            <div className="w-40 sm:w-48 md:w-64 h-40 sm:h-48 md:h-80 relative">
               <svg viewBox="0 0 320 320" className="w-full h-full">
                 <motion.rect
                   x="40"
@@ -191,11 +191,7 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-muted-foreground opacity-60"
                   animate={{ y: [0, -20, -40], opacity: [0.6, 0.3, 0] }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: 0.5,
-                  }}
+                  transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                 />
                 <motion.rect
                   x="70"
@@ -217,11 +213,7 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{
-                    duration: 3,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: 1,
-                  }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
                 />
                 <motion.rect
                   x="185"
@@ -232,11 +224,7 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{
-                    duration: 3,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: 2,
-                  }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
                 />
                 <motion.rect
                   x="235"
@@ -247,11 +235,7 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{
-                    duration: 3,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: 0.5,
-                  }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                 />
                 <motion.rect
                   x="60"
@@ -274,11 +258,7 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ x: [80, 240, 80] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
+                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                 />
                 <motion.rect
                   x="140"
@@ -289,100 +269,87 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ x: [140, 300, 140] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                    delay: 1,
-                  }}
+                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear", delay: 1 }}
                 />
               </svg>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="text-center space-y-3 sm:space-y-4"
+            className="text-center space-y-2 sm:space-y-3"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground text-balance">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground text-balance">
               Join the Future of <span className="text-gradient">Industry</span>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground text-pretty max-w-xs sm:max-w-md">
-              Connect with leading industrial automation solutions and transform
-              your business operations.
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground text-pretty max-w-xs sm:max-w-md">
+              Connect with leading industrial automation solutions and transform your business operations.
             </p>
           </motion.div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full max-w-md sm:max-w-lg mx-auto"
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto"
         >
           <Card className="glass-morphism border shadow-xl">
-            <CardHeader className="text-center space-y-3 sm:space-y-4">
+            <CardHeader className="text-center space-y-2 sm:space-y-3">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="flex justify-center"
               >
-                <div className="w-12 sm:w-16 h-12 sm:h-16 bg-primary rounded-2xl flex items-center justify-center animate-glow">
-                  <UserPlus className="w-6 sm:w-8 h-6 sm:h-8 text-primary-foreground" />
+                <div className="w-10 sm:w-12 md:w-16 h-10 sm:h-12 md:h-16 bg-primary rounded-2xl flex items-center justify-center animate-glow">
+                  <UserPlus className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-primary-foreground" />
                 </div>
               </motion.div>
 
               <div>
-                <CardTitle className="text-xl sm:text-2xl font-bold text-foreground">
+                <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground">
                   Create Account
                 </CardTitle>
-                <CardDescription className="text-sm sm:text-base text-muted-foreground">
+                <CardDescription className="text-xs sm:text-sm md:text-base text-muted-foreground">
                   Start your industrial automation journey
                 </CardDescription>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-4 sm:space-y-6">
+            <CardContent className="space-y-3 sm:space-y-4">
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
                 {({ isSubmitting }) => (
-                  <Form className="space-y-4 sm:space-y-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <Form className="space-y-3 sm:space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.5 }}
-                        className="space-y-1 sm:space-y-2"
+                        className="space-y-1 sm:space-y-1.5"
                       >
-                        <Label
-                          htmlFor="firstname"
-                          className="text-xs sm:text-sm font-medium text-foreground"
-                        >
+                        <Label htmlFor="firstname" className="text-xs sm:text-sm font-medium text-foreground">
                           First Name
                         </Label>
                         <div className="relative group">
-                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                          <User className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                           <Field
                             id="firstname"
                             name="firstname"
                             type="text"
                             placeholder="First name"
                             as={Input}
-                            className="pl-9 sm:pl-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                            className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                           />
                         </div>
                         <div>
-                          <ErrorMessage
-                            name="firstname"
-                            component="div"
-                            className="text-xs text-red-500 mt-1"
-                          />
+                          <ErrorMessage name="firstname" component="div" className="text-xs text-red-500 mt-1" />
                         </div>
                       </motion.div>
 
@@ -390,30 +357,23 @@ export default function SignupPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5, duration: 0.5 }}
-                        className="space-y-1 sm:space-y-2"
+                        className="space-y-1 sm:space-y-1.5"
                       >
-                        <Label
-                          htmlFor="lastname"
-                          className="text-xs sm:text-sm font-medium text-foreground"
-                        >
+                        <Label htmlFor="lastname" className="text-xs sm:text-sm font-medium text-foreground">
                           Last Name
                         </Label>
                         <div className="relative group">
-                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                          <User className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                           <Field
                             id="lastname"
                             name="lastname"
                             type="text"
                             placeholder="Last name"
                             as={Input}
-                            className="pl-9 sm:pl-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                            className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                           />
                         </div>
-                        <ErrorMessage
-                          name="lastname"
-                          component="div"
-                          className="text-xs text-red-500 mt-1"
-                        />
+                        <ErrorMessage name="lastname" component="div" className="text-xs text-red-500 mt-1" />
                       </motion.div>
                     </div>
 
@@ -421,142 +381,106 @@ export default function SignupPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6, duration: 0.5 }}
-                      className="space-y-1 sm:space-y-2"
+                      className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label
-                        htmlFor="email"
-                        className="text-xs sm:text-sm font-medium text-foreground"
-                      >
+                      <Label htmlFor="email" className="text-xs sm:text-sm font-medium text-foreground">
                         Email Address
                       </Label>
                       <div className="relative group">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                        <Mail className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                         <Field
                           id="email"
                           name="email"
                           type="email"
                           placeholder="Enter your email"
                           as={Input}
-                          className="pl-9 sm:pl-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                          className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                       </div>
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-xs text-red-500 mt-1"
-                      />
+                      <ErrorMessage name="email" component="div" className="text-xs text-red-500 mt-1" />
                     </motion.div>
 
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.7, duration: 0.5 }}
-                      className="space-y-1 sm:space-y-2"
+                      className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label
-                        htmlFor="mobile"
-                        className="text-xs sm:text-sm font-medium text-foreground"
-                      >
+                      <Label htmlFor="mobile" className="text-xs sm:text-sm font-medium text-foreground">
                         Mobile Number
                       </Label>
                       <div className="relative group">
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                        <Phone className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                         <Field
                           id="mobile"
                           name="mobile"
                           type="tel"
                           placeholder="Enter your mobile number"
                           as={Input}
-                          className="pl-9 sm:pl-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                          className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                       </div>
-                      <ErrorMessage
-                        name="mobile"
-                        component="div"
-                        className="text-xs text-red-500 mt-1"
-                      />
+                      <ErrorMessage name="mobile" component="div" className="text-xs text-red-500 mt-1" />
                     </motion.div>
 
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.8, duration: 0.5 }}
-                      className="space-y-1 sm:space-y-2"
+                      className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label
-                        htmlFor="password"
-                        className="text-xs sm:text-sm font-medium text-foreground"
-                      >
+                      <Label htmlFor="password" className="text-xs sm:text-sm font-medium text-foreground">
                         Password
                       </Label>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                        <Lock className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                         <Field
                           id="password"
                           name="password"
                           type={showPassword ? "text" : "password"}
                           placeholder="Create a password"
                           as={Input}
-                          className="pl-9 sm:pl-10 pr-9 sm:pr-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                          className="pl-7 sm:pl-9 pr-7 sm:pr-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                          className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showPassword ? (
-                            <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" />
-                          ) : (
-                            <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
-                          )}
+                          {showPassword ? <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" /> : <Eye className="w-3 sm:w-4 h-3 sm:h-4" />}
                         </button>
                       </div>
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="text-xs text-red-500 mt-1"
-                      />
+                      <ErrorMessage name="password" component="div" className="text-xs text-red-500 mt-1" />
                     </motion.div>
 
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="space-y-1 sm:space-y-2"
+                      className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label
-                        htmlFor="confirmPassword"
-                        className="text-xs sm:text-sm font-medium text-foreground"
-                      >
+                      <Label htmlFor="confirmPassword" className="text-xs sm:text-sm font-medium text-foreground">
                         Confirm Password
                       </Label>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
+                        <Lock className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-3 sm:w-4 h-3 sm:h-4 group-focus-within:text-primary transition-colors" />
                         <Field
                           id="confirmPassword"
                           name="confirmPassword"
                           type={showPassword ? "text" : "password"}
                           placeholder="Confirm password"
                           as={Input}
-                          className="pl-9 sm:pl-10 pr-9 sm:pr-10 h-10 sm:h-11 focus-ring transition-all duration-300"
+                          className="pl-7 sm:pl-9 pr-7 sm:pr-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                          className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showPassword ? (
-                            <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" />
-                          ) : (
-                            <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
-                          )}
+                          {showPassword ? <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" /> : <Eye className="w-3 sm:w-4 h-3 sm:h-4" />}
                         </button>
                       </div>
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="div"
-                        className="text-xs text-red-500 mt-1"
-                      />
+                      <ErrorMessage name="confirmPassword" component="div" className="text-xs text-red-500 mt-1" />
                     </motion.div>
 
                     <motion.div
@@ -567,17 +491,17 @@ export default function SignupPage() {
                       <Button
                         type="submit"
                         disabled={isSubmitting || isLoading}
-                        className="w-full h-10 sm:h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold btn-hover-grow transition-all duration-300 cursor-pointer text-xs sm:text-sm"
+                        className="w-full h-9 sm:h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold btn-hover-grow transition-all duration-300 cursor-pointer text-xs sm:text-sm"
                       >
                         {isLoading ? (
                           <>
-                            <Loader2 className="w-3 sm:w-4 h-3 sm:h-4 mr-2 animate-spin" />
+                            <Loader2 className="w-2 sm:w-3 h-2 sm:h-3 mr-1 sm:mr-2 animate-spin" />
                             Creating Account...
                           </>
                         ) : (
                           <>
                             Create Account
-                            <ArrowRight className="w-3 sm:w-4 h-3 sm:h-4 ml-2" />
+                            <ArrowRight className="w-2 sm:w-3 h-2 sm:h-3 ml-1 sm:ml-2" />
                           </>
                         )}
                       </Button>
@@ -591,10 +515,7 @@ export default function SignupPage() {
                     >
                       <p className="text-xs sm:text-sm text-muted-foreground">
                         Already have an account?{" "}
-                        <Link
-                          href="/login"
-                          className="text-primary hover:text-primary/80 transition-colors font-semibold"
-                        >
+                        <Link href="/login" className="text-primary hover:text-primary/80 transition-colors font-semibold">
                           Sign In
                         </Link>
                       </p>
@@ -609,12 +530,9 @@ export default function SignupPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.5 }}
-            className="text-center mt-6 sm:mt-8"
+            className="text-center mt-4 sm:mt-6"
           >
-            <Link
-              href="/"
-              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/" className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors">
               ← Back to Home
             </Link>
           </motion.div>

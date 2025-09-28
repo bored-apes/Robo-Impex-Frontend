@@ -27,21 +27,21 @@ const hoverEffect = {
 
 export default function ContactUsPage(): React.ReactElement {
   return (
-    <div className="min-h-screen bg-background px-4 sm:px-6 md:px-8 lg:px-12">
-      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-8 sm:py-10 md:py-12 relative overflow-hidden">
+    <div className="min-h-screen bg-background px-2 sm:px-4 md:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-4 sm:py-6 md:py-8 lg:py-10 relative overflow-hidden">
         <ConnectivityAnimation />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 relative z-10">
           <motion.div
-            className="text-center mb-8 sm:mb-12 md:mb-16"
+            className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-[#38b6ff]">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-[#38b6ff]">
               Get Connected
             </h1>
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto leading-relaxed">
               Ready to transform your industrial operations? Our experts at Robo
               Impox are here to help you find the perfect connectivity solutions
               for your business needs.
@@ -49,7 +49,7 @@ export default function ContactUsPage(): React.ReactElement {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-8 lg:mb-12"
             variants={staggerContainer}
             initial="initial"
             animate="animate"
@@ -62,21 +62,21 @@ export default function ContactUsPage(): React.ReactElement {
                 className="iot-device"
               >
                 <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover-lift glass-morphism">
-                  <CardContent className="p-4 sm:p-6 text-center">
+                  <CardContent className="p-2 sm:p-3 md:p-4 lg:p-5 text-center">
                     <motion.div
-                      className={`inline-flex items-center justify-center w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 rounded-2xl ${method.bgColor} mb-3 sm:mb-4`}
+                      className={`inline-flex items-center justify-center w-10 sm:w-12 md:w-14 lg:w-16 h-10 sm:h-12 md:h-14 lg:h-16 rounded-2xl ${method.bgColor} mb-1 sm:mb-2 md:mb-3`}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <method.icon className={`h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 ${method.color}`} />
+                      <method.icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 ${method.color}`} />
                     </motion.div>
-                    <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">
+                    <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl mb-1 sm:mb-1 md:mb-2">
                       {method.title}
                     </h3>
-                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-2 sm:mb-3">
+                    <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground mb-1 sm:mb-1 md:mb-2">
                       {method.description}
                     </p>
-                    <p className="font-medium text-xs sm:text-sm md:text-base">{method.value}</p>
+                    <p className="font-medium text-xs sm:text-sm md:text-base lg:text-lg">{method.value}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -85,19 +85,19 @@ export default function ContactUsPage(): React.ReactElement {
         </div>
       </section>
 
-      <section className="py-8 sm:py-12 md:py-16 bg-muted/30 circuit-pattern">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-4 sm:py-6 md:py-8 lg:py-12 bg-muted/30 circuit-pattern">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
           <motion.div
-            className="text-center mb-8 sm:mb-10 md:mb-12"
+            className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2 md:mb-3">
               Visit Our Hub
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
+            <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg">
               Located in the heart of Surat's industrial innovation center
             </p>
           </motion.div>
@@ -109,9 +109,9 @@ export default function ContactUsPage(): React.ReactElement {
             transition={{ duration: 0.7 }}
           >
             <Card className="overflow-hidden border-2 glass-morphism">
-              <div className="relative h-64 sm:h-80 md:h-96 bg-muted/50">
+              <div className="relative h-48 sm:h-60 md:h-72 lg:h-96 bg-muted/50">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.122213129299!2d72.8622141750811!3d21.2306444806871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f3f12b5e2c5%3A0x5a1e6c0e1c1b1b1d!2sMota%20Varachha%2C%20Surat%2C%20Gujarat%20394101!5e0!3m2!1sen!2sin!4v1635959542742!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8004.208929795134!2d72.89970959116954!3d21.238245480668525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0450010ff7451%3A0x49cb9ab83002a4f7!2sShyamdham%20Mandir!5e1!3m2!1sen!2sin!4v1759062153354!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -120,6 +120,7 @@ export default function ContactUsPage(): React.ReactElement {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="rounded-lg"
                 ></iframe>
+                
               </div>
             </Card>
           </motion.div>

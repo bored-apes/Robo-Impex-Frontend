@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import Link from "next/link"
 import { ShoppingCart, Heart, Menu, Search, Zap, LogIn, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useTheme } from "@/components/theme-provider"
 import { cartStorage, wishlistStorage } from "@/lib/utils/storage"
-import { motion, AnimatePresence } from "framer-motion"
 import { NAVIGATION } from "@/data/constants"
 import {
   DropdownMenu,
@@ -41,49 +40,54 @@ export function Header() {
   const pathname = usePathname()
   const headerRef = useRef<HTMLDivElement>(null)
 
-  const logoPath = theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png"
+  const logoPath = useMemo(() => (theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png"), [theme])
 
-  const logoDimensions = {
-    notScrolled: {
-      height: "h-8",
-      width: "w-34",
-      smHeight: "sm:h-10",
-      smWidth: "sm:w-40",
-    },
-    scrolled: {
-      height: "h-8",
-      width: "w-32",
-      smHeight: "sm:h-10",
-      smWidth: "sm:w-38",
-    },
-    mobile: { height: "h-12", width: "w-42" },
-  }
+  const logoDimensions = useMemo(
+    () => ({
+      notScrolled: {
+        height: "h-8 md:h-10",
+        width: "w-auto",
+      },
+      scrolled: {
+        height: "h-7 md:h-9",
+        width: "w-auto",
+      },
+      mobile: {
+        height: "h-8",
+        width: "w-auto",
+      },
+    }),
+    [],
+  )
 
-  const getUserDisplayName = () => {
-    if (!user) return "User";
+  const getUserDisplayName = useCallback(() => {
+    if (!user) return "User"
     if (user?.firstname && user?.lastname) {
       return `${user?.firstname} ${user?.lastname}`
     }
     if (user?.firstname) return user?.firstname
     if (user?.email) return user?.email.split("@")[0]
     return "User"
-  }
+  }, [user])
 
-  const getUserAvatar = () => {
+  const getUserAvatar = useCallback(() => {
     return "/images/default-avatar.jpg"
-  }
+  }, [])
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await logout()
     router.push("/")
-  }
+  }, [logout, router])
 
-  const isActiveLink = (href: string) => {
-    if (href === "/") {
-      return pathname === href
-    }
-    return pathname.startsWith(href)
-  }
+  const isActiveLink = useCallback(
+    (href: string) => {
+      if (href === "/") {
+        return pathname === href
+      }
+      return pathname.startsWith(href)
+    },
+    [pathname],
+  )
 
   useEffect(() => {
     const updateCounts = () => {
@@ -131,104 +135,83 @@ export function Header() {
     <>
       <TopBar showTopBar={showTopBar} />
 
-      <motion.header
+      <header
         ref={headerRef}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-        className={`sticky top-0 z-50 w-full overflow-hidden ${
+        className={`sticky top-0 z-50 w-full overflow-hidden transition-all duration-300 ${
           isScrolled
-            ? "bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/60 dark:border-slate-700/60 shadow-lg backdrop-blur-xl transition-all duration-100"
-            : "bg-transparent border-b border-transparent backdrop-blur-md transition-all duration-100"
+            ? "bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/60 dark:border-slate-700/60 shadow-lg backdrop-blur-xl"
+            : "bg-transparent border-b border-transparent backdrop-blur-md"
         }`}
       >
         <div
-          className={`absolute inset-0 bg-gradient-to-r from-[#38b6ff]/2 via-transparent to-[#38b6ff]/2 ${
-            isScrolled ? "opacity-100 transition-opacity duration-100" : "opacity-0 transition-opacity duration-100"
+          className={`absolute inset-0 bg-gradient-to-r from-[#38b6ff]/2 via-transparent to-[#38b6ff]/2 transition-opacity duration-300 ${
+            isScrolled ? "opacity-100" : "opacity-0"
           }`}
         />
         <div
-          className={`absolute inset-0 bg-gradient-to-br from-slate-50/50 via-white/80 to-slate-50/50 dark:from-slate-900/50 dark:via-slate-800/80 dark:to-slate-900/50 ${
-            isScrolled ? "opacity-100 transition-opacity duration-100" : "opacity-0 transition-opacity duration-100"
+          className={`absolute inset-0 bg-gradient-to-br from-slate-50/50 via-white/80 to-slate-50/50 dark:from-slate-900/50 dark:via-slate-800/80 dark:to-slate-900/50 transition-opacity duration-300 ${
+            isScrolled ? "opacity-100" : "opacity-0"
           }`}
         />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10">
           <div
-            className={`flex items-center justify-between transition-all duration-500 ${
-              isScrolled ? "h-14 sm:h-16" : "h-16 sm:h-20"
+            className={`flex items-center justify-between transition-all duration-300 ${
+              isScrolled ? "h-14 md:h-16" : "h-16 md:h-20"
             }`}
           >
-            <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0">
-              <motion.img
-                src={logoPath}
+            <Link href="/" className="flex items-center space-x-2 group flex-shrink-0">
+              <img
+                src={logoPath || "/placeholder.svg"}
                 alt="Robo Impex Logo"
-                className={`transition-all duration-300 ${
+                className={`transition-all duration-300 hover:scale-105 ${
                   isScrolled
-                    ? `${logoDimensions.scrolled.height} ${logoDimensions.scrolled.width} ${logoDimensions.scrolled.smHeight} ${logoDimensions.scrolled.smWidth}`
-                    : `${logoDimensions.notScrolled.height} ${logoDimensions.notScrolled.width} ${logoDimensions.notScrolled.smHeight} ${logoDimensions.notScrolled.smWidth}`
+                    ? `${logoDimensions.scrolled.height} ${logoDimensions.scrolled.width}`
+                    : `${logoDimensions.notScrolled.height} ${logoDimensions.notScrolled.width}`
                 }`}
-                whileHover={{ rotate: 5 }}
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-              {NAVIGATION.map((item, index) => (
-                <motion.div
+            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
+              {NAVIGATION.map((item) => (
+                <Link
                   key={item.name}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.2, duration: 0.6 }}
+                  href={item.href}
+                  className={`relative text-sm font-medium transition-all duration-300 group ${
+                    isActiveLink(item.href)
+                      ? "text-[#38b6ff]"
+                      : "text-slate-700 dark:text-slate-300 hover:text-[#38b6ff]"
+                  }`}
                 >
-                  <Link
-                    href={item.href}
-                    className={`relative text-sm font-medium transition-all duration-300 group ${
-                      isActiveLink(item.href)
-                        ? "text-[#38b6ff]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-[#38b6ff]"
+                  {item.name}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 transition-all duration-300 ${
+                      isActiveLink(item.href) ? "w-full" : "w-0 group-hover:w-full"
                     }`}
-                  >
-                    {item.name}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 ${
-                        isActiveLink(item.href) ? "w-full" : "w-0 group-hover:w-full"
-                      } transition-all duration-300`}
-                    ></span>
-                  </Link>
-                </motion.div>
+                  ></span>
+                </Link>
               ))}
               {isAuthenticated && (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: NAVIGATION.length * 0.1 + 0.2, duration: 0.6 }}
+                <Link
+                  href="/orders"
+                  className={`relative text-sm font-medium transition-all duration-300 group ${
+                    isActiveLink("/orders")
+                      ? "text-[#38b6ff]"
+                      : "text-slate-700 dark:text-slate-300 hover:text-[#38b6ff]"
+                  }`}
                 >
-                  <Link
-                    href="/orders"
-                    className={`relative text-sm font-medium transition-all duration-300 group ${
-                      isActiveLink("/orders")
-                        ? "text-[#38b6ff]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-[#38b6ff]"
+                  Orders
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 transition-all duration-300 ${
+                      isActiveLink("/orders") ? "w-full" : "w-0 group-hover:w-full"
                     }`}
-                  >
-                    Orders
-                    <span
-                      className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/50 ${
-                        isActiveLink("/orders") ? "w-full" : "w-0 group-hover:w-full"
-                      } transition-all duration-300`}
-                    ></span>
-                  </Link>
-                </motion.div>
+                  ></span>
+                </Link>
               )}
             </nav>
 
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <motion.div
-                className="hidden xl:flex items-center"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
+            <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
+              <div className="hidden xl:flex items-center">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-colors duration-300" />
                   <Input
@@ -243,110 +226,85 @@ export function Header() {
                     }`}
                   />
                 </div>
-              </motion.div>
+              </div>
 
               <ThemeToggle />
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden sm:block">
+              <div className="hidden sm:block">
                 <div className="relative">
                   <Button
                     variant="ghost"
                     size="icon"
                     asChild
-                    className="transition-all duration-300 hover:bg-[#38b6ff] hover:text-white"
+                    className="h-9 w-9 md:h-10 md:w-10 transition-all duration-300 hover:bg-[#38b6ff] hover:text-white hover:scale-105"
                   >
                     <Link href="/wishlist">
-                      <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <Heart className="h-4 w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>
-                  <AnimatePresence>
-                    {wishlistCount > 0 && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="absolute -top-1 -right-1"
-                      >
-                        <Badge
-                          variant="destructive"
-                          className="h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 text-xs animate-pulse"
-                        >
-                          {wishlistCount}
-                        </Badge>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {wishlistCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -top-1 -right-1 h-4 w-4 md:h-5 md:w-5 rounded-full p-0 text-xs flex items-center justify-center"
+                    >
+                      {wishlistCount}
+                    </Badge>
+                  )}
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden sm:block">
+              <div className="hidden sm:block">
                 <div className="relative">
                   <Button
                     variant="ghost"
                     size="icon"
                     asChild
-                    className="transition-all duration-300 hover:bg-[#38b6ff] hover:text-white"
+                    className="h-9 w-9 md:h-10 md:w-10 transition-all duration-300 hover:bg-[#38b6ff] hover:text-white hover:scale-105"
                   >
                     <Link href="/cart">
-                      <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <ShoppingCart className="h-4 w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>
-                  <AnimatePresence>
-                    {cartCount > 0 && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="absolute -top-1 -right-1"
-                      >
-                        <Badge
-                          variant="destructive"
-                          className="h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 text-xs animate-pulse"
-                        >
-                          {cartCount}
-                        </Badge>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {cartCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -top-1 -right-1 h-4 w-4 md:h-5 md:w-5 rounded-full p-0 text-xs flex items-center justify-center"
+                    >
+                      {cartCount}
+                    </Badge>
+                  )}
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="hidden lg:flex items-center space-x-2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-              >
+              <div className="hidden lg:flex items-center space-x-2">
                 <Link href="/inquiry">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="transition-all cursor-pointer duration-300 hover:scale-105 hover:bg-[#38b6ff]/10 hover:border-[#38b6ff] hover:text-[#38b6ff] dark:hover:bg-[#38b6ff]/20 group bg-transparent border-slate-200 dark:border-slate-700"
+                    className="h-9 px-3 xl:px-4 transition-all cursor-pointer duration-300 hover:scale-105 hover:bg-[#38b6ff]/10 hover:border-[#38b6ff] hover:text-[#38b6ff] dark:hover:bg-[#38b6ff]/20 group bg-transparent border-slate-200 dark:border-slate-700"
                   >
                     <Zap className="mr-1 xl:mr-2 h-4 w-4 group-hover:text-[#38b6ff]" />
-                    <span className="hidden xl:inline">Inquiry</span>
+                    <span className="hidden xl:inline text-sm">Inquiry</span>
                   </Button>
                 </Link>
 
                 {isLoading ? (
-                  <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-muted animate-pulse" />
                 ) : isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="relative h-10 w-10 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-[#38b6ff]/10"
-                        >
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={getUserAvatar() || "/placeholder.svg"} alt={getUserDisplayName()} />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                              <User className="h-4 w-4" />
-                            </AvatarFallback>
-                          </Avatar>
-                        </Button>
-                      </motion.div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="relative h-9 w-9 md:h-10 md:w-10 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-[#38b6ff]/10 hover:scale-105 transition-all duration-300"
+                      >
+                        <Avatar className="h-7 w-7 md:h-8 md:w-8">
+                          <AvatarImage src={getUserAvatar() || "/placeholder.svg"} alt={getUserDisplayName()} />
+                          <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                            <User className="h-3 w-3 md:h-4 md:w-4" />
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       className="w-56 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-slate-200 dark:border-slate-700"
@@ -367,19 +325,19 @@ export function Header() {
                       <DropdownMenuItem onClick={() => router.push("/orders")} className="cursor-pointer p-2">
                         <Icon
                           icon="material-symbols-light:orders-outline-rounded"
-                          width="28"
-                          height="28"
-                          className="mr-2 w-12 h-12 dark:text-[#fff]"
-                        />{" "}
+                          width="20"
+                          height="20"
+                          className="mr-2 w-5 h-5 dark:text-[#fff]"
+                        />
                         <span className="text-sm dark:text-[#fff]">My Order</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={handleLogout} className="cursor-pointer p-2">
                         <Icon
                           icon="clarity:logout-line"
-                          width="28"
-                          height="28"
-                          className="mr-2 w-8 h-8 dark:text-[#fff]"
-                        />{" "}
+                          width="20"
+                          height="20"
+                          className="mr-2 w-5 h-5 dark:text-[#fff]"
+                        />
                         <span className="text-sm dark:text-[#fff]">Log out</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -388,22 +346,24 @@ export function Header() {
                   <Link href="/login">
                     <Button
                       size="sm"
-                      className="transition-all cursor-pointer duration-300 hover:scale-105 bg-[#38b6ff] hover:bg-[#38b6ff]/90 shadow-md"
+                      className="h-9 px-3 xl:px-4 transition-all cursor-pointer duration-300 hover:scale-105 bg-[#38b6ff] hover:bg-[#38b6ff]/90 shadow-md"
                     >
                       <LogIn className="mr-1 xl:mr-2 h-4 w-4" />
-                      <span className="hidden xl:inline">Login</span>
+                      <span className="hidden xl:inline text-sm">Login</span>
                     </Button>
                   </Link>
                 )}
-              </motion.div>
+              </div>
 
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                <SheetTrigger asChild className="lg:hidden w-[80%]">
-                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                    <Button variant="ghost" size="icon" className="hover:bg-[#38b6ff]/10 dark:hover:bg-[#38b6ff]/20 cursor-pointer">
-                      <Menu className="h-5 w-5" />
-                    </Button>
-                  </motion.div>
+                <SheetTrigger asChild className="lg:hidden">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 hover:bg-[#38b6ff]/10 dark:hover:bg-[#38b6ff]/20 cursor-pointer hover:scale-110 transition-all duration-300"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
                 </SheetTrigger>
                 <MobileMenu
                   isOpen={isMobileMenuOpen}
@@ -422,7 +382,7 @@ export function Header() {
             </div>
           </div>
         </div>
-      </motion.header>
+      </header>
     </>
   )
 }
