@@ -4,10 +4,8 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { PRODUCT_CATEGORIES } from "@/data/constants";
 import { Card, CardContent } from "../ui/card";
-import { motion } from "framer-motion";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useRef } from "react";
 import type { JSX } from "react/jsx-runtime";
-import { AnimatedFeatureCategoryBackgroundIcons } from "../shared/common/animatedBackgroundIcons";
 
 const categoryIcons = {
   Semiconductor: "mdi:chip",
@@ -18,276 +16,89 @@ const categoryIcons = {
 };
 
 export function FeaturedCategories(): JSX.Element {
-  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = useCallback((event: MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * 100;
-      const y = ((event.clientY - rect.top) / rect.height) * 100;
-      setMousePosition({ x, y });
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [handleMouseMove]);
 
   return (
     <section
       ref={containerRef}
-      className="relative py-20 px-4 md:px-16 overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-20 px-2 sm:px-4 md:px-8 lg:px-12 xl:px-16 overflow-hidden"
     >
-      <AnimatedFeatureCategoryBackgroundIcons />
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background">
         <div className="absolute inset-0 opacity-10">
-          <svg className="w-full h-full">
-            <defs>
-              <pattern
-                id="categoryMesh"
-                x={mousePosition.x * 0.3}
-                y={mousePosition.y * 0.3}
-                width="60"
-                height="60"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 60 0 L 0 0 0 60"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="0.5"
-                  className="text-primary/20"
-                />
-              </pattern>
-              <radialGradient id="categoryGlow" cx="50%" cy="50%" r="40%">
-                <stop offset="0%" stopColor="rgba(56, 182, 255, 0.2)" />
-                <stop offset="100%" stopColor="rgba(56, 182, 255, 0)" />
-              </radialGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#categoryMesh)" />
-            <circle
-              cx={`${mousePosition.x}%`}
-              cy={`${mousePosition.y}%`}
-              r="150"
-              fill="url(#categoryGlow)"
-              className="transition-all duration-500"
-            />
-          </svg>
+          <div className="w-full h-full bg-[linear-gradient(90deg,rgba(56,182,255,0.1)_1px,transparent_1px),linear-gradient(rgba(56,182,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px] sm:bg-[size:50px_50px] md:bg-[size:60px_60px]" />
         </div>
-
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-          <defs>
-            <filter
-              id="categoryLineGlow"
-              x="-50%"
-              y="-50%"
-              width="200%"
-              height="200%"
-            >
-              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <motion.line
-              key={i}
-              x1={`${20 + i * 10}%`}
-              y1="20%"
-              x2={`${30 + i * 8}%`}
-              y2="80%"
-              stroke="rgba(56, 182, 255, 0.3)"
-              strokeWidth="1"
-              filter="url(#categoryLineGlow)"
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-                strokeWidth: [1, 2, 1],
-                x1: `${20 + i * 10 + (mousePosition.x - 50) * 0.1}%`,
-                x2: `${30 + i * 8 + (mousePosition.x - 50) * 0.1}%`,
-              }}
-              transition={{
-                duration: 4 + i * 0.5,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </svg>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent bg-[length:200%_100%]"
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          >
+      <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 mb-6 sm:mb-8 md:mb-10 relative z-10 w-full">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16 w-full opacity-0 animate-[fadeIn_0.6s_ease-out_forwards]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 w-full bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent text-center">
             Browse by Category
-          </motion.h2>
-          <motion.p
-            className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed"
-            animate={{
-              y: (mousePosition.y - 50) * 0.1,
-            }}
-            transition={{ duration: 0.5 }}
-          >
+          </h2>
+          <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl w-full text-center">
             Discover our comprehensive range of electronics components across
             specialized categories
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 w-full">
           {PRODUCT_CATEGORIES.map((category, index) => (
-            <motion.div
+            <div
               key={category.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -12, scale: 1.05 }}
+              className="opacity-0 animate-[fadeIn_0.5s_ease-out_forwards] hover:scale-105 hover:-translate-y-2 transition-all duration-300 w-full"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <Card className="group relative overflow-hidden border border-primary/20 bg-background/90 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:ring-2 hover:ring-primary/30 cursor-pointer">
+              <Card className="group relative overflow-hidden border border-primary/20 bg-background/90 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:ring-2 hover:ring-primary/30 w-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/15 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
 
-                <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-1 h-1 bg-primary/60 rounded-full"
-                      style={{
-                        left: `${20 + i * 15}%`,
-                        top: `${30 + (i % 2) * 40}%`,
-                      }}
-                      animate={{
-                        scale: [0, 1.5, 0],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        delay: i * 0.2,
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <CardContent className="p-8 text-center relative">
+                <CardContent className="p-4 sm:p-6 md:p-8 text-center relative w-full">
                   <Link
                     href="/products"
-                    className="block"
+                    className="block w-full"
                     onClick={() => {
-                      // Store the selected category in sessionStorage for filter state management
                       sessionStorage.setItem("selectedCategory", category.id);
                     }}
                   >
-                    <div className="relative z-10">
-                      <div className="mb-6 relative">
-                        <motion.div
-                          className="relative"
-                          whileHover={{
-                            rotate: [0, -10, 10, 0],
-                            scale: 1.3,
-                          }}
-                          transition={{ duration: 0.6 }}
-                        >
+                    <div className="relative z-10 w-full">
+                      <div className="mb-4 sm:mb-6 w-full relative">
+                        <div className="relative group-hover:scale-125 transition-transform duration-300 w-full flex justify-center">
                           <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150"></div>
-                          <motion.div
-                            className="absolute inset-0 bg-primary/20 rounded-full blur-lg opacity-0 group-hover:opacity-100"
-                            animate={{
-                              scale: [1, 1.2, 1],
-                              opacity: [0, 0.5, 0],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Number.POSITIVE_INFINITY,
-                              repeatType: "reverse",
-                            }}
-                          />
                           <Icon
                             icon={
                               categoryIcons[
                                 category.id as keyof typeof categoryIcons
                               ]
                             }
-                            className="h-16 w-16 mx-auto text-primary group-hover:text-primary relative z-10 drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500"
+                            className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 mx-auto text-primary group-hover:text-primary relative z-10 drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500"
                           />
-                        </motion.div>
+                        </div>
                       </div>
 
-                      <motion.h3
-                        className="font-semibold text-base group-hover:text-primary transition-all duration-500 mb-3 group-hover:font-bold"
-                        animate={{
-                          y: (mousePosition.y - 50) * 0.05,
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
+                      <h3 className="font-semibold text-sm sm:text-base md:text-lg group-hover:text-primary transition-all duration-500 mb-2 sm:mb-3 w-full text-center group-hover:font-bold">
                         {category.name}
-                      </motion.h3>
+                      </h3>
 
-                      <motion.div
-                        className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"
-                        initial={{ width: 0 }}
-                        whileHover={{ width: "70%" }}
-                        transition={{ duration: 0.4 }}
-                      />
-
-                      <motion.div
-                        className="h-px bg-primary/50 mx-auto mt-1 opacity-0 group-hover:opacity-100"
-                        initial={{ width: 0 }}
-                        whileHover={{ width: "40%" }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                      />
+                      <div className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto w-0 group-hover:w-3/5 transition-all duration-400 " />
+                      <div className="h-px bg-primary/50 mx-auto mt-1 opacity-0 group-hover:opacity-100 w-0 group-hover:w-2/5 transition-all duration-600 delay-200" />
                     </div>
                   </Link>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <motion.p
-            className="text-muted-foreground mb-4"
-            animate={{
-              y: (mousePosition.y - 50) * 0.05,
-            }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="text-center mt-8 sm:mt-12 md:mt-16 w-full opacity-0 animate-[fadeIn_0.6s_ease-out_0.8s_forwards]">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-3 sm:mb-4 w-full text-center">
             Can't find what you're looking for?
-          </motion.p>
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
+          </p>
+          <Link
+            href="/contact-us"
+            className="text-primary hover:text-primary/80 font-semibold text-sm sm:text-base md:text-lg transition-colors duration-300 underline underline-offset-4 hover:underline-offset-8 hover:scale-105 inline-block w-full text-center "
           >
-            <Link
-              href="/contact-us"
-              className="text-primary hover:text-primary/80 font-semibold transition-colors duration-300 underline underline-offset-4 hover:underline-offset-8"
-            >
-              Contact our specialists for custom solutions
-            </Link>
-          </motion.div>
-        </motion.div>
+            Contact our specialists for custom solutions
+          </Link>
+        </div>
       </div>
     </section>
   );
