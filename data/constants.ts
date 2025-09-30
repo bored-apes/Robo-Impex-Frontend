@@ -229,3 +229,4 @@ export const PRODUCT_STATUSES = [
   { id: "Inactive", name: "Inactive" },
   { id: "OutOfStock", name: "Out of Stock" },
 ] as const;
+
