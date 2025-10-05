@@ -7,7 +7,7 @@ import { StarRating } from "../shared/common/starRating";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
@@ -18,6 +18,16 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
   const swiperRef = useRef<SwiperType>();
   const navigationPrevRef = useRef<HTMLButtonElement>(null);
   const navigationNextRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      setTimeout(() => {
+        swiperRef.current?.navigation.init();
+        swiperRef.current?.navigation.update();
+        swiperRef.current?.update();
+      }, 100);
+    }
+  }, [products]);
 
   if (products.length === 0) {
     return null;
@@ -47,9 +57,17 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
             }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
+              setTimeout(() => {
+                swiper.navigation.init();
+                swiper.navigation.update();
+              }, 100);
+            }}
+            onSlideChange={() => {
+              if (swiperRef.current) {
+                swiperRef.current.navigation.update();
+              }
             }}
             breakpoints={{
-              // Mobile first approach
               320: {
                 slidesPerView: 1,
                 spaceBetween: 12,
