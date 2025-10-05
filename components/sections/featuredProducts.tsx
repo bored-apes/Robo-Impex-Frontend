@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
   Star,
@@ -42,18 +42,153 @@ const ALL_PRODUCT_TYPES = [
   "Display"
 ];
 
+// Separate ProductCard component to prevent re-renders
+const ProductCard = React.memo(({ 
+  product, 
+  index,
+  onWishlistToggle,
+  onAddToCart,
+  isInWishlist 
+}: { 
+  product: Product;
+  index: number;
+  onWishlistToggle: (product: Product) => void;
+  onAddToCart: (product: Product) => void;
+  isInWishlist: boolean;
+}) => {
+  const productType = product.tags[0] || "IC";
+  const theme = getProductTypeTheme(productType);
+
+  return (
+    <div className="h-full">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.1 }}
+        whileHover={{ y: -4 }}
+        className="group h-full"
+      >
+        <Card className="h-full flex flex-col border-border bg-card dark:bg-card/90 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+          {/* Image Section - Fixed Height */}
+          <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
+            <img
+              src={
+                product.images[0] ||
+                "/placeholder.svg?height=200&width=300&text=Product+Image"
+              }
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+
+            {/* Wishlist Button */}
+            <Button
+              variant="secondary"
+              size="icon"
+              className={`absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm ${
+                isInWishlist
+                  ? "text-red-500"
+                  : "text-muted-foreground hover:text-red-500"
+              }`}
+              onClick={() => onWishlistToggle(product)}
+            >
+              <Heart
+                className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`}
+              />
+            </Button>
+          </div>
+
+          {/* Content Section - Flexible but constrained */}
+          <CardContent className="px-4 flex-1 flex flex-col min-h-0">
+            {/* Product Type */}
+            <div className="mb-2 flex items-center justify-start gap-2">
+              <div className="mb-3">
+                <Badge
+                  variant="secondary"
+                  className={`${theme.bg} ${theme.text} ${theme.border} border text-xs font-medium`}
+                >
+                  {productType}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Product Name - Fixed height with ellipsis */}
+            <div className="mb-3 min-h-0 flex-shrink-0">
+              <Link
+                href={`/products/${product.id}`}
+                className="font-semibold text-base leading-tight line-clamp-2 hover:text-primary transition-colors block"
+                title={product.name}
+              >
+                {product.name}
+              </Link>
+            </div>
+
+            {/* Rating - Fixed height */}
+            <div className="flex items-center flex-shrink-0">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-3 w-3 ${
+                      i < Math.floor(product.rating)
+                        ? "text-yellow-400 fill-current"
+                        : "text-gray-300 dark:text-gray-600"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-muted-foreground ml-2">
+                ({product.ratingCount})
+              </span>
+            </div>
+
+            {/* Price - Fixed at bottom */}
+            <div className="flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-primary">
+                  {CURRENCY.SYMBOL}
+                  {product.price.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </CardContent>
+
+          {/* Actions - Fixed height */}
+          <CardFooter className="px-4 pt-0 flex gap-2 flex-shrink-0">
+            <Button
+              size="sm"
+              className="flex-1 bg-primary hover:bg-primary/90 text-sm"
+              onClick={() => onAddToCart(product)}
+              disabled={!product.inStock}
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Add to Cart
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="flex-shrink-0 hover:border-primary hover:text-primary"
+            >
+              <Link href={`/products/${product.id}`}>
+                <Eye className="h-4 w-4" />
+              </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    </div>
+  );
+});
+
+ProductCard.displayName = 'ProductCard';
+
 export function FeaturedProducts() {
-  const [wishlistItems, setWishlistItems] = useState<{ id: string }[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<Set<string>>(new Set());
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProductType, setSelectedProductType] = useState<string | null>(
-    null
-  );
-  const [totalProducts, setTotalProducts] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
   const [availableTypes, setAvailableTypes] = useState<string[]>(ALL_PRODUCT_TYPES);
   const [hasInitialTypesLoaded, setHasInitialTypesLoaded] = useState(false);
   const swiperRef = useRef<SwiperType>();
@@ -79,19 +214,15 @@ export function FeaturedProducts() {
     };
   };
 
-  const fetchProducts = async (
-    productType: string | null = null,
-    page = 1,
-    append = false
-  ) => {
+  // Fetch all products initially
+  const fetchAllProducts = async () => {
     try {
       setLoading(true);
       setError(null);
 
       const response = await getProducts({
-        page,
+        page: 1,
         pageSize: productsPerPage,
-        type: productType ?? undefined,
       });
 
       if (
@@ -109,24 +240,15 @@ export function FeaturedProducts() {
           ),
         ] as string[];
         
-        if (!hasInitialTypesLoaded && !append && !productType) {
+        if (!hasInitialTypesLoaded) {
           setAvailableTypes(types.length > 0 ? types : ALL_PRODUCT_TYPES);
           setHasInitialTypesLoaded(true);
         }
 
-        if (append) {
-          setProducts((prev) => [...prev, ...mappedProducts]);
-        } else {
-          setProducts(mappedProducts);
-          setCurrentPage(1);
-        }
+        setAllProducts(mappedProducts);
+        setFilteredProducts(mappedProducts);
 
-        setTotalProducts(
-          response.data.pagination?.total || mappedProducts.length
-        );
-        setHasMore(mappedProducts.length === productsPerPage);
-
-        if (!append && swiperRef.current) {
+        if (swiperRef.current) {
           swiperRef.current.slideTo(0);
         }
       } else {
@@ -134,52 +256,54 @@ export function FeaturedProducts() {
       }
     } catch (err) {
       setError("Failed to load products. Please try again.");
-      if (!append) {
-        setProducts([]);
-        setTotalProducts(0);
-      }
+      setAllProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadMoreProducts = async () => {
-    if (!hasMore || loading || isLoadingMore) return;
-
-    setIsLoadingMore(true);
-    try {
-      await fetchProducts(selectedProductType, currentPage + 1, true);
-      setCurrentPage((prev) => prev + 1);
-    } finally {
-      setIsLoadingMore(false);
+  // Filter products by type
+  const filterProductsByType = useCallback((type: string | null) => {
+    if (!type) {
+      setFilteredProducts(allProducts);
+    } else {
+      const filtered = allProducts.filter(product => 
+        product.tags.includes(type)
+      );
+      setFilteredProducts(filtered);
     }
+    
+    // Reset swiper to first slide when filter changes
+    setTimeout(() => {
+      if (swiperRef.current) {
+        swiperRef.current.slideTo(0);
+      }
+    }, 100);
+  }, [allProducts]);
+
+  // Handle product type change
+  const handleProductTypeChange = (type: string | null) => {
+    setSelectedProductType(type);
+    filterProductsByType(type);
   };
 
-  const handleSlideChange = async (swiper: SwiperType) => {
-    const newSlide = swiper.activeIndex;
-    const slidesPerView = (swiper.params.slidesPerView as number) || 1;
-    const totalSlides = products.length;
-    const remainingSlides = totalSlides - newSlide;
-
-    if (
-      remainingSlides <= slidesPerView * 2 &&
-      hasMore &&
-      !loading &&
-      !isLoadingMore
-    ) {
-      await loadMoreProducts();
-    }
+  // Check if product is in wishlist
+  const checkWishlistStatus = (productId: string): boolean => {
+    return wishlistItems.has(productId);
   };
 
-  useEffect(() => {
-    fetchProducts(selectedProductType);
-  }, [selectedProductType]);
-
-  const handleWishlistToggle = (product: Product): void => {
-    const isInWishlist = wishlistItems.some((item) => item.id === product.id);
+  // Handle wishlist toggle
+  const handleWishlistToggle = useCallback((product: Product): void => {
+    const isInWishlist = wishlistItems.has(product.id);
+    
     if (isInWishlist) {
       wishlistStorage.removeItem(product.id);
-      setWishlistItems((prev) => prev.filter((item) => item.id !== product.id));
+      setWishlistItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(product.id);
+        return newSet;
+      });
     } else {
       const wishlistItem = {
         id: product.id,
@@ -188,11 +312,12 @@ export function FeaturedProducts() {
         image: product.images[0] || "",
       };
       wishlistStorage.addItem(wishlistItem);
-      setWishlistItems((prev) => [...prev, wishlistItem]);
+      setWishlistItems(prev => new Set(prev).add(product.id));
     }
-  };
+  }, [wishlistItems]);
 
-  const handleAddToCart = (product: Product): void => {
+  // Handle add to cart
+  const handleAddToCart = useCallback((product: Product): void => {
     const productInput = {
       id: product.id,
       name: product.name,
@@ -202,140 +327,18 @@ export function FeaturedProducts() {
       stockQuantity: product.stockQuantity || 0,
     };
     cartStorage.addItem(productInput, {}, 1);
-  };
-  const ProductCard = ({
-    product,
-    index,
-  }: {
-    product: Product;
-    index: number;
-  }) => {
-    const isInWishlist = wishlistItems.some((item) => item.id === product.id);
-    const productType = product.tags[0] || "IC";
-    const theme = getProductTypeTheme(productType);
+  }, []);
 
-    return (
-      <div className="h-full">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.1 }}
-          whileHover={{ y: -4 }}
-          className="group h-full"
-        >
-          <Card className="h-full flex flex-col border-border bg-card dark:bg-card/90 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
-            {/* Image Section - Fixed Height */}
-            <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
-              <img
-                src={
-                  product.images[0] ||
-                  "/placeholder.svg?height=200&width=300&text=Product+Image"
-                }
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
 
-
-              {/* Wishlist Button */}
-              <Button
-                variant="secondary"
-                size="icon"
-                className={`absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm ${
-                  isInWishlist
-                    ? "text-red-500"
-                    : "text-muted-foreground hover:text-red-500"
-                }`}
-                onClick={() => handleWishlistToggle(product)}
-              >
-                <Heart
-                  className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`}
-                />
-              </Button>
-            </div>
-
-            {/* Content Section - Flexible but constrained */}
-            <CardContent className="px-4 flex-1 flex flex-col min-h-0">
-              {/* Product Type */}
-              <div className="mb-2 flex items-center justify-start gap-2">
-              
-                <div className="mb-3">
-                  <Badge
-                    variant="secondary"
-                    className={`${theme.bg} ${theme.text} ${theme.border} border text-xs font-medium`}
-                  >
-                    {productType}
-                  </Badge>
-                </div>
-              </div>
-
-              {/* Product Name - Fixed height with ellipsis */}
-              <div className="mb-3 min-h-0 flex-shrink-0">
-                <Link
-                  href={`/products/${product.id}`}
-                  className="font-semibold text-base leading-tight line-clamp-2 hover:text-primary transition-colors block"
-                  title={product.name}
-                >
-                  {product.name}
-                </Link>
-              </div>
-
-              {/* Rating - Fixed height */}
-              <div className="flex items-center flex-shrink-0">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 ${
-                        i < Math.floor(product.rating)
-                          ? "text-yellow-400 fill-current"
-                          : "text-gray-300 dark:text-gray-600"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-muted-foreground ml-2">
-                  ({product.ratingCount})
-                </span>
-              </div>
-
-              {/* Price - Fixed at bottom */}
-              <div className="flex items-center justify-between flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-primary">
-                    {CURRENCY.SYMBOL}
-                    {product.price.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-
-            {/* Actions - Fixed height */}
-            <CardFooter className="px-4 pt-0 flex gap-2 flex-shrink-0">
-              <Button
-                size="sm"
-                className="flex-1 bg-primary hover:bg-primary/90 text-sm"
-                onClick={() => handleAddToCart(product)}
-                disabled={!product.inStock}
-              >
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Add to Cart
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                asChild
-                className="flex-shrink-0 hover:border-primary hover:text-primary"
-              >
-                <Link href={`/products/${product.id}`}>
-                  <Eye className="h-4 w-4" />
-                </Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        </motion.div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    // Initialize wishlist items from storage
+    const items = wishlistStorage.getItems();
+    const wishlistIds = new Set(items.map(item => item.id));
+    setWishlistItems(wishlistIds);
+  }, []);
 
   const EmptyState = () => (
     <div className="text-center py-12">
@@ -360,11 +363,11 @@ export function FeaturedProducts() {
         <div className="flex gap-3">
           <Button
             variant="outline"
-            onClick={() => setSelectedProductType(null)}
+            onClick={() => handleProductTypeChange(null)}
           >
             View All Types
           </Button>
-          <Button onClick={() => fetchProducts(selectedProductType)}>
+          <Button onClick={fetchAllProducts}>
             Try Again
           </Button>
         </div>
@@ -391,7 +394,7 @@ export function FeaturedProducts() {
           </p>
         </motion.div>
 
-        {/* Product Type Filters - Always show all types to prevent layout shift */}
+        {/* Product Type Filters */}
         {availableTypes.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -403,7 +406,7 @@ export function FeaturedProducts() {
               variant={selectedProductType === null ? "default" : "outline"}
               size="sm"
               className="text-xs sm:text-sm rounded-full"
-              onClick={() => setSelectedProductType(null)}
+              onClick={() => handleProductTypeChange(null)}
               disabled={loading}
             >
               All Types
@@ -420,7 +423,7 @@ export function FeaturedProducts() {
                       ? `${theme.bg} ${theme.text} ${theme.border} border`
                       : `bg-transparent ${theme.hover} ${theme.border} border hover:${theme.text}`
                   }`}
-                  onClick={() => setSelectedProductType(type)}
+                  onClick={() => handleProductTypeChange(type)}
                   disabled={loading}
                 >
                   {type}
@@ -431,7 +434,7 @@ export function FeaturedProducts() {
         )}
 
         {/* Products Swiper */}
-        {loading && products.length === 0 ? (
+        {loading && filteredProducts.length === 0 ? (
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
             {Array.from({ length: 5 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
@@ -450,12 +453,12 @@ export function FeaturedProducts() {
                 Error Loading Products
               </h3>
               <p className="text-muted-foreground mb-4">{error}</p>
-              <Button onClick={() => fetchProducts(selectedProductType)}>
+              <Button onClick={fetchAllProducts}>
                 Try Again
               </Button>
             </motion.div>
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="relative px-2">
@@ -475,8 +478,18 @@ export function FeaturedProducts() {
               }}
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
+                // Initialize navigation after swiper is mounted
+                setTimeout(() => {
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                }, 100);
               }}
-              onSlideChange={handleSlideChange}
+              onSlideChange={() => {
+                // Ensure navigation is updated
+                if (swiperRef.current) {
+                  swiperRef.current.navigation.update();
+                }
+              }}
               breakpoints={{
                 320: { slidesPerView: 1, spaceBetween: 12 },
                 480: { slidesPerView: 2, spaceBetween: 12 },
@@ -488,17 +501,17 @@ export function FeaturedProducts() {
               }}
               className="featured-products-swiper pb-10 sm:pb-12"
             >
-              {products.map((product, index) => (
+              {filteredProducts.map((product, index) => (
                 <SwiperSlide key={product.id} className="h-auto">
-                  <ProductCard product={product} index={index} />
+                  <ProductCard 
+                    product={product} 
+                    index={index}
+                    onWishlistToggle={handleWishlistToggle}
+                    onAddToCart={handleAddToCart}
+                    isInWishlist={checkWishlistStatus(product.id)}
+                  />
                 </SwiperSlide>
               ))}
-              {isLoadingMore &&
-                Array.from({ length: 5 }).map((_, i) => (
-                  <SwiperSlide key={`loading-${i}`}>
-                    <ProductCardSkeleton />
-                  </SwiperSlide>
-                ))}
             </Swiper>
 
             {/* Navigation Buttons */}
@@ -517,25 +530,13 @@ export function FeaturedProducts() {
           </div>
         )}
 
-        {/* Load More Section */}
-        {products.length > 0 && (
+        {/* Product Count */}
+        {filteredProducts.length > 0 && (
           <div className="text-center mt-6 sm:mt-8 px-2">
             <p className="text-xs sm:text-sm text-muted-foreground mb-3">
-              Showing {products.length} of {totalProducts} products
+              Showing {filteredProducts.length} products
               {selectedProductType && ` for "${selectedProductType}"`}
-              {isLoadingMore && " (Loading more...)"}
             </p>
-
-            {hasMore && (
-              <Button
-                variant="outline"
-                onClick={loadMoreProducts}
-                disabled={loading || isLoadingMore}
-                className="text-xs sm:text-sm hover:border-primary hover:text-primary transition-all duration-300"
-              >
-                {isLoadingMore ? "Loading..." : "Load More Products"}
-              </Button>
-            )}
           </div>
         )}
 
