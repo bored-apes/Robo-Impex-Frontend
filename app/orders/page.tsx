@@ -162,7 +162,16 @@ function OrdersContent() {
               </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
-             
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fetchOrders(currentPage, true)}
+                disabled={isRefreshing}
+                className="h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm bg-transparent hover:bg-accent/10 flex-shrink-0"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
               <Button
                 variant="outline"
                 asChild
@@ -222,8 +231,14 @@ function OrdersContent() {
             <div className="space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between">
                 <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
-                  Showing {orders.length} order{orders.length !== 1 ? "s" : ""}
+                  Showing {((currentPage - 1) * ordersPerPage) + 1} to {Math.min(currentPage * ordersPerPage, totalItems)} of {totalItems} order{totalItems !== 1 ? 's' : ''}
                 </p>
+                {isRefreshing && (
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                    Refreshing...
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4 sm:gap-6">
@@ -391,6 +406,17 @@ function OrdersContent() {
                             <Calendar className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
                             Ordered on {formatDate(order.created_at)}
                           </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            asChild
+                            className="h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm order-2 sm:order-none"
+                          >
+                            <Link href={`/orders/${order.id}`}>
+                              <Eye className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                              View Details
+                            </Link>
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>

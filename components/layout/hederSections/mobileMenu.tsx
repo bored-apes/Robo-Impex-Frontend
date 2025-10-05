@@ -193,13 +193,13 @@ export function MobileMenu({
           </SheetClose>
 
           <SheetClose asChild>
-            <Link href="/inquiry">
+            <Link href="/Enquiry">
               <Button
                 variant="outline"
                 className="w-full h-12 mb-4 cursor-pointer hover:bg-[#38b6ff]/10 hover:border-[#38b6ff] hover:text-[#38b6ff] bg-transparent border-slate-200 dark:border-slate-700 text-sm"
               >
                 <Zap className="mr-2 h-4 w-4" />
-                Inquiry
+                Enquiry
               </Button>
             </Link>
           </SheetClose>
@@ -221,7 +221,7 @@ export function MobileMenu({
                 <Button
                   onClick={onLogout}
                   variant="outline"
-                  className="w-full h-12 bg-transparent cursor-pointer border-slate-200 dark:border-slate-700 text-destructive hover:text-destructive hover:bg-destructive/10 text-sm"
+                  className="w-full h-12 mt-4 bg-transparent cursor-pointer border-slate-200 dark:border-slate-700 text-destructive hover:text-destructive hover:bg-destructive/10 text-sm"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout

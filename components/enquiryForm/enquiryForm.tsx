@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, Loader2, Search, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAuth } from "@/context/authContext";
 import { useCustomToast } from "@/components/shared/common/customToast";
 import { enquiryService } from "@/lib/apiServices/enquiry.service";
@@ -32,22 +32,20 @@ interface EnquiryFormProps {
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(2, "Name must be at least 2 characters")
+    .matches(/^[a-zA-Z\s]+$/, "First name must contain only letters")
     .required("Name is required"),
   email: Yup.string()
     .email("Invalid email address")
+    .matches(
+      /^[\w-.]+@([\w-]+\.)+(com|net|org|in|co|edu|gov|info|biz|io|me)$/i,
+      "Email must end with a valid domain like .com, .net, etc."
+    )
     .required("Email is required"),
   mobile: Yup.string()
     .matches(/^[0-9+\-\s()]+$/, "Invalid mobile number format")
     .optional(),
-  productId: Yup.number()
-    .positive("Please select a product")
-    .required("Product selection is required"),
-  quantity: Yup.number()
-    .min(1, "Quantity must be at least 1")
-    .required("Quantity is required"),
-  message: Yup.string()
-    .min(10, "Message must be at least 10 characters")
-    .required("Message is required"),
+  quantity: Yup.number().min(1, "Quantity must be at least 1"),
+  message: Yup.string().min(10, "Message must be at least 10 characters"),
 });
 
 export function EnquiryForm({
@@ -59,10 +57,20 @@ export function EnquiryForm({
   const { user, isAuthenticated } = useAuth();
   const { showToast } = useCustomToast();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProducts, setFilteredProducts] =
-    useState<APIProduct[]>(products);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownLoading, setIsDropdownLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm.trim()) return products;
+    
+    const term = searchTerm.toLowerCase();
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(term) ||
+        product.description?.toLowerCase().includes(term)
+    );
+  }, [searchTerm, products]);
 
   const formik = useFormik({
     initialValues: {
@@ -128,17 +136,21 @@ export function EnquiryForm({
     }
   }, [isAuthenticated, user, formik.setValues]);
 
-  useEffect(() => {
-    const filtered = products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (product.description
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase()) ??
-          false)
-    );
-    setFilteredProducts(filtered);
-  }, [searchTerm, products]);
+  const handleDropdownOpen = (open: boolean) => {
+    setIsDropdownOpen(open);
+    
+    if (open && products.length === 0) {
+      setIsDropdownLoading(true);
+      
+      const timer = setTimeout(() => {
+        setIsDropdownLoading(false);
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    } else {
+      setIsDropdownLoading(false);
+    }
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -146,10 +158,73 @@ export function EnquiryForm({
 
   const clearSearch = () => {
     setSearchTerm("");
-    setFilteredProducts(products);
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
+  };
+
+  const DropdownSkeleton = () => (
+    <div className="p-2 space-y-2">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="flex items-center space-x-3 p-2 rounded-md animate-pulse"
+        >
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const ProductList = () => {
+    if (isDropdownLoading) {
+      return <DropdownSkeleton />;
+    }
+
+    if (filteredProducts.length === 0) {
+      return (
+        <div className="p-4 text-center">
+          <div className="text-muted-foreground">
+            <Search className="h-6 w-6 mx-auto mb-2 opacity-50" />
+            <p className="text-sm font-medium mb-1">
+              {products.length === 0 ? "No products available" : "No products found"}
+            </p>
+            <p className="text-xs">
+              {searchTerm ? (
+                <>
+                  No results for "<span className="font-medium">{searchTerm}</span>"
+                </>
+              ) : (
+                "Start typing to search products"
+              )}
+            </p>
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                className="mt-2 text-xs text-primary hover:underline"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="max-h-[200px] overflow-y-auto">
+        {filteredProducts.map((product) => (
+          <SelectItem
+            key={product.id}
+            value={product.id.toString()}
+            className="px-2 py-2 rounded-md focus:bg-primary/10 hover:bg-muted/50 transition-colors cursor-pointer text-sm"
+          >
+            <div className="font-medium truncate">{product.name}</div>
+          </SelectItem>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -256,29 +331,32 @@ export function EnquiryForm({
                     formik.setFieldValue("productId", Number.parseInt(value))
                   }
                   disabled={formik.isSubmitting}
-                  onOpenChange={setIsDropdownOpen}
+                  onOpenChange={handleDropdownOpen}
                 >
                   <SelectTrigger className="w-full h-10 sm:h-11 text-left">
                     <SelectValue placeholder="Select a product" />
+                    {(isDropdownLoading || isLoading) && (
+                      <Loader2 className="h-4 w-4 animate-spin ml-2" />
+                    )}
                   </SelectTrigger>
                   <SelectContent
-                    className="w-[var(--radix-select-trigger-width)] max-w-[var(--radix-select-trigger-width)] max-h-[200px] sm:max-h-[300px] p-0 z-50"
+                    className="w-[var(--radix-select-trigger-width)] max-h-[300px] p-0 z-50"
                     side="bottom"
                     align="start"
                     sideOffset={4}
                     position="popper"
                   >
-                    <div className="sticky top-0 bg-background/95 backdrop-blur-sm z-20 border-b">
-                      <div className="p-2 space-y-1">
+                    <div className="sticky top-0 bg-background border-b z-10">
+                      <div className="p-2 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-foreground">
                             Search Products
                           </span>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs bg-primary/10 text-primary px-1 py-0.5 rounded-full font-medium">
+                          {!isDropdownLoading && (
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
                               {filteredProducts.length} found
                             </span>
-                          </div>
+                          )}
                         </div>
 
                         <div className="relative">
@@ -291,9 +369,9 @@ export function EnquiryForm({
                             onChange={handleSearchChange}
                             onClick={(e) => e.stopPropagation()}
                             onKeyDown={(e) => e.stopPropagation()}
-                            autoFocus={isDropdownOpen}
+                            disabled={isDropdownLoading}
                           />
-                          {searchTerm && (
+                          {searchTerm && !isDropdownLoading && (
                             <button
                               type="button"
                               onClick={clearSearch}
@@ -306,81 +384,7 @@ export function EnquiryForm({
                       </div>
                     </div>
 
-                    <div className="max-h-[200px] sm:max-h-[250px] overflow-y-auto">
-                      <AnimatePresence mode="wait">
-                        {filteredProducts.length > 0 ? (
-                          <motion.div
-                            key="products-list"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="p-1"
-                          >
-                            {filteredProducts.map((product, index) => (
-                              <motion.div
-                                key={product.id}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  duration: 0.2,
-                                  delay: index * 0.02,
-                                }}
-                              >
-                                <SelectItem
-                                  value={product.id.toString()}
-                                  className="px-2 py-2 rounded-md focus:bg-primary/10 hover:bg-muted/50 transition-colors cursor-pointer text-sm"
-                                >
-                                  <div className="w-full">
-                                    <div className="font-medium truncate">
-                                      {product.name}
-                                    </div>
-                                  </div>
-                                </SelectItem>
-                              </motion.div>
-                            ))}
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="no-results"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                            className="p-4 text-center"
-                          >
-                            <div className="text-muted-foreground">
-                              <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                              <p className="text-sm font-medium mb-1">
-                                No products found
-                              </p>
-                              <p className="text-xs">
-                                {searchTerm ? (
-                                  <>
-                                    No results for "
-                                    <span className="font-medium">
-                                      {searchTerm}
-                                    </span>
-                                    "
-                                  </>
-                                ) : (
-                                  "Start typing to search products"
-                                )}
-                              </p>
-                              {searchTerm && (
-                                <button
-                                  type="button"
-                                  onClick={clearSearch}
-                                  className="mt-2 text-xs text-primary hover:underline"
-                                >
-                                  Clear search
-                                </button>
-                              )}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+                    <ProductList />
                   </SelectContent>
                 </Select>
                 {formik.touched.productId && formik.errors.productId && (

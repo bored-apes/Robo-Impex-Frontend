@@ -53,6 +53,8 @@ export default function WishlistPage() {
         price: item.price,
         image: item.image,
         qty: 1,
+        stockQuantity: item.stockQuantity || 0,
+        minQuantityOrder: item.minQuantityOrder || 1,
       };
       cartStorage.addItem(cartItem);
     });
@@ -137,7 +139,8 @@ export default function WishlistPage() {
             </h1>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground flex items-center gap-1 sm:gap-1.5">
               <Heart className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-red-500" />
-              {wishlistItems.length} {wishlistItems.length === 1 ? "item" : "items"} saved
+              {wishlistItems.length}{" "}
+              {wishlistItems.length === 1 ? "item" : "items"} saved
             </p>
           </div>
           {wishlistItems.length > 0 && (
@@ -161,7 +164,10 @@ export default function WishlistPage() {
               <CardContent className="p-2 sm:p-3 md:p-4">
                 <div className="relative mb-2 sm:mb-3 md:mb-4">
                   <img
-                    src={item.image || "/placeholder.svg?height=200&width=300&query=industrial equipment"}
+                    src={
+                      item.image ||
+                      "/placeholder.svg?height=200&width=300&query=industrial equipment"
+                    }
                     alt={item.name}
                     className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg"
                   />
@@ -181,7 +187,8 @@ export default function WishlistPage() {
                   </h3>
                   {item.price && (
                     <div className="text-sm sm:text-base md:text-lg font-semibold">
-                      {CURRENCY.SYMBOL}{item.price.toLocaleString()}
+                      {CURRENCY.SYMBOL}
+                      {item.price.toLocaleString()}
                     </div>
                   )}
                 </div>
@@ -200,7 +207,7 @@ export default function WishlistPage() {
                     asChild
                     className="h-8 sm:h-9 md:h-10 w-8 sm:w-9 md:w-10 bg-transparent hover:bg-accent/10"
                   >
-                    <Link href={`/products/${item.slug || item.id}`}>
+                    <Link href={`/products/${item.id}`}>
                       <Heart className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>

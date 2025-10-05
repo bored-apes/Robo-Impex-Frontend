@@ -153,10 +153,7 @@ export function Footer() {
               <MapPin className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#38b6ff] flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
               <div className="text-muted-foreground group-hover:text-foreground transition-colors min-w-0 w-full">
                 <div className="font-medium text-xs sm:text-sm md:text-base w-full">
-                  {CONTACT.ADDRESS.split(",")[0]}
-                </div>
-                <div className="text-xs sm:text-sm md:text-base break-words w-full">
-                  {CONTACT.ADDRESS.split(",").slice(1).join(",").trim()}
+                  {CONTACT.ADDRESS}
                 </div>
               </div>
             </motion.div>

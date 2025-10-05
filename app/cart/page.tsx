@@ -39,13 +39,60 @@ export default function CartPage(): ReactElement {
     setCartItems(cartStorage.getItems());
   }, []);
 
-  const updateQuantity = (id: string, variant: Variant, newQty: number): void => {
-    if (newQty <= 0) {
+  const handleQuantityChange = (id: string, variant: Variant, newQuantity: number, item: CartItem): void => {
+    const maxStock = item.stockQuantity || 0;
+
+    if (newQuantity > maxStock) {
+      showToast({
+        type: "warning",
+        title: "Maximum Stock Reached",
+        message: `Maximum available stock for ${item.name} is ${maxStock} pieces.`,
+      });
+      newQuantity = maxStock;
+    }
+
+    if (newQuantity <= 0) {
       removeItem(id, variant);
       return;
     }
-    cartStorage.updateQuantity(id, variant, newQty);
+    
+    cartStorage.updateQuantity(id, variant, newQuantity);
     setCartItems(cartStorage.getItems());
+  };
+
+  const updateQuantity = (id: string, variant: Variant, newQty: number): void => {
+    const item = cartItems.find(item => item.id === id && JSON.stringify(item.variant) === JSON.stringify(variant));
+    if (!item) return;
+    
+    handleQuantityChange(id, variant, newQty, item);
+  };
+
+  const handleDirectQuantityChange = (id: string, variant: Variant, value: string, item: CartItem): void => {
+    if (value === "") return;
+    
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue > 0) {
+      handleQuantityChange(id, variant, numValue, item);
+    }
+  };
+
+  const handleInputBlur = (id: string, variant: Variant, value: string, item: CartItem): void => {
+    if (value === "") {
+      handleQuantityChange(id, variant, 1, item);
+      return;
+    }
+
+    const numValue = parseInt(value);
+    if (isNaN(numValue) || numValue <= 0) {
+      handleQuantityChange(id, variant, 1, item);
+      showToast({
+        type: "warning",
+        title: "Invalid Quantity",
+        message: `Quantity for ${item.name} set to 1 piece.`,
+      });
+    } else {
+      handleQuantityChange(id, variant, numValue, item);
+    }
   };
 
   const removeItem = (id: string, variant: Variant): void => {
@@ -194,95 +241,111 @@ export default function CartPage(): ReactElement {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6">
             <div className="sm:col-span-2 space-y-2 sm:space-y-4">
-              {cartItems.map((item, index) => (
-                <Card
-                  key={`${item.id}-${JSON.stringify(item.variant)}`}
-                  className="product-card animate-fade-in-up glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardContent className="p-2 sm:p-3 md:p-4">
-                    <div className="flex gap-2 sm:gap-3 md:gap-4">
-                      <div className="relative">
-                        <img
-                          src={item.image || "/placeholder.svg?height=100&width=100&query=industrial equipment"}
-                          alt={item.name}
-                          className="w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 object-cover rounded-lg border"
-                        />
-                      </div>
-                      <div className="flex-1 space-y-1 sm:space-y-2 md:space-y-3">
-                        <div>
-                          <h3 className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg line-clamp-2">
-                            {item.name}
-                          </h3>
-                          {item.variant && (
-                            <p className="text-xs sm:text-sm text-muted-foreground">
-                              {Object.entries(item.variant).map(([key, value]) => `${key}: ${String(value)}`).join(", ")}
-                            </p>
-                          )}
+              {cartItems.map((item, index) => {
+                const maxStock = item.stockQuantity || 0;
+                
+                return (
+                  <Card
+                    key={`${item.id}-${JSON.stringify(item.variant)}`}
+                    className="product-card animate-fade-in-up glass-morphism border-l-4 border-l-[#38b6ff] hover:shadow-lg transition-all duration-300"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <CardContent className="p-2 sm:p-3 md:p-4">
+                      <div className="flex gap-2 sm:gap-3 md:gap-4">
+                        <div className="relative">
+                          <img
+                            src={item.image || "/placeholder.svg?height=100&width=100&query=industrial equipment"}
+                            alt={item.name}
+                            className="w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 object-cover rounded-lg border"
+                          />
                         </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 md:gap-3">
-                          <div className="flex items-center space-x-1 sm:space-x-2">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-7 sm:h-8 md:h-9 w-7 sm:w-8 md:w-9 bg-transparent cursor-pointer"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty - 1)}
-                            >
-                              <Minus className="h-2 sm:h-3 md:h-4 w-2 sm:w-3 md:w-4" />
-                            </Button>
-                            <Input
-                              type="number"
-                              value={item.qty}
-                              onChange={(e) => updateQuantity(item.id, item.variant, Number.parseInt(e.target.value) || 1)}
-                              className="w-10 sm:w-12 md:w-16 text-center h-7 sm:h-8 md:h-9 text-xs sm:text-sm md:text-base"
-                              min={1}
-                            />
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-7 sm:h-8 md:h-9 w-7 sm:w-8 md:w-9 bg-transparent cursor-pointer"
-                              onClick={() => updateQuantity(item.id, item.variant, item.qty + 1)}
-                            >
-                              <Plus className="h-2 sm:h-3 md:h-4 w-2 sm:w-3 md:w-4" />
-                            </Button>
-                          </div>
-
-                          <div className="text-right">
-                            <div className="font-semibold text-sm sm:text-base md:text-lg">
-                              {CURRENCY.SYMBOL}{(item.price * item.qty).toLocaleString()}
-                            </div>
-                            <div className="text-xs sm:text-sm text-muted-foreground">
-                              {CURRENCY.SYMBOL}{item.price.toLocaleString()} each
+                        <div className="flex-1 space-y-1 sm:space-y-2 md:space-y-3">
+                          <div>
+                            <h3 className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg line-clamp-2">
+                              {item.name}
+                            </h3>
+                            {item.variant && (
+                              <p className="text-xs sm:text-sm text-muted-foreground">
+                                {Object.entries(item.variant).map(([key, value]) => `${key}: ${String(value)}`).join(", ")}
+                              </p>
+                            )}
+                            <div className="text-xs text-muted-foreground mt-1">
+                              Available: {maxStock} pieces
                             </div>
                           </div>
-                        </div>
 
-                        <div className="flex gap-1 sm:gap-2 md:gap-3">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => moveToWishlist(item)}
-                            className="text-xs sm:text-sm cursor-pointer"
-                          >
-                            <Heart className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-0.5 sm:mr-1 md:mr-2" />
-                            Save for Later
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeItem(item.id, item.variant)}
-                            className="text-destructive hover:text-destructive text-xs sm:text-sm cursor-pointer"
-                          >
-                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-0.5 sm:mr-1 md:mr-2" />
-                            Remove
-                          </Button>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 md:gap-3">
+                            <div className="flex items-center space-x-1 sm:space-x-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 sm:h-8 md:h-9 w-7 sm:w-8 md:w-9 bg-transparent cursor-pointer"
+                                onClick={() => updateQuantity(item.id, item.variant, item.qty - 1)}
+                                disabled={item.qty <= 1}
+                              >
+                                <Minus className="h-2 sm:h-3 md:h-4 w-2 sm:w-3 md:w-4" />
+                              </Button>
+                              <Input
+                                type="number"
+                                value={item.qty}
+                                onChange={(e) => handleDirectQuantityChange(item.id, item.variant, e.target.value, item)}
+                                onBlur={(e) => handleInputBlur(item.id, item.variant, e.target.value, item)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleInputBlur(item.id, item.variant, e.currentTarget.value, item);
+                                  }
+                                }}
+                                className="w-10 sm:w-12 md:w-16 text-center h-7 sm:h-8 md:h-9 text-xs sm:text-sm md:text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                min={1}
+                                max={maxStock}
+                              />
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-7 sm:h-8 md:h-9 w-7 sm:w-8 md:w-9 bg-transparent cursor-pointer"
+                                onClick={() => updateQuantity(item.id, item.variant, item.qty + 1)}
+                                disabled={item.qty >= maxStock}
+                              >
+                                <Plus className="h-2 sm:h-3 md:h-4 w-2 sm:w-3 md:w-4" />
+                              </Button>
+                            </div>
+
+                            <div className="text-right">
+                              <div className="font-semibold text-sm sm:text-base md:text-lg">
+                                {CURRENCY.SYMBOL}{(item.price * item.qty).toLocaleString()}
+                              </div>
+                              <div className="text-xs sm:text-sm text-muted-foreground">
+                                {CURRENCY.SYMBOL}{item.price.toLocaleString()} each
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-1 sm:gap-2 md:gap-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => moveToWishlist(item)}
+                              className="text-xs sm:text-sm cursor-pointer"
+                            >
+                              <Heart className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-0.5 sm:mr-1 md:mr-2" />
+                              Save for Later
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeItem(item.id, item.variant)}
+                              className="text-destructive hover:text-destructive text-xs sm:text-sm cursor-pointer"
+                            >
+                              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-0.5 sm:mr-1 md:mr-2" />
+                              Remove
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
 
             <div className="sm:col-span-2 lg:col-span-1">

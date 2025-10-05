@@ -19,7 +19,7 @@ import { CONTACT } from "@/data/constants";
 import { EnquiryForm } from "@/components/enquiryForm/enquiryForm";
 import { getProducts } from "@/lib/apiServices/product.service";
 
-export default function InquiryPage(): ReactElement {
+export default function EnquiryPage(): ReactElement {
   const [products, setProducts] = useState<APIProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,7 +53,7 @@ export default function InquiryPage(): ReactElement {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2 md:mb-3 text-primary py-1 sm:py-2">
-          Product Inquiry
+          Product Enquiry
         </h1>
         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl mx-auto">
           Interested in our products? Fill out the form below and our team will

@@ -43,9 +43,9 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/logos/logo_transparent.png",
-    apple: "/logos/logo_transparent.png",
-    shortcut: "/logos/logo_transparent.png",
+    icon: "/logos/logo_transparent.ico",
+    apple: "/logos/logo_transparent.ico",
+    shortcut: "/logos/logo_transparent.ico",
   },
 };
 
@@ -56,6 +56,10 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/logos/logo_transparent.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/logos/logo_transparent.png" />
+      </head>
       <body
         className={`font-sans ${playfairDisplay.variable} ${sourceSans.variable} antialiased`}
       >

@@ -205,13 +205,6 @@ export function ReviewList({ productId, className }: ReviewListProps) {
                   {isAuthenticated && user && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                        >
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>Report Review</DropdownMenuItem>
@@ -229,24 +222,7 @@ export function ReviewList({ productId, className }: ReviewListProps) {
                   {review.comment}
                 </p>
 
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 text-xs hover:bg-green-50 hover:text-green-600"
-                  >
-                    <ThumbsUp className="h-3 w-3 mr-1" />
-                    {/* Helpful ({review.helpfulCount || 0}) */}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 text-xs hover:bg-red-50 hover:text-red-600"
-                  >
-                    <ThumbsDown className="h-3 w-3 mr-1" />
-                    Not Helpful
-                  </Button>
-                </div>
+             
               </CardContent>
             </Card>
           </motion.div>

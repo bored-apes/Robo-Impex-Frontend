@@ -37,6 +37,8 @@ export function ProductCard({ product }: ProductCardProps) {
         name: product.name,
         price: product.price,
         image: product.images[0],
+        minQuantityOrder: product.minQuantityOrder || 1,
+        stockQuantity: product.stockQuantity || 0,
       };
       wishlistStorage.addItem(wishlistItem);
       setIsInWishlist(true);
@@ -56,6 +58,8 @@ export function ProductCard({ product }: ProductCardProps) {
       price: product.price,
       image: product.images[0],
       qty: 1,
+      stockQuantity: product.stockQuantity || 0,
+      minQuantityOrder:product.minQuantityOrder || 1,
     };
     cartStorage.addItem(cartItem);
     showToast({
