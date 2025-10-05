@@ -7,28 +7,12 @@ import { StarRating } from "../shared/common/starRating";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useEffect } from "react";
-import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export function RelatedProducts({ products }: { products: APIProduct[] }) {
-  const swiperRef = useRef<SwiperType>();
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (swiperRef.current) {
-      setTimeout(() => {
-        swiperRef.current?.navigation.init();
-        swiperRef.current?.navigation.update();
-        swiperRef.current?.update();
-      }, 100);
-    }
-  }, [products]);
-
   if (products.length === 0) {
     return null;
   }
@@ -46,26 +30,15 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
             spaceBetween={16}
             slidesPerView={1}
             navigation={{
-              prevEl: navigationPrevRef.current,
-              nextEl: navigationNextRef.current,
+              prevEl: '.related-products-prev',
+              nextEl: '.related-products-next',
             }}
             pagination={{
               clickable: true,
+              el: '.related-products-pagination',
               renderBullet: (index, className) => {
                 return `<span class="${className} related-products-bullet"></span>`;
               },
-            }}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-              setTimeout(() => {
-                swiper.navigation.init();
-                swiper.navigation.update();
-              }, 100);
-            }}
-            onSlideChange={() => {
-              if (swiperRef.current) {
-                swiperRef.current.navigation.update();
-              }
             }}
             breakpoints={{
               320: {
@@ -93,7 +66,7 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
                 spaceBetween: 24,
               },
             }}
-            className="related-products-swiper pb-10 sm:pb-12"
+            className="related-products-swiper"
           >
             {products.map((relatedProduct) => (
               <SwiperSlide key={relatedProduct.id} className="h-auto">
@@ -183,19 +156,16 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
           </Swiper>
 
           {/* Navigation Buttons */}
-          <button
-            ref={navigationPrevRef}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -ml-2 sm:-ml-4"
-          >
+          <button className="related-products-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -ml-2 sm:-ml-4">
             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           
-          <button
-            ref={navigationNextRef}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -mr-2 sm:-mr-4"
-          >
+          <button className="related-products-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -mr-2 sm:-mr-4">
             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
+
+          {/* Pagination */}
+          <div className="related-products-pagination mt-6 sm:mt-8"></div>
         </div>
       </div>
 
@@ -210,7 +180,7 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
           transition: all 0.3s ease;
         }
 
-        .related-products-bullet-active {
+        .swiper-pagination-bullet-active.related-products-bullet {
           background: hsl(var(--primary));
           opacity: 1;
           transform: scale(1.2);
@@ -225,17 +195,21 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
           background: hsl(var(--muted-foreground));
         }
 
-        .dark .related-products-bullet-active {
+        .dark .swiper-pagination-bullet-active.related-products-bullet {
           background: hsl(var(--primary));
-        }
-
-        .related-products-swiper .swiper-pagination {
-          bottom: 0px !important;
         }
 
         /* Ensure all cards have same height */
         .related-products-swiper .swiper-slide {
           height: auto;
+        }
+
+        /* Swiper navigation button styles */
+        .related-products-prev.swiper-button-disabled,
+        .related-products-next.swiper-button-disabled {
+          opacity: 0.35;
+          cursor: auto;
+          pointer-events: none;
         }
 
         /* Responsive line clamp */

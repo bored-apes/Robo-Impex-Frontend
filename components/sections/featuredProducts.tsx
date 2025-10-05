@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Star,
@@ -8,9 +8,7 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
-  Zap,
   Cpu,
-  Microscope as Microchip,
   Package,
   AlertCircle,
 } from "lucide-react";
@@ -25,7 +23,6 @@ import type { Product, APIProduct } from "@/types/products";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ProductCardSkeleton } from "@/components/shared/skeletons/productCardSkeleton";
-import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -191,9 +188,6 @@ export function FeaturedProducts() {
   const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
   const [availableTypes, setAvailableTypes] = useState<string[]>(ALL_PRODUCT_TYPES);
   const [hasInitialTypesLoaded, setHasInitialTypesLoaded] = useState(false);
-  const swiperRef = useRef<SwiperType>();
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
 
   const productsPerPage = 10000;
 
@@ -247,10 +241,6 @@ export function FeaturedProducts() {
 
         setAllProducts(mappedProducts);
         setFilteredProducts(mappedProducts);
-
-        if (swiperRef.current) {
-          swiperRef.current.slideTo(0);
-        }
       } else {
         throw new Error(response.message || "Failed to fetch products");
       }
@@ -273,13 +263,6 @@ export function FeaturedProducts() {
       );
       setFilteredProducts(filtered);
     }
-    
-    // Reset swiper to first slide when filter changes
-    setTimeout(() => {
-      if (swiperRef.current) {
-        swiperRef.current.slideTo(0);
-      }
-    }, 100);
   }, [allProducts]);
 
   // Handle product type change
@@ -467,28 +450,15 @@ export function FeaturedProducts() {
               spaceBetween={12}
               slidesPerView={1}
               navigation={{
-                prevEl: navigationPrevRef.current,
-                nextEl: navigationNextRef.current,
+                prevEl: '.swiper-button-prev-featured',
+                nextEl: '.swiper-button-next-featured',
               }}
               pagination={{
                 clickable: true,
+                el: '.swiper-pagination-featured',
                 renderBullet: (index, className) => {
                   return `<span class="${className} swiper-pagination-bullet-custom"></span>`;
                 },
-              }}
-              onSwiper={(swiper) => {
-                swiperRef.current = swiper;
-                // Initialize navigation after swiper is mounted
-                setTimeout(() => {
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                }, 100);
-              }}
-              onSlideChange={() => {
-                // Ensure navigation is updated
-                if (swiperRef.current) {
-                  swiperRef.current.navigation.update();
-                }
               }}
               breakpoints={{
                 320: { slidesPerView: 1, spaceBetween: 12 },
@@ -499,7 +469,7 @@ export function FeaturedProducts() {
                 1280: { slidesPerView: 4, spaceBetween: 20 },
                 1536: { slidesPerView: 5, spaceBetween: 24 },
               }}
-              className="featured-products-swiper pb-10 sm:pb-12"
+              className="featured-products-swiper"
             >
               {filteredProducts.map((product, index) => (
                 <SwiperSlide key={product.id} className="h-auto">
@@ -515,18 +485,15 @@ export function FeaturedProducts() {
             </Swiper>
 
             {/* Navigation Buttons */}
-            <button
-              ref={navigationPrevRef}
-              className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-            >
+            <button className="swiper-button-prev-featured absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50">
               <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
-            <button
-              ref={navigationNextRef}
-              className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-            >
+            <button className="swiper-button-next-featured absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50">
               <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
+
+            {/* Pagination */}
+            <div className="swiper-pagination-featured mt-6 sm:mt-8"></div>
           </div>
         )}
 
@@ -591,13 +558,17 @@ export function FeaturedProducts() {
           background: hsl(var(--primary));
         }
 
-        .swiper-pagination {
-          bottom: 0px !important;
-        }
-
         /* Ensure all cards have same height */
         .featured-products-swiper .swiper-slide {
           height: auto;
+        }
+
+        /* Swiper navigation button styles */
+        .swiper-button-prev-featured.swiper-button-disabled,
+        .swiper-button-next-featured.swiper-button-disabled {
+          opacity: 0.35;
+          cursor: auto;
+          pointer-events: none;
         }
 
         /* Responsive line clamp for different screens */

@@ -287,7 +287,7 @@ export function Header() {
                 {isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex items-center justify-center rounded-full border border-slate-300 dark:border-slate-600 h-9 w-9 md:h-10 md:w-10 overflow-hidden hover:ring-2 hover:ring-[#38b6ff] transition">
+                      <button className="flex items-center justify-center rounded-full border border-slate-300 dark:border-slate-600 h-9 w-9 md:h-10 md:w-10 overflow-hidden hover:ring-2 hover:ring-[#38b6ff] transition cursor-pointer">
                         <Avatar className="h-full w-full">
                           <AvatarImage
                             src={getUserAvatar()}
