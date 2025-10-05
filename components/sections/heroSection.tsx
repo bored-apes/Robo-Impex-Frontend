@@ -218,17 +218,7 @@ export function HeroSection() {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="glass-morphism hover-lift px-8 py-4 rounded-xl text-lg font-semibold group border-[#38b6ff]/30 hover:border-[#38b6ff] hover:bg-[#38b6ff]/10 bg-transparent text-foreground"
-              asChild
-            >
-              <Link href="/demo">
-                <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                Watch Demo
-              </Link>
-            </Button>
+           
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">

@@ -45,6 +45,10 @@ const validationSchema = Yup.object({
     .required("Last name is required"),
   email: Yup.string()
     .email("Invalid email address")
+    .matches(
+      /^[\w-.]+@([\w-]+\.)+(com|net|org|in|co|edu|gov|info|biz|io|me)$/i,
+      "Email must end with a valid domain like .com, .net, etc."
+    )
     .required("Email is required"),
   mobile: Yup.string()
     .matches(/^\+?[1-9]\d{9,11}$/, "Invalid mobile number")
@@ -191,7 +195,11 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-muted-foreground opacity-60"
                   animate={{ y: [0, -20, -40], opacity: [0.6, 0.3, 0] }}
-                  transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: 0.5,
+                  }}
                 />
                 <motion.rect
                   x="70"
@@ -213,7 +221,11 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+                  transition={{
+                    duration: 3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: 1,
+                  }}
                 />
                 <motion.rect
                   x="185"
@@ -224,7 +236,11 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
+                  transition={{
+                    duration: 3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: 2,
+                  }}
                 />
                 <motion.rect
                   x="235"
@@ -235,7 +251,11 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
+                  transition={{
+                    duration: 3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: 0.5,
+                  }}
                 />
                 <motion.rect
                   x="60"
@@ -258,7 +278,11 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ x: [80, 240, 80] }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  transition={{
+                    duration: 4,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "linear",
+                  }}
                 />
                 <motion.rect
                   x="140"
@@ -269,7 +293,12 @@ export default function SignupPage() {
                   fill="currentColor"
                   className="text-accent"
                   animate={{ x: [140, 300, 140] }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear", delay: 1 }}
+                  transition={{
+                    duration: 4,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "linear",
+                    delay: 1,
+                  }}
                 />
               </svg>
             </div>
@@ -285,7 +314,8 @@ export default function SignupPage() {
               Join the Future of <span className="text-gradient">Industry</span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground text-pretty max-w-xs sm:max-w-md">
-              Connect with leading industrial automation solutions and transform your business operations.
+              Connect with leading industrial automation solutions and transform
+              your business operations.
             </p>
           </motion.div>
         </motion.div>
@@ -334,7 +364,10 @@ export default function SignupPage() {
                         transition={{ delay: 0.4, duration: 0.5 }}
                         className="space-y-1 sm:space-y-1.5"
                       >
-                        <Label htmlFor="firstname" className="text-xs sm:text-sm font-medium text-foreground">
+                        <Label
+                          htmlFor="firstname"
+                          className="text-xs sm:text-sm font-medium text-foreground"
+                        >
                           First Name
                         </Label>
                         <div className="relative group">
@@ -349,7 +382,11 @@ export default function SignupPage() {
                           />
                         </div>
                         <div>
-                          <ErrorMessage name="firstname" component="div" className="text-xs text-red-500 mt-1" />
+                          <ErrorMessage
+                            name="firstname"
+                            component="div"
+                            className="text-xs text-red-500 mt-1"
+                          />
                         </div>
                       </motion.div>
 
@@ -359,7 +396,10 @@ export default function SignupPage() {
                         transition={{ delay: 0.5, duration: 0.5 }}
                         className="space-y-1 sm:space-y-1.5"
                       >
-                        <Label htmlFor="lastname" className="text-xs sm:text-sm font-medium text-foreground">
+                        <Label
+                          htmlFor="lastname"
+                          className="text-xs sm:text-sm font-medium text-foreground"
+                        >
                           Last Name
                         </Label>
                         <div className="relative group">
@@ -373,7 +413,11 @@ export default function SignupPage() {
                             className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                           />
                         </div>
-                        <ErrorMessage name="lastname" component="div" className="text-xs text-red-500 mt-1" />
+                        <ErrorMessage
+                          name="lastname"
+                          component="div"
+                          className="text-xs text-red-500 mt-1"
+                        />
                       </motion.div>
                     </div>
 
@@ -383,7 +427,10 @@ export default function SignupPage() {
                       transition={{ delay: 0.6, duration: 0.5 }}
                       className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label htmlFor="email" className="text-xs sm:text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="email"
+                        className="text-xs sm:text-sm font-medium text-foreground"
+                      >
                         Email Address
                       </Label>
                       <div className="relative group">
@@ -397,7 +444,11 @@ export default function SignupPage() {
                           className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                       </div>
-                      <ErrorMessage name="email" component="div" className="text-xs text-red-500 mt-1" />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="text-xs text-red-500 mt-1"
+                      />
                     </motion.div>
 
                     <motion.div
@@ -406,7 +457,10 @@ export default function SignupPage() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label htmlFor="mobile" className="text-xs sm:text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="mobile"
+                        className="text-xs sm:text-sm font-medium text-foreground"
+                      >
                         Mobile Number
                       </Label>
                       <div className="relative group">
@@ -420,7 +474,11 @@ export default function SignupPage() {
                           className="pl-7 sm:pl-9 h-9 sm:h-10 focus-ring transition-all duration-300"
                         />
                       </div>
-                      <ErrorMessage name="mobile" component="div" className="text-xs text-red-500 mt-1" />
+                      <ErrorMessage
+                        name="mobile"
+                        component="div"
+                        className="text-xs text-red-500 mt-1"
+                      />
                     </motion.div>
 
                     <motion.div
@@ -429,7 +487,10 @@ export default function SignupPage() {
                       transition={{ delay: 0.8, duration: 0.5 }}
                       className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label htmlFor="password" className="text-xs sm:text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="password"
+                        className="text-xs sm:text-sm font-medium text-foreground"
+                      >
                         Password
                       </Label>
                       <div className="relative group">
@@ -447,10 +508,18 @@ export default function SignupPage() {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showPassword ? <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" /> : <Eye className="w-3 sm:w-4 h-3 sm:h-4" />}
+                          {showPassword ? (
+                            <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" />
+                          ) : (
+                            <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
+                          )}
                         </button>
                       </div>
-                      <ErrorMessage name="password" component="div" className="text-xs text-red-500 mt-1" />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-xs text-red-500 mt-1"
+                      />
                     </motion.div>
 
                     <motion.div
@@ -459,7 +528,10 @@ export default function SignupPage() {
                       transition={{ delay: 0.9, duration: 0.5 }}
                       className="space-y-1 sm:space-y-1.5"
                     >
-                      <Label htmlFor="confirmPassword" className="text-xs sm:text-sm font-medium text-foreground">
+                      <Label
+                        htmlFor="confirmPassword"
+                        className="text-xs sm:text-sm font-medium text-foreground"
+                      >
                         Confirm Password
                       </Label>
                       <div className="relative group">
@@ -477,10 +549,18 @@ export default function SignupPage() {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showPassword ? <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" /> : <Eye className="w-3 sm:w-4 h-3 sm:h-4" />}
+                          {showPassword ? (
+                            <EyeOff className="w-3 sm:w-4 h-3 sm:h-4" />
+                          ) : (
+                            <Eye className="w-3 sm:w-4 h-3 sm:h-4" />
+                          )}
                         </button>
                       </div>
-                      <ErrorMessage name="confirmPassword" component="div" className="text-xs text-red-500 mt-1" />
+                      <ErrorMessage
+                        name="confirmPassword"
+                        component="div"
+                        className="text-xs text-red-500 mt-1"
+                      />
                     </motion.div>
 
                     <motion.div
@@ -515,7 +595,10 @@ export default function SignupPage() {
                     >
                       <p className="text-xs sm:text-sm text-muted-foreground">
                         Already have an account?{" "}
-                        <Link href="/login" className="text-primary hover:text-primary/80 transition-colors font-semibold">
+                        <Link
+                          href="/login"
+                          className="text-primary hover:text-primary/80 transition-colors font-semibold"
+                        >
                           Sign In
                         </Link>
                       </p>
@@ -532,7 +615,10 @@ export default function SignupPage() {
             transition={{ delay: 1.2, duration: 0.5 }}
             className="text-center mt-4 sm:mt-6"
           >
-            <Link href="/" className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               ← Back to Home
             </Link>
           </motion.div>

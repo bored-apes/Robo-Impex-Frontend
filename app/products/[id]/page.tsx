@@ -15,10 +15,10 @@ import {
   Zap,
   Plus,
   Minus,
-  StarHalf,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { cartStorage, wishlistStorage } from "@/lib/utils/storage";
 import { CURRENCY } from "@/data/constants";
 import type { APIProduct } from "@/types/products";
@@ -46,6 +46,7 @@ export default function ProductPage() {
   const [activeTab, setActiveTab] = useState("description");
   const [refreshReviews, setRefreshReviews] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
+  const [customQuantityInput, setCustomQuantityInput] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -68,13 +69,12 @@ export default function ProductPage() {
               .some((item) => item.id === productData.id.toString())
           );
 
-          // Set total reviews from API data
           if (productData.total_ratings) {
             setTotalReviews(productData.total_ratings);
           }
 
           const relatedResponse = await getProducts({
-            pageSize: 4,
+            pageSize: 10000, 
             category: productData.category || undefined,
           });
 
@@ -91,7 +91,7 @@ export default function ProductPage() {
             const filtered = responseData.data.filter(
               (p) => p.id !== productData.id
             );
-            setRelatedProducts(filtered.slice(0, 4));
+            setRelatedProducts(filtered);
           }
         } else {
           setError(response.message || "Product not found");
@@ -109,9 +109,74 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (product) {
-      setQuantity(product.min_order_qty || 1);
+      const initialQty = product.min_order_qty || 1;
+      setQuantity(initialQty);
+      setCustomQuantityInput(initialQty.toString());
     }
   }, [product]);
+
+  const handleCustomQuantityChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setCustomQuantityInput(value);
+
+    if (value === "") return;
+
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue > 0) {
+      handleQuantityChange(numValue);
+    }
+  };
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (!product) return;
+
+    const maxStock = product.stock_quantity || 0;
+
+    if (newQuantity > maxStock) {
+      showToast({
+        type: "warning",
+        title: "Maximum Stock Reached",
+        message: `Maximum available stock is ${maxStock} pieces.`,
+      });
+      setQuantity(maxStock);
+      setCustomQuantityInput(maxStock.toString());
+      return;
+    }
+
+    setQuantity(newQuantity);
+    setCustomQuantityInput(newQuantity.toString());
+  };
+
+  const handleIncrement = () => {
+    handleQuantityChange(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    handleQuantityChange(Math.max(1, quantity - 1));
+  };
+
+  const handleInputBlur = () => {
+    if (customQuantityInput === "") {
+      setCustomQuantityInput("1");
+      setQuantity(1);
+      return;
+    }
+
+    const numValue = parseInt(customQuantityInput);
+    if (isNaN(numValue) || numValue <= 0) {
+      setCustomQuantityInput("1");
+      setQuantity(1);
+      showToast({
+        type: "warning",
+        title: "Invalid Quantity",
+        message: `Quantity set to 1 piece.`,
+      });
+    } else {
+      handleQuantityChange(numValue);
+    }
+  };
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -264,6 +329,7 @@ export default function ProductPage() {
         </Button>
 
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
+          {/* Product images section */}
           <div className="space-y-4 sm:space-y-6">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/30 industrial-border">
               <img
@@ -304,6 +370,7 @@ export default function ProductPage() {
             </div>
           </div>
 
+          {/* Product details section */}
           <div className="space-y-4 sm:space-y-6">
             <div>
               <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
@@ -370,21 +437,30 @@ export default function ProductPage() {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="flex items-center border rounded-lg">
                   <button
-                    onClick={() =>
-                      setQuantity(
-                        Math.max(displayProduct.minOrderQty, quantity - 1)
-                      )
-                    }
-                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer"
+                    onClick={handleDecrement}
+                    disabled={quantity <= 1}
+                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
-                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 font-medium text-xs sm:text-sm">
-                    {quantity}
-                  </span>
+
+                  <Input
+                    type="text"
+                    value={customQuantityInput}
+                    onChange={handleCustomQuantityChange}
+                    onBlur={handleInputBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleInputBlur();
+                      }
+                    }}
+                    className="w-16 sm:w-20 text-center border-0 focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer"
+                    onClick={handleIncrement}
+                    disabled={quantity >= displayProduct.stockQuantity}
+                    className="p-2 sm:p-2.5 hover:bg-muted transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
@@ -461,6 +537,7 @@ export default function ProductPage() {
           </div>
         </div>
 
+        {/* Tabs Section */}
         <div className="mb-12 sm:mb-16 md:mb-20">
           {/* Desktop Tabs */}
           <div className="hidden md:block border-b">

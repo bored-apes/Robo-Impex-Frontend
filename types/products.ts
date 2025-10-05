@@ -1,12 +1,10 @@
 
 export interface Product {
   id: string;
-  slug: string;
   name: string;
   descriptionShort: string;
   descriptionLong: string;
   price: number;
-  currency: string;
   images: string[];
   videos?: string[];
   categories: string[];
@@ -14,12 +12,10 @@ export interface Product {
   rating: number;
   ratingCount: number;
   inStock: boolean;
-  brand: string;
-  modelNumber: string;
-  warranty: string;
   specifications?: Specifications;
   variants?: Variants;
-  similar: string[];
+  stockQuantity?:number;
+  minQuantityOrder?:number;
 }
 
 export interface Specifications {
@@ -136,4 +132,17 @@ export interface APIProduct {
   average_rating?:number;
   total_ratings?:number;
   ratingCount?: number;
+  minQuantityOrder?:number;
+  specifications?: Specifications;
+  variants?: Variants;
+  images: string[];
+}
+
+export interface WishlistAddItem {
+  id: string
+  name: string
+  price: number
+  image?: string
+  stockQuantity: number
+  minQuantityOrder: number
 }

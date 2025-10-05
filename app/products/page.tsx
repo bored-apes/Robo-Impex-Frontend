@@ -27,7 +27,6 @@ import { useDebounce } from "@/components/shared/hooks/use-debounce";
 import { ProductFilters } from "@/components/product/productFilters";
 import { ProductCard } from "@/components/product/productCard";
 import { ProductsListSkeleton } from "@/components/shared/skeletons/productsListSkeleton";
-import { useSearchParams } from "next/navigation";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<APIProduct[]>([]);
@@ -186,28 +185,23 @@ export default function ProductsPage() {
     }
   }, [currentPage, fetchProducts]);
 
-  const convertToDisplayProduct = (apiProduct: APIProduct) => ({
-    id: apiProduct.id.toString(),
-    slug: apiProduct.name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, ""),
-    name: apiProduct.name,
-    descriptionShort: apiProduct.description || "",
-    descriptionLong: apiProduct.description || "",
-    price: apiProduct.base_price ?? 0, // fallback to 0
-    currency: "INR",
-    images: apiProduct.image_url ? [apiProduct.image_url] : [""],
-    categories: apiProduct.category ? [apiProduct.category] : [],
-    tags: apiProduct.type ? [apiProduct.type] : [],
-    inStock: (apiProduct.stock_quantity ?? 0) > 0,
-    brand: "RoboImpex",
-    modelNumber: `RI-${apiProduct.id}`,
-    warranty: "1 Year",
-    rating: apiProduct.average_rating ?? 4.5, // fallback to 4.5
-    ratingCount: apiProduct.ratingCount ?? apiProduct.total_ratings ?? 0, // fallback to 0
-    similar: [],
-  });
+  const convertToDisplayProduct = (apiProduct: APIProduct) => {
+    return ({
+        id: apiProduct.id.toString(),
+        name: apiProduct.name,
+        descriptionShort: apiProduct.description || "",
+        descriptionLong: apiProduct.description || "",
+        price: apiProduct.base_price ?? 0, 
+        images: apiProduct.image_url ? [apiProduct.image_url] : [""],
+        categories: apiProduct.category ? [apiProduct.category] : [],
+        tags: apiProduct.type ? [apiProduct.type] : [],
+        inStock: (apiProduct.stock_quantity ?? 0) > 0,
+        rating: apiProduct.average_rating ?? 4.5, 
+        ratingCount: apiProduct.ratingCount ?? apiProduct.total_ratings ?? 0,
+        stockQuantity: apiProduct.stock_quantity ?? 0,
+        minQuantityOrder: apiProduct.min_order_qty ?? 0
+    });
+};
 
   if (error && !loading) {
     return (

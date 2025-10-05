@@ -27,11 +27,9 @@ const validationSchema = Yup.object({
     .max(5, "Rating cannot exceed 5 stars")
     .required("Rating is required"),
   title: Yup.string()
-    .min(5, "Title must be at least 5 characters")
     .max(100, "Title cannot exceed 100 characters")
     .required("Review title is required"),
   comment: Yup.string()
-    .min(20, "Review must be at least 20 characters")
     .max(1000, "Review cannot exceed 1000 characters")
     .required("Review comment is required"),
 })
