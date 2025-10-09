@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { motion } from "framer-motion"
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,18 +9,18 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Card } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { LEGAL, TERMS_SECTIONS } from "@/data/constants"
-import { AnimatedHeroSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons"
+} from "@/components/ui/breadcrumb";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { LEGAL, TERMS_SECTIONS } from "@/data/constants";
+import { AnimatedHeroSectionBackgroundIcons } from "@/components/shared/common/animatedBackgroundIcons";
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background px-2 sm:px-4 md:px-6 lg:px-8">
       {/* Hero */}
-      <section className="relative overflow-hidden py-8 sm:py-10 md:py-12 lg:py-16 bg-gradient-to-br from-muted/30 via-background to-accent/5 rounded-lg">
+      <section className="relative overflow-hidden py-4 sm:py-5 md:py-6 lg:py-8 bg-gradient-to-br from-muted/30 via-background to-accent/5 rounded-lg">
         <AnimatedHeroSectionBackgroundIcons />
         <div className="relative z-10 container mx-auto">
           <Breadcrumb className="mb-3 sm:mb-4">
@@ -34,33 +34,19 @@ export default function TermsPage() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-
-          <div className="flex flex-col gap-3 sm:gap-4">
-            <h1 className="text-balance text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight">
-              Terms & Conditions
-            </h1>
-            <p className="text-muted-foreground">
-              Last updated: <span className="font-medium text-foreground">{LEGAL.LAST_UPDATED}</span>
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
-                {LEGAL.COMPANY}
-              </Badge>
-              <Badge className="bg-primary text-primary-foreground">E-commerce</Badge>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12">
+      <section className="py-3 sm:py-4 md:py-5 lg:py-6">
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {/* Left: Summary */}
           <Card className="p-4 sm:p-6 lg:sticky lg:top-24 h-fit bg-card/90 backdrop-blur-sm">
             <h2 className="text-lg sm:text-xl font-semibold mb-3">Summary</h2>
             <p className="text-sm text-muted-foreground">
-              Use of this site constitutes acceptance of these Terms. Orders are subject to availability, secure
-              payments, and our shipping/return policies.
+              Use of this site constitutes acceptance of these Terms. Orders are
+              subject to availability, secure payments, and our shipping/return
+              policies.
             </p>
             <Separator className="my-4" />
             <ul className="grid gap-2 text-sm list-disc pl-5 text-muted-foreground">
@@ -82,7 +68,10 @@ export default function TermsPage() {
                 transition={{ delay: idx * 0.05 }}
               >
                 <Card className="p-4 sm:p-6">
-                  <h3 id={section.id} className="text-lg sm:text-xl font-semibold mb-3">
+                  <h3
+                    id={section.id}
+                    className="text-lg sm:text-xl font-semibold mb-3"
+                  >
                     {section.title}
                   </h3>
                   <ul className="grid gap-2 text-sm sm:text-base text-muted-foreground list-disc pl-5">
@@ -96,7 +85,10 @@ export default function TermsPage() {
 
             <p className="text-xs sm:text-sm text-muted-foreground">
               Questions?{" "}
-              <Link href={`mailto:${LEGAL.CONTACT_EMAIL}`} className="text-primary hover:underline">
+              <Link
+                href={`mailto:${LEGAL.CONTACT_EMAIL}`}
+                className="text-primary hover:underline"
+              >
                 {LEGAL.CONTACT_EMAIL}
               </Link>
             </p>
@@ -104,5 +96,5 @@ export default function TermsPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
