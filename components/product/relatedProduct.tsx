@@ -10,39 +10,18 @@ import { StarRating } from "../shared/common/starRating";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useEffect } from "react";
-import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export function RelatedProducts({ products }: { products: APIProduct[] }) {
-<<<<<<< Updated upstream
-  const swiperRef = useRef<SwiperType>();
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (swiperRef.current) {
-      setTimeout(() => {
-        swiperRef.current?.navigation.init();
-        swiperRef.current?.navigation.update();
-        swiperRef.current?.update();
-      }, 100);
-    }
-  }, [products]);
-
-  if (products.length === 0) {
-    return null;
-  }
-=======
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<any>(null);
 
   if (products.length === 0) return null;
->>>>>>> Stashed changes
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -57,16 +36,6 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
             spaceBetween={16}
             slidesPerView={1}
             navigation={{
-<<<<<<< Updated upstream
-              prevEl: navigationPrevRef.current,
-              nextEl: navigationNextRef.current,
-            }}
-            pagination={{
-              clickable: true,
-              renderBullet: (index, className) => {
-                return `<span class="${className} related-products-bullet"></span>`;
-              },
-=======
               prevEl: prevRef.current ?? undefined,
               nextEl: nextRef.current ?? undefined,
             }}
@@ -90,7 +59,6 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
               ) {
                 swiper.params.pagination.el = paginationRef.current;
               }
->>>>>>> Stashed changes
             }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
@@ -204,20 +172,6 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
 
           {/* Navigation Buttons */}
           <button
-<<<<<<< Updated upstream
-            ref={navigationPrevRef}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -ml-2 sm:-ml-4"
-          >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
-          
-          <button
-            ref={navigationNextRef}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -mr-2 sm:-mr-4"
-          >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
-=======
             ref={prevRef}
             className="related-products-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50 -ml-2 sm:-ml-4"
           >
@@ -236,7 +190,6 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
             ref={paginationRef}
             className="related-products-pagination mt-6 sm:mt-8 text-center"
           ></div>
->>>>>>> Stashed changes
         </div>
       </div>
 
@@ -270,33 +223,12 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
           background: hsl(var(--primary));
         }
 
-<<<<<<< Updated upstream
-        .related-products-swiper .swiper-pagination {
-          bottom: 0px !important;
-        }
-
-        /* Ensure all cards have same height */
-        .related-products-swiper .swiper-slide {
-          height: auto;
-        }
-
-        /* Responsive line clamp */
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-
-        /* Hover lift effect */
-=======
         .related-products-prev.swiper-button-disabled,
         .related-products-next.swiper-button-disabled {
           opacity: 0.35;
           pointer-events: none;
         }
 
->>>>>>> Stashed changes
         .hover-lift {
           transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
