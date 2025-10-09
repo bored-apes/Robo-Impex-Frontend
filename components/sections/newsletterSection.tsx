@@ -43,11 +43,18 @@ export function NewsletterSection(): JSX.Element {
             >
               <Mail className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-white" />
             </motion.div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/70 bg-clip-text text-transparent">
+            <h2
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold 
+             mb-3 sm:mb-4 md:mb-6 bg-gradient-to-r from-[#38b6ff] to-[#38b6ff]/70 
+             bg-clip-text text-transparent leading-snug pb-1 overflow-visible"
+            >
               Stay Ahead of Industry Trends
             </h2>
+
             <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl max-w-md sm:max-w-lg md:max-w-2xl mx-auto leading-relaxed">
-              Get exclusive access to the latest updates on new products, industry insights, market trends, and special offers delivered directly to your inbox
+              Get exclusive access to the latest updates on new products,
+              industry insights, market trends, and special offers delivered
+              directly to your inbox
             </p>
           </div>
 
@@ -105,7 +112,8 @@ export function NewsletterSection(): JSX.Element {
                 Welcome to Our Community!
               </h3>
               <p className="text-muted-foreground text-xs sm:text-sm md:text-base">
-                Thank you for subscribing! You'll receive your first newsletter within 24 hours.
+                Thank you for subscribing! You'll receive your first newsletter
+                within 24 hours.
               </p>
             </motion.div>
           )}

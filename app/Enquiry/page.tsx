@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import {
@@ -82,7 +81,7 @@ export default function EnquiryPage(): ReactElement {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <Card className="glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300">
+                <Card className="glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 border border-gray-300">
                   <CardHeader className="pb-1 sm:pb-2 md:pb-3">
                     <CardTitle className="text-base sm:text-lg md:text-xl lg:text-2xl flex items-center space-x-1 sm:space-x-2">
                       <MapPin className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-primary" />
@@ -122,7 +121,7 @@ export default function EnquiryPage(): ReactElement {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <Card className="glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300">
+                <Card className="glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 border border-gray-300">
                   <CardHeader className="pb-1 sm:pb-2 md:pb-3">
                     <CardTitle className="text-base sm:text-lg md:text-xl lg:text-2xl">
                       Why Inquire With Us?

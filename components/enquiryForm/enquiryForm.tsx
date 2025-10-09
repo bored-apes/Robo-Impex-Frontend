@@ -218,7 +218,7 @@ export function EnquiryForm({
           <SelectItem
             key={product.id}
             value={product.id.toString()}
-            className="px-2 py-2 rounded-md focus:bg-primary/10 hover:bg-muted/50 transition-colors cursor-pointer text-sm"
+            className="px-2 py-2 rounded-md focus:bg-primary/10 hover:bg-muted/50 transition-colors cursor-pointer text-sm border-b border-gray-200 last:border-b-0"
           >
             <div className="font-medium truncate">{product.name}</div>
           </SelectItem>
@@ -229,7 +229,7 @@ export function EnquiryForm({
 
   return (
     <Card
-      className={`glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 ${className}`}
+      className={`glass-morphism border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 border-2 border-gray-300 ${className}`}
     >
       <CardHeader className="pb-3 px-3 sm:px-6">
         <CardTitle className="text-lg sm:text-xl md:text-2xl flex items-center">
@@ -266,7 +266,7 @@ export function EnquiryForm({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter your full name"
-                  className="form-field-glow h-10 sm:h-11"
+                  className="h-10 sm:h-11 border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                   disabled={formik.isSubmitting}
                 />
                 {formik.touched.name && formik.errors.name && (
@@ -288,7 +288,7 @@ export function EnquiryForm({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter your email"
-                  className="form-field-glow h-10 sm:h-11"
+                  className="h-10 sm:h-11 border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                   disabled={formik.isSubmitting}
                 />
                 {formik.touched.email && formik.errors.email && (
@@ -312,7 +312,7 @@ export function EnquiryForm({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter your mobile number"
-                  className="h-10 sm:h-11"
+                  className="h-10 sm:h-11 border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                   disabled={formik.isSubmitting}
                 />
                 {formik.touched.mobile && formik.errors.mobile && (
@@ -333,20 +333,20 @@ export function EnquiryForm({
                   disabled={formik.isSubmitting}
                   onOpenChange={handleDropdownOpen}
                 >
-                  <SelectTrigger className="w-full h-10 sm:h-11 text-left">
+                  <SelectTrigger className="w-full h-10 sm:h-11 text-left border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                     <SelectValue placeholder="Select a product" />
                     {(isDropdownLoading || isLoading) && (
                       <Loader2 className="h-4 w-4 animate-spin ml-2" />
                     )}
                   </SelectTrigger>
                   <SelectContent
-                    className="w-[var(--radix-select-trigger-width)] max-h-[300px] p-0 z-50"
+                    className="w-[var(--radix-select-trigger-width)] max-h-[300px] p-0 z-50 border-2 border-gray-400"
                     side="bottom"
                     align="start"
                     sideOffset={4}
                     position="popper"
                   >
-                    <div className="sticky top-0 bg-background border-b z-10">
+                    <div className="sticky top-0 bg-background border-b border-gray-300 z-10">
                       <div className="p-2 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-foreground">
@@ -364,7 +364,7 @@ export function EnquiryForm({
                           <Input
                             ref={searchInputRef}
                             placeholder="Type to search products..."
-                            className="w-full h-8 pl-8 pr-8 text-sm"
+                            className="w-full h-8 pl-8 pr-8 text-sm border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20"
                             value={searchTerm}
                             onChange={handleSearchChange}
                             onClick={(e) => e.stopPropagation()}
@@ -409,7 +409,7 @@ export function EnquiryForm({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter quantity needed"
-                  className="h-10 sm:h-11"
+                  className="h-10 sm:h-11 border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                   disabled={formik.isSubmitting}
                 />
                 {formik.touched.quantity && formik.errors.quantity && (
@@ -432,7 +432,7 @@ export function EnquiryForm({
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="Tell us about your specific requirements, technical specifications needed, intended use, timeline, and any questions you have..."
-                className="resize-none"
+                className="resize-none border-2 border-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                 disabled={formik.isSubmitting}
               />
               {formik.touched.message && formik.errors.message && (
@@ -449,7 +449,7 @@ export function EnquiryForm({
             >
               <Button
                 type="submit"
-                className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-sm sm:text-base font-medium"
+                className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-sm sm:text-base font-medium border-2 border-primary hover:border-primary/80 transition-colors"
                 disabled={formik.isSubmitting}
               >
                 {formik.isSubmitting ? (

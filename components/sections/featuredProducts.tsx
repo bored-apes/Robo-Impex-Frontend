@@ -1,5 +1,9 @@
 "use client";
+<<<<<<< Updated upstream
 import React, { useState, useEffect, useRef, useCallback } from "react";
+=======
+import React, { useState, useEffect, useCallback, useRef } from "react";
+>>>>>>> Stashed changes
 import Link from "next/link";
 import {
   Star,
@@ -32,155 +36,156 @@ import "swiper/css/pagination";
 
 const ALL_PRODUCT_TYPES = [
   "IC",
-  "Microcontroller", 
+  "Microcontroller",
   "Sensor",
   "Module",
   "DevBoard",
   "PCB",
   "Connector",
   "PowerSupply",
-  "Display"
+  "Display",
 ];
 
-// Separate ProductCard component to prevent re-renders
-const ProductCard = React.memo(({ 
-  product, 
-  index,
-  onWishlistToggle,
-  onAddToCart,
-  isInWishlist 
-}: { 
-  product: Product;
-  index: number;
-  onWishlistToggle: (product: Product) => void;
-  onAddToCart: (product: Product) => void;
-  isInWishlist: boolean;
-}) => {
-  const productType = product.tags[0] || "IC";
-  const theme = getProductTypeTheme(productType);
+const ProductCard = React.memo(
+  ({
+    product,
+    index,
+    onWishlistToggle,
+    onAddToCart,
+    isInWishlist,
+  }: {
+    product: Product;
+    index: number;
+    onWishlistToggle: (product: Product) => void;
+    onAddToCart: (product: Product) => void;
+    isInWishlist: boolean;
+  }) => {
+    const productType = product.tags[0] || "IC";
+    const theme = getProductTypeTheme(productType);
 
-  return (
-    <div className="h-full">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: index * 0.1 }}
-        whileHover={{ y: -4 }}
-        className="group h-full"
-      >
-        <Card className="h-full flex flex-col border-border bg-card dark:bg-card/90 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
-          {/* Image Section - Fixed Height */}
-          <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
-            <img
-              src={
-                product.images[0] ||
-                "/placeholder.svg?height=200&width=300&text=Product+Image"
-              }
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-
-            {/* Wishlist Button */}
-            <Button
-              variant="secondary"
-              size="icon"
-              className={`absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm ${
-                isInWishlist
-                  ? "text-red-500"
-                  : "text-muted-foreground hover:text-red-500"
-              }`}
-              onClick={() => onWishlistToggle(product)}
-            >
-              <Heart
-                className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`}
+    return (
+      <div className="h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: index * 0.1 }}
+          whileHover={{ y: -4 }}
+          className="group h-full"
+        >
+          <Card className="h-full flex flex-col border-border bg-card dark:bg-card/90 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+            {/* Image Section - Fixed Height */}
+            <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
+              <img
+                src={
+                  product.images[0] ||
+                  "/placeholder.svg?height=200&width=300&text=Product+Image"
+                }
+                alt={product.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-            </Button>
-          </div>
 
-          {/* Content Section - Flexible but constrained */}
-          <CardContent className="px-4 flex-1 flex flex-col min-h-0">
-            {/* Product Type */}
-            <div className="mb-2 flex items-center justify-start gap-2">
-              <div className="mb-3">
-                <Badge
-                  variant="secondary"
-                  className={`${theme.bg} ${theme.text} ${theme.border} border text-xs font-medium`}
-                >
-                  {productType}
-                </Badge>
-              </div>
-            </div>
-
-            {/* Product Name - Fixed height with ellipsis */}
-            <div className="mb-3 min-h-0 flex-shrink-0">
-              <Link
-                href={`/products/${product.id}`}
-                className="font-semibold text-base leading-tight line-clamp-2 hover:text-primary transition-colors block"
-                title={product.name}
+              {/* Wishlist Button */}
+              <Button
+                variant="secondary"
+                size="icon"
+                className={`absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm ${
+                  isInWishlist
+                    ? "text-red-500"
+                    : "text-muted-foreground hover:text-red-500"
+                }`}
+                onClick={() => onWishlistToggle(product)}
               >
-                {product.name}
-              </Link>
+                <Heart
+                  className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`}
+                />
+              </Button>
             </div>
 
-            {/* Rating - Fixed height */}
-            <div className="flex items-center flex-shrink-0">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-3 w-3 ${
-                      i < Math.floor(product.rating)
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300 dark:text-gray-600"
-                    }`}
-                  />
-                ))}
+            {/* Content Section - Flexible but constrained */}
+            <CardContent className="px-4 flex-1 flex flex-col min-h-0">
+              {/* Product Type */}
+              <div className="mb-2 flex items-center justify-start gap-2">
+                <div className="mb-3">
+                  <Badge
+                    variant="secondary"
+                    className={`${theme.bg} ${theme.text} ${theme.border} border text-xs font-medium`}
+                  >
+                    {productType}
+                  </Badge>
+                </div>
               </div>
-              <span className="text-xs text-muted-foreground ml-2">
-                ({product.ratingCount})
-              </span>
-            </div>
 
-            {/* Price - Fixed at bottom */}
-            <div className="flex items-center justify-between flex-shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-primary">
-                  {CURRENCY.SYMBOL}
-                  {product.price.toLocaleString()}
+              {/* Product Name - Fixed height with ellipsis */}
+              <div className="mb-3 min-h-0 flex-shrink-0">
+                <Link
+                  href={`/products/${product.id}`}
+                  className="font-semibold text-base leading-tight line-clamp-2 hover:text-primary transition-colors block"
+                  title={product.name}
+                >
+                  {product.name}
+                </Link>
+              </div>
+
+              {/* Rating - Fixed height */}
+              <div className="flex items-center flex-shrink-0">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-3 w-3 ${
+                        i < Math.floor(product.rating)
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300 dark:text-gray-600"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-muted-foreground ml-2">
+                  ({product.ratingCount})
                 </span>
               </div>
-            </div>
-          </CardContent>
 
-          {/* Actions - Fixed height */}
-          <CardFooter className="px-4 pt-0 flex gap-2 flex-shrink-0">
-            <Button
-              size="sm"
-              className="flex-1 bg-primary hover:bg-primary/90 text-sm"
-              onClick={() => onAddToCart(product)}
-              disabled={!product.inStock}
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Add to Cart
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="flex-shrink-0 hover:border-primary hover:text-primary"
-            >
-              <Link href={`/products/${product.id}`}>
-                <Eye className="h-4 w-4" />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </motion.div>
-    </div>
-  );
-});
+              {/* Price - Fixed at bottom */}
+              <div className="flex items-center justify-between flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-primary">
+                    {CURRENCY.SYMBOL}
+                    {product.price.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
 
-ProductCard.displayName = 'ProductCard';
+            {/* Actions - Fixed height */}
+            <CardFooter className="px-4 pt-0 flex gap-2 flex-shrink-0">
+              <Button
+                size="sm"
+                className="flex-1 bg-primary hover:bg-primary/90 text-sm"
+                onClick={() => onAddToCart(product)}
+                disabled={!product.inStock}
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add to Cart
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="flex-shrink-0 hover:border-primary hover:text-primary"
+              >
+                <Link href={`/products/${product.id}`}>
+                  <Eye className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </motion.div>
+      </div>
+    );
+  }
+);
+
+ProductCard.displayName = "ProductCard";
 
 export function FeaturedProducts() {
   const [wishlistItems, setWishlistItems] = useState<Set<string>>(new Set());
@@ -188,14 +193,23 @@ export function FeaturedProducts() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
-  const [availableTypes, setAvailableTypes] = useState<string[]>(ALL_PRODUCT_TYPES);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(
+    null
+  );
+  const [availableTypes, setAvailableTypes] =
+    useState<string[]>(ALL_PRODUCT_TYPES);
   const [hasInitialTypesLoaded, setHasInitialTypesLoaded] = useState(false);
+<<<<<<< Updated upstream
   const swiperRef = useRef<SwiperType>();
   const navigationPrevRef = useRef<HTMLButtonElement>(null);
   const navigationNextRef = useRef<HTMLButtonElement>(null);
 
   const productsPerPage = 10000;
+=======
+  const prevRef = useRef<HTMLButtonElement | null>(null);
+  const nextRef = useRef<HTMLButtonElement | null>(null);
+  const productsPerPage = 1000;
+>>>>>>> Stashed changes
 
   const mapAPIProductToProduct = (apiProduct: APIProduct): Product => {
     return {
@@ -239,7 +253,7 @@ export function FeaturedProducts() {
             mappedProducts.map((product) => product.tags[0]).filter(Boolean)
           ),
         ] as string[];
-        
+
         if (!hasInitialTypesLoaded) {
           setAvailableTypes(types.length > 0 ? types : ALL_PRODUCT_TYPES);
           setHasInitialTypesLoaded(true);
@@ -264,6 +278,7 @@ export function FeaturedProducts() {
   };
 
   // Filter products by type
+<<<<<<< Updated upstream
   const filterProductsByType = useCallback((type: string | null) => {
     if (!type) {
       setFilteredProducts(allProducts);
@@ -281,6 +296,21 @@ export function FeaturedProducts() {
       }
     }, 100);
   }, [allProducts]);
+=======
+  const filterProductsByType = useCallback(
+    (type: string | null) => {
+      if (!type) {
+        setFilteredProducts(allProducts);
+      } else {
+        const filtered = allProducts.filter((product) =>
+          product.tags.includes(type)
+        );
+        setFilteredProducts(filtered);
+      }
+    },
+    [allProducts]
+  );
+>>>>>>> Stashed changes
 
   // Handle product type change
   const handleProductTypeChange = (type: string | null) => {
@@ -294,27 +324,30 @@ export function FeaturedProducts() {
   };
 
   // Handle wishlist toggle
-  const handleWishlistToggle = useCallback((product: Product): void => {
-    const isInWishlist = wishlistItems.has(product.id);
-    
-    if (isInWishlist) {
-      wishlistStorage.removeItem(product.id);
-      setWishlistItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(product.id);
-        return newSet;
-      });
-    } else {
-      const wishlistItem = {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.images[0] || "",
-      };
-      wishlistStorage.addItem(wishlistItem);
-      setWishlistItems(prev => new Set(prev).add(product.id));
-    }
-  }, [wishlistItems]);
+  const handleWishlistToggle = useCallback(
+    (product: Product): void => {
+      const isInWishlist = wishlistItems.has(product.id);
+
+      if (isInWishlist) {
+        wishlistStorage.removeItem(product.id);
+        setWishlistItems((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(product.id);
+          return newSet;
+        });
+      } else {
+        const wishlistItem = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.images[0] || "",
+        };
+        wishlistStorage.addItem(wishlistItem);
+        setWishlistItems((prev) => new Set(prev).add(product.id));
+      }
+    },
+    [wishlistItems]
+  );
 
   // Handle add to cart
   const handleAddToCart = useCallback((product: Product): void => {
@@ -336,7 +369,7 @@ export function FeaturedProducts() {
   useEffect(() => {
     // Initialize wishlist items from storage
     const items = wishlistStorage.getItems();
-    const wishlistIds = new Set(items.map(item => item.id));
+    const wishlistIds = new Set(items.map((item) => item.id));
     setWishlistItems(wishlistIds);
   }, []);
 
@@ -367,9 +400,7 @@ export function FeaturedProducts() {
           >
             View All Types
           </Button>
-          <Button onClick={fetchAllProducts}>
-            Try Again
-          </Button>
+          <Button onClick={fetchAllProducts}>Try Again</Button>
         </div>
       </motion.div>
     </div>
@@ -453,9 +484,7 @@ export function FeaturedProducts() {
                 Error Loading Products
               </h3>
               <p className="text-muted-foreground mb-4">{error}</p>
-              <Button onClick={fetchAllProducts}>
-                Try Again
-              </Button>
+              <Button onClick={fetchAllProducts}>Try Again</Button>
             </motion.div>
           </div>
         ) : filteredProducts.length === 0 ? (
@@ -466,6 +495,7 @@ export function FeaturedProducts() {
               modules={[Navigation, Pagination]}
               spaceBetween={12}
               slidesPerView={1}
+<<<<<<< Updated upstream
               navigation={{
                 prevEl: navigationPrevRef.current,
                 nextEl: navigationNextRef.current,
@@ -475,6 +505,38 @@ export function FeaturedProducts() {
                 renderBullet: (index, className) => {
                   return `<span class="${className} swiper-pagination-bullet-custom"></span>`;
                 },
+=======
+              onBeforeInit={(swiper) => {
+                // Attach refs before Swiper initializes
+                if (swiper.params.navigation) {
+                  const navigation = swiper.params.navigation as any;
+                  navigation.prevEl = prevRef.current;
+                  navigation.nextEl = nextRef.current;
+                }
+              }}
+              onSwiper={(swiper) => {
+                // Update navigation after render
+                setTimeout(() => {
+                  if (
+                    swiper.params.navigation &&
+                    typeof swiper.params.navigation !== "boolean"
+                  ) {
+                    const navigation = swiper.params.navigation;
+                    swiper.params.navigation = {
+                      ...navigation,
+                      prevEl: prevRef.current,
+                      nextEl: nextRef.current,
+                    };
+                    swiper.navigation.destroy();
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                  }
+                });
+              }}
+              pagination={{
+                clickable: true,
+                el: ".swiper-pagination-featured",
+>>>>>>> Stashed changes
               }}
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
@@ -493,7 +555,6 @@ export function FeaturedProducts() {
               breakpoints={{
                 320: { slidesPerView: 1, spaceBetween: 12 },
                 480: { slidesPerView: 2, spaceBetween: 12 },
-                640: { slidesPerView: 2, spaceBetween: 16 },
                 768: { slidesPerView: 2, spaceBetween: 16 },
                 1024: { slidesPerView: 3, spaceBetween: 20 },
                 1280: { slidesPerView: 4, spaceBetween: 20 },
@@ -502,9 +563,9 @@ export function FeaturedProducts() {
               className="featured-products-swiper pb-10 sm:pb-12"
             >
               {filteredProducts.map((product, index) => (
-                <SwiperSlide key={product.id} className="h-auto">
-                  <ProductCard 
-                    product={product} 
+                <SwiperSlide key={product.id}>
+                  <ProductCard
+                    product={product}
                     index={index}
                     onWishlistToggle={handleWishlistToggle}
                     onAddToCart={handleAddToCart}
@@ -514,19 +575,35 @@ export function FeaturedProducts() {
               ))}
             </Swiper>
 
+<<<<<<< Updated upstream
             {/* Navigation Buttons */}
             <button
               ref={navigationPrevRef}
               className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
+=======
+            {/* Navigation Buttons using refs */}
+            <button
+              ref={prevRef}
+              className="swiper-button-prev-featured absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
+>>>>>>> Stashed changes
             >
               <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
             <button
+<<<<<<< Updated upstream
               ref={navigationNextRef}
               className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
             >
               <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
+=======
+              ref={nextRef}
+              className="swiper-button-next-featured absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
+            >
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+
+>>>>>>> Stashed changes
           </div>
         )}
 
