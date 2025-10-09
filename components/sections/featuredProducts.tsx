@@ -1,9 +1,5 @@
 "use client";
-<<<<<<< Updated upstream
-import React, { useState, useEffect, useRef, useCallback } from "react";
-=======
 import React, { useState, useEffect, useCallback, useRef } from "react";
->>>>>>> Stashed changes
 import Link from "next/link";
 import {
   Star,
@@ -199,17 +195,10 @@ export function FeaturedProducts() {
   const [availableTypes, setAvailableTypes] =
     useState<string[]>(ALL_PRODUCT_TYPES);
   const [hasInitialTypesLoaded, setHasInitialTypesLoaded] = useState(false);
-<<<<<<< Updated upstream
-  const swiperRef = useRef<SwiperType>();
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
-
-  const productsPerPage = 10000;
-=======
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
   const productsPerPage = 1000;
->>>>>>> Stashed changes
+  const swiperRef = useRef<any>(null);
 
   const mapAPIProductToProduct = (apiProduct: APIProduct): Product => {
     return {
@@ -278,25 +267,6 @@ export function FeaturedProducts() {
   };
 
   // Filter products by type
-<<<<<<< Updated upstream
-  const filterProductsByType = useCallback((type: string | null) => {
-    if (!type) {
-      setFilteredProducts(allProducts);
-    } else {
-      const filtered = allProducts.filter(product => 
-        product.tags.includes(type)
-      );
-      setFilteredProducts(filtered);
-    }
-    
-    // Reset swiper to first slide when filter changes
-    setTimeout(() => {
-      if (swiperRef.current) {
-        swiperRef.current.slideTo(0);
-      }
-    }, 100);
-  }, [allProducts]);
-=======
   const filterProductsByType = useCallback(
     (type: string | null) => {
       if (!type) {
@@ -310,7 +280,6 @@ export function FeaturedProducts() {
     },
     [allProducts]
   );
->>>>>>> Stashed changes
 
   // Handle product type change
   const handleProductTypeChange = (type: string | null) => {
@@ -495,19 +464,7 @@ export function FeaturedProducts() {
               modules={[Navigation, Pagination]}
               spaceBetween={12}
               slidesPerView={1}
-<<<<<<< Updated upstream
-              navigation={{
-                prevEl: navigationPrevRef.current,
-                nextEl: navigationNextRef.current,
-              }}
-              pagination={{
-                clickable: true,
-                renderBullet: (index, className) => {
-                  return `<span class="${className} swiper-pagination-bullet-custom"></span>`;
-                },
-=======
               onBeforeInit={(swiper) => {
-                // Attach refs before Swiper initializes
                 if (swiper.params.navigation) {
                   const navigation = swiper.params.navigation as any;
                   navigation.prevEl = prevRef.current;
@@ -515,7 +472,8 @@ export function FeaturedProducts() {
                 }
               }}
               onSwiper={(swiper) => {
-                // Update navigation after render
+                swiperRef.current = swiper;
+                // Combine both previous onSwiper logics here
                 setTimeout(() => {
                   if (
                     swiper.params.navigation &&
@@ -531,23 +489,15 @@ export function FeaturedProducts() {
                     swiper.navigation.init();
                     swiper.navigation.update();
                   }
-                });
-              }}
-              pagination={{
-                clickable: true,
-                el: ".swiper-pagination-featured",
->>>>>>> Stashed changes
-              }}
-              onSwiper={(swiper) => {
-                swiperRef.current = swiper;
-                // Initialize navigation after swiper is mounted
-                setTimeout(() => {
                   swiper.navigation.init();
                   swiper.navigation.update();
                 }, 100);
               }}
+              pagination={{
+                clickable: true,
+                el: ".swiper-pagination-featured",
+              }}
               onSlideChange={() => {
-                // Ensure navigation is updated
                 if (swiperRef.current) {
                   swiperRef.current.navigation.update();
                 }
@@ -575,35 +525,19 @@ export function FeaturedProducts() {
               ))}
             </Swiper>
 
-<<<<<<< Updated upstream
-            {/* Navigation Buttons */}
-            <button
-              ref={navigationPrevRef}
-              className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-=======
             {/* Navigation Buttons using refs */}
             <button
               ref={prevRef}
               className="swiper-button-prev-featured absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
->>>>>>> Stashed changes
             >
               <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
             <button
-<<<<<<< Updated upstream
-              ref={navigationNextRef}
-              className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-            >
-              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
-            </button>
-=======
               ref={nextRef}
               className="swiper-button-next-featured absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/90 dark:bg-background/95 backdrop-blur-sm border border-border hover:border-primary hover:text-primary transition-all duration-300 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
             >
               <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
-
->>>>>>> Stashed changes
           </div>
         )}
 
