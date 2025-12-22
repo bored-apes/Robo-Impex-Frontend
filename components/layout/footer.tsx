@@ -13,7 +13,7 @@ import { useTheme } from "@/components/theme-provider";
 export function Footer() {
   const { theme } = useTheme();
 
-  const logoPath = theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png";
+  const logoPath = theme === "dark" ? "/logos/logo_3_dark.png" : "/logos/logo_3.png";
 
   const logoDimensions = {
     notScrolled: {

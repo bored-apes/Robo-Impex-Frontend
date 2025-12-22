@@ -38,7 +38,7 @@ export function Header() {
   const headerRef = useRef<HTMLDivElement>(null);
 
   const logoPath = useMemo(
-    () => (theme === "dark" ? "/logos/logo_3.png" : "/logos/logo_3.png"),
+    () => (theme === "dark" ? "/logos/logo_3_dark.png" : "/logos/logo_3.png"),
     [theme]
   );
 

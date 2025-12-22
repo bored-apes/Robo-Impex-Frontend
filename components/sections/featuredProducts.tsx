@@ -465,7 +465,7 @@ export function FeaturedProducts() {
               spaceBetween={12}
               slidesPerView={1}
               onBeforeInit={(swiper) => {
-                if (swiper.params.navigation) {
+                if (swiper?.params?.navigation) {
                   const navigation = swiper.params.navigation as any;
                   navigation.prevEl = prevRef.current;
                   navigation.nextEl = nextRef.current;
@@ -475,22 +475,23 @@ export function FeaturedProducts() {
                 swiperRef.current = swiper;
                 // Combine both previous onSwiper logics here
                 setTimeout(() => {
-                  if (
-                    swiper.params.navigation &&
-                    typeof swiper.params.navigation !== "boolean"
-                  ) {
-                    const navigation = swiper.params.navigation;
-                    swiper.params.navigation = {
-                      ...navigation,
-                      prevEl: prevRef.current,
-                      nextEl: nextRef.current,
-                    };
-                    swiper.navigation.destroy();
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                  }
-                  swiper.navigation.init();
-                  swiper.navigation.update();
+                  // Swiper instance may be unmounted/destroyed before this runs.
+                  if (!swiper || (swiper as any).destroyed) return;
+                  if (!swiper.params) return;
+
+                  const navigationParam = swiper.params.navigation;
+                  if (!navigationParam || typeof navigationParam === "boolean") return;
+
+                  swiper.params.navigation = {
+                    ...(navigationParam as any),
+                    prevEl: prevRef.current,
+                    nextEl: nextRef.current,
+                  };
+
+                  // Re-init navigation safely after refs are attached
+                  swiper.navigation?.destroy?.();
+                  swiper.navigation?.init?.();
+                  swiper.navigation?.update?.();
                 }, 100);
               }}
               pagination={{
