@@ -27,6 +27,7 @@ import { useDebounce } from "@/components/shared/hooks/use-debounce";
 import { ProductFilters } from "@/components/product/productFilters";
 import { ProductCard } from "@/components/product/productCard";
 import { ProductsListSkeleton } from "@/components/shared/skeletons/productsListSkeleton";
+import { normalizeImageUrls, normalizeImageUrl } from "@/lib/utils/imageUtils";
 
 export default function ProductsPageInner() {
   const searchParams = useSearchParams();
@@ -214,21 +215,31 @@ export default function ProductsPageInner() {
     updateURL(cleared);
   };
 
-  const convertToDisplayProduct = (apiProduct: APIProduct) => ({
-    id: apiProduct.id.toString(),
-    name: apiProduct.name,
-    descriptionShort: apiProduct.description || "",
-    descriptionLong: apiProduct.description || "",
-    price: apiProduct.base_price ?? 0,
-    images: apiProduct.image_url ? [apiProduct.image_url] : [""],
-    categories: apiProduct.category ? [apiProduct.category] : [],
-    tags: apiProduct.type ? [apiProduct.type] : [],
-    inStock: (apiProduct.stock_quantity ?? 0) > 0,
-    rating: apiProduct.average_rating ?? 4.5,
-    ratingCount: apiProduct.ratingCount ?? apiProduct.total_ratings ?? 0,
-    stockQuantity: apiProduct.stock_quantity ?? 0,
-    minQuantityOrder: apiProduct.min_order_qty ?? 0,
-  });
+  const convertToDisplayProduct = (apiProduct: APIProduct) => {
+    // Get images from API - use images array from API response
+    const getProductImages = () => {
+      if (apiProduct.images && Array.isArray(apiProduct.images) && apiProduct.images.length > 0) {
+        return apiProduct.images.map(url => normalizeImageUrl(url));
+      }
+      return ["/placeholder.svg"];
+    };
+
+    return {
+      id: apiProduct.id.toString(),
+      name: apiProduct.name,
+      descriptionShort: apiProduct.description || "",
+      descriptionLong: apiProduct.description || "",
+      price: apiProduct.base_price ?? 0,
+      images: getProductImages(),
+      categories: apiProduct.category ? [apiProduct.category] : [],
+      tags: apiProduct.type ? [apiProduct.type] : [],
+      inStock: (apiProduct.stock_quantity ?? 0) > 0,
+      rating: apiProduct.average_rating ?? 4.5,
+      ratingCount: apiProduct.ratingCount ?? apiProduct.total_ratings ?? 0,
+      stockQuantity: apiProduct.stock_quantity ?? 0,
+      minQuantityOrder: apiProduct.min_order_qty ?? 0,
+    };
+  };
 
   // Error UI: use reloadKey to trigger a refetch
   if (error && !loading) {

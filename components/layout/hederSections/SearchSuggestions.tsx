@@ -182,11 +182,9 @@ export function SearchSuggestions({ className }: SearchSuggestionsProps) {
                   >
                     {/* Product Image */}
                     <div className="flex-shrink-0 w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-md overflow-hidden">
-                      {product.image_url ||
-                      (product.images && product.images.length > 0) ? (
+                      {(product.images && product.images.length > 0) ? (
                         <img
                           src={
-                            product.image_url ||
                             product.images[0] ||
                             "/placeholder.svg"
                           }

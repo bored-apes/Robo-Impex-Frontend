@@ -26,6 +26,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ProductCardSkeleton } from "@/components/shared/skeletons/productCardSkeleton";
 import type { Swiper as SwiperType } from "swiper";
+import { normalizeImageUrls, normalizeImageUrl, handleImageError } from "@/lib/utils/imageUtils";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -72,12 +73,10 @@ const ProductCard = React.memo(
             {/* Image Section - Fixed Height */}
             <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
               <img
-                src={
-                  product.images[0] ||
-                  "/placeholder.svg?height=200&width=300&text=Product+Image"
-                }
+                src={product.images[0]}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={handleImageError}
               />
 
               {/* Wishlist Button */}
@@ -201,13 +200,21 @@ export function FeaturedProducts() {
   const swiperRef = useRef<any>(null);
 
   const mapAPIProductToProduct = (apiProduct: APIProduct): Product => {
+    // Get images from API - use images array from API response
+    const getProductImages = () => {
+      if (apiProduct.images && Array.isArray(apiProduct.images) && apiProduct.images.length > 0) {
+        return apiProduct.images.map(url => normalizeImageUrl(url));
+      }
+      return ["/placeholder.svg"];
+    };
+
     return {
       id: apiProduct.id.toString(),
       name: apiProduct.name,
       descriptionShort: apiProduct.description || "",
       descriptionLong: apiProduct.description || "",
       price: apiProduct.base_price || 0,
-      images: apiProduct.image_url ? [apiProduct.image_url] : [],
+      images: getProductImages(),
       categories: apiProduct.category ? [apiProduct.category] : [],
       tags: apiProduct.type ? [apiProduct.type] : [],
       rating: apiProduct.average_rating || 4.5,
@@ -464,6 +471,10 @@ export function FeaturedProducts() {
               modules={[Navigation, Pagination]}
               spaceBetween={12}
               slidesPerView={1}
+              navigation={{
+                prevEl: prevRef.current,
+                nextEl: nextRef.current,
+              }}
               onBeforeInit={(swiper) => {
                 if (swiper?.params?.navigation) {
                   const navigation = swiper.params.navigation as any;
@@ -473,7 +484,7 @@ export function FeaturedProducts() {
               }}
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
-                // Combine both previous onSwiper logics here
+                // Initialize navigation after swiper is ready
                 setTimeout(() => {
                   // Swiper instance may be unmounted/destroyed before this runs.
                   if (!swiper || (swiper as any).destroyed) return;
@@ -499,7 +510,7 @@ export function FeaturedProducts() {
                 el: ".swiper-pagination-featured",
               }}
               onSlideChange={() => {
-                if (swiperRef.current) {
+                if (swiperRef.current?.navigation) {
                   swiperRef.current.navigation.update();
                 }
               }}

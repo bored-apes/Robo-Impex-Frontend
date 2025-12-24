@@ -10,6 +10,7 @@ import { StarRating } from "../shared/common/starRating";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getProductImageUrl, normalizeImageUrl, handleImageError } from "@/lib/utils/imageUtils";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -63,12 +64,14 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
               setTimeout(() => {
-                swiper.navigation.init();
-                swiper.navigation.update();
+                if (swiper.navigation) {
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                }
               }, 100);
             }}
             onSlideChange={() => {
-              if (swiperRef.current) {
+              if (swiperRef.current?.navigation) {
                 swiperRef.current.navigation.update();
               }
             }}
@@ -88,11 +91,13 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
                   <div className="relative overflow-hidden flex-shrink-0">
                     <img
                       src={
-                        relatedProduct.image_url ||
-                        "/placeholder.svg?key=robotics-chip"
+                        (relatedProduct.images && relatedProduct.images.length > 0)
+                          ? normalizeImageUrl(relatedProduct.images[0])
+                          : "/placeholder.svg"
                       }
                       alt={relatedProduct.name || "Product"}
                       className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={handleImageError}
                     />
                     {relatedProduct.stock_quantity === 0 && (
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">

@@ -11,6 +11,7 @@ import { CURRENCY } from "@/data/constants";
 import type { ProductCardProps } from "@/types/products";
 import { StarRating } from "../shared/common/starRating";
 import { useCustomToast } from "../shared/common/customToast";
+import { handleImageError } from "@/lib/utils/imageUtils";
 
 export function ProductCard({ product }: ProductCardProps) {
   const { showToast } = useCustomToast();
@@ -77,6 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
           src={product?.images?.[0] || "/placeholder.svg"}
           alt={product?.name || "Product image"}
           className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+          onError={handleImageError}
         />
 
         <div className="absolute top-1 sm:top-1.5 left-1 sm:left-1.5">

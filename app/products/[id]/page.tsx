@@ -32,6 +32,7 @@ import { ReviewsTab } from "@/components/product/reviewsTab";
 import { ShippingTab } from "@/components/product/shippingTab";
 import { ProductDetailSkeleton } from "@/components/shared/skeletons/productDetailSkeleton";
 import { useCustomToast } from "@/components/shared/common/customToast";
+import { normalizeImageUrls, normalizeImageUrl, handleImageError, getProductImageUrl } from "@/lib/utils/imageUtils";
 
 export default function ProductPage() {
   const params = useParams();
@@ -186,7 +187,9 @@ export default function ProductPage() {
       id: product.id.toString(),
       name: product.name || "Unknown Product",
       price: product.base_price || 0,
-      image: product.image_url || "/placeholder.svg?key=robotics-chip",
+      image: (product.images && product.images.length > 0) 
+        ? normalizeImageUrl(product.images[0]) 
+        : "/placeholder.svg",
       qty: quantity,
     };
     cartStorage.addItem(cartItem);
@@ -208,7 +211,9 @@ export default function ProductPage() {
         id: product.id.toString(),
         name: product.name || "Unknown Product",
         price: product.base_price || 0,
-        image: product.image_url || "/placeholder.svg?key=robotics-chip",
+        image: (product.images && product.images.length > 0) 
+        ? normalizeImageUrl(product.images[0]) 
+        : "/placeholder.svg",
       };
       wishlistStorage.addItem(wishlistItem);
       setIsInWishlist(true);
@@ -268,14 +273,23 @@ export default function ProductPage() {
     );
   }
 
+  // Get images from API - use images array from API response
+  const getProductImages = () => {
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      return product.images.map(url => normalizeImageUrl(url));
+    }
+    if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+      return product.image_urls.map(url => normalizeImageUrl(url));
+    }
+    return ["/placeholder.svg"];
+  };
+
   const displayProduct = {
     id: product.id.toString(),
     name: product.name || "Unknown Product",
     description: product.description || "No description available",
     price: product.base_price || 0,
-    images: product.image_url
-      ? [product.image_url]
-      : ["/placeholder.svg?key=robotics-chip"],
+    images: getProductImages(),
     category: product.category || "Unknown",
     type: product.type || "Unknown",
     inStock: (product.stock_quantity || 0) > 0,
@@ -334,9 +348,10 @@ export default function ProductPage() {
           <div className="space-y-4 sm:space-y-6">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/30 industrial-border">
               <img
-                src={displayProduct.images[selectedImage] || "/placeholder.svg"}
+                src={displayProduct.images[selectedImage]}
                 alt={displayProduct.name}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={handleImageError}
               />
               {!displayProduct.inStock && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -362,9 +377,10 @@ export default function ProductPage() {
                   }`}
                 >
                   <img
-                    src={image || "/placeholder.svg"}
+                    src={image}
                     alt={`${displayProduct.name} ${index + 1}`}
                     className="w-full h-full object-cover"
+                    onError={handleImageError}
                   />
                 </button>
               ))}

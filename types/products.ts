@@ -126,7 +126,6 @@ export interface APIProduct {
   gst_rate: number | null;
   min_order_qty: number | null;
   stock_quantity: number | null;
-  image_url: string | null;
   status: ProductStatusEnum;
   created_at: string;
   average_rating?:number;
