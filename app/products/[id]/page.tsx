@@ -49,6 +49,8 @@ export default function ProductPage() {
   const [refreshReviews, setRefreshReviews] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
   const [customQuantityInput, setCustomQuantityInput] = useState("");
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -273,14 +275,18 @@ export default function ProductPage() {
     );
   }
 
-  // Get images from API - use images array from API response
-  const getProductImages = () => {
-    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-      return product.images.map(url => normalizeImageUrl(url));
+  // Get images from API - use images array or image_urls from API response
+  const getProductImages = (): string[] => {
+    const imageArray = product.images && Array.isArray(product.images) && product.images.length > 0
+      ? product.images
+      : product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0
+        ? product.image_urls
+        : null;
+
+    if (imageArray && imageArray.length > 0) {
+      return imageArray.map((url: string) => normalizeImageUrl(url));
     }
-    if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-      return product.image_urls.map(url => normalizeImageUrl(url));
-    }
+    
     return ["/placeholder.svg"];
   };
 
@@ -346,13 +352,50 @@ export default function ProductPage() {
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {/* Product images section */}
           <div className="space-y-4 sm:space-y-6">
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/30 industrial-border">
+            {/* Main Image Viewer - 500x500 Smooth In-Place Zoom */}
+            <div 
+              className={`relative w-96 h-96 sm:w-[500px] sm:h-[500px] rounded-2xl overflow-hidden bg-muted/30 industrial-border flex items-center justify-center group ${
+                isImageZoomed ? "cursor-zoom-out" : "cursor-zoom-in"
+              } mx-auto`}
+              onClick={() => setIsImageZoomed(!isImageZoomed)}
+              onMouseMove={(e) => {
+                if (isImageZoomed) {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = (e.clientX - rect.left) / rect.width * 100;
+                  const y = (e.clientY - rect.top) / rect.height * 100;
+                  setZoomPosition({ x, y });
+                }
+              }}
+            >
               <img
                 src={displayProduct.images[selectedImage]}
                 alt={displayProduct.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                className={`w-full h-full object-cover transition-transform duration-700 ${
+                  isImageZoomed ? "scale-200" : "scale-100 group-hover:scale-105"
+                }`}
+                style={isImageZoomed ? {
+                  transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                } : {}}
                 onError={handleImageError}
               />
+
+              {/* Zoom Icon Overlay */}
+              {!isImageZoomed && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none">
+                  <div className="flex flex-col items-center gap-2">
+                    <Zap className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <span className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500">Click to zoom</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Zoomed instruction */}
+              {isImageZoomed && (
+                <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                  Click to zoom out
+                </div>
+              )}
+
               {!displayProduct.inStock && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <Badge
@@ -363,28 +406,42 @@ export default function ProductPage() {
                   </Badge>
                 </div>
               )}
+              {displayProduct.images.length > 1 && (
+                <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                  {selectedImage + 1} / {displayProduct.images.length}
+                </div>
+              )}
             </div>
 
-            <div className="flex space-x-2 sm:space-x-3 overflow-x-auto">
-              {displayProduct.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`flex-shrink-0 w-16 sm:w-20 h-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                    selectedImage === index
-                      ? "border-primary"
-                      : "border-transparent hover:border-accent"
-                  }`}
-                >
-                  <img
-                    src={image}
-                    alt={`${displayProduct.name} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={handleImageError}
-                  />
-                </button>
-              ))}
-            </div>
+            {/* Image Thumbnails Gallery */}
+            {displayProduct.images.length > 1 && (
+              <div className="space-y-2">
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+                  Product Images ({displayProduct.images.length})
+                </p>
+                <div className="flex space-x-2 sm:space-x-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                  {displayProduct.images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`flex-shrink-0 w-16 cursor-pointer sm:w-20 h-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                        selectedImage === index
+                          ? "border-primary ring-2 ring-primary/30"
+                          : "border-gray-200 hover:border-primary"
+                      }`}
+                      title={`Image ${index + 1}`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${displayProduct.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={handleImageError}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Product details section */}

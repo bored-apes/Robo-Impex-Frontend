@@ -128,13 +128,14 @@ export interface APIProduct {
   stock_quantity: number | null;
   status: ProductStatusEnum;
   created_at: string;
-  average_rating?:number;
-  total_ratings?:number;
+  average_rating?: number;
+  total_ratings?: number;
   ratingCount?: number;
-  minQuantityOrder?:number;
+  minQuantityOrder?: number;
   specifications?: Specifications;
   variants?: Variants;
   images: string[];
+  image_urls?: string[];
 }
 
 export interface WishlistAddItem {

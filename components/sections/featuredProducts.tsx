@@ -25,8 +25,8 @@ import type { Product, APIProduct } from "@/types/products";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ProductCardSkeleton } from "@/components/shared/skeletons/productCardSkeleton";
+import { handleImageError, normalizeImageUrl } from "@/lib/utils/imageUtils";
 import type { Swiper as SwiperType } from "swiper";
-import { normalizeImageUrls, normalizeImageUrl, handleImageError } from "@/lib/utils/imageUtils";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -73,7 +73,11 @@ const ProductCard = React.memo(
             {/* Image Section - Fixed Height */}
             <div className="relative h-48 sm:h-52 md:h-56 overflow-hidden flex-shrink-0">
               <img
-                src={product.images[0]}
+                src={
+                  product.images && product.images.length > 0
+                    ? normalizeImageUrl(product.images[0])
+                    : "/placeholder.svg?height=200&width=300&text=Product+Image"
+                }
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 onError={handleImageError}
@@ -200,13 +204,13 @@ export function FeaturedProducts() {
   const swiperRef = useRef<any>(null);
 
   const mapAPIProductToProduct = (apiProduct: APIProduct): Product => {
-    // Get images from API - use images array from API response
-    const getProductImages = () => {
-      if (apiProduct.images && Array.isArray(apiProduct.images) && apiProduct.images.length > 0) {
-        return apiProduct.images.map(url => normalizeImageUrl(url));
-      }
-      return ["/placeholder.svg"];
-    };
+    // Get images from either images or image_urls array
+    const productImages =
+      apiProduct.images && apiProduct.images.length > 0
+        ? apiProduct.images
+        : apiProduct.image_urls && apiProduct.image_urls.length > 0
+        ? apiProduct.image_urls
+        : [];
 
     return {
       id: apiProduct.id.toString(),
@@ -214,7 +218,7 @@ export function FeaturedProducts() {
       descriptionShort: apiProduct.description || "",
       descriptionLong: apiProduct.description || "",
       price: apiProduct.base_price || 0,
-      images: getProductImages(),
+      images: productImages,
       categories: apiProduct.category ? [apiProduct.category] : [],
       tags: apiProduct.type ? [apiProduct.type] : [],
       rating: apiProduct.average_rating || 4.5,

@@ -10,7 +10,7 @@ import { StarRating } from "../shared/common/starRating";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getProductImageUrl, normalizeImageUrl, handleImageError } from "@/lib/utils/imageUtils";
+import { normalizeImageUrl, handleImageError } from "@/lib/utils/imageUtils";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -93,7 +93,9 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
                       src={
                         (relatedProduct.images && relatedProduct.images.length > 0)
                           ? normalizeImageUrl(relatedProduct.images[0])
-                          : "/placeholder.svg"
+                          : (relatedProduct.image_urls && relatedProduct.image_urls.length > 0)
+                            ? normalizeImageUrl(relatedProduct.image_urls[0])
+                            : "/placeholder.svg?key=robotics-chip"
                       }
                       alt={relatedProduct.name || "Product"}
                       className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
@@ -136,9 +138,7 @@ export function RelatedProducts({ products }: { products: APIProduct[] }) {
                           {CURRENCY.SYMBOL}
                           {(relatedProduct.base_price || 0).toLocaleString()}
                         </span>
-                        <span className="text-xs text-muted-foreground">
-                          + {relatedProduct.gst_rate || 0}% GST
-                        </span>
+                       
                       </div>
 
                       <div className="flex flex-col items-end">

@@ -115,7 +115,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </Button>
       </div>
 
-      <CardContent className="p-2 sm:p-3 md:p-4 flex-1 flex flex-col">
+      <CardContent className="p-1 sm:p-2 md:p-3 flex-1 flex flex-col">
         <div className="mb-1 sm:mb-2">
           <Link
             href={`/products/${product.id}`}
