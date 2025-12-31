@@ -25,7 +25,7 @@ import { MobileMenu } from "./hederSections/mobileMenu";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { SearchSuggestions } from "./hederSections/SearchSuggestions";
 export function Header() {
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const [cartCount, setCartCount] = useState<number>(0);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
@@ -33,14 +33,23 @@ export function Header() {
   const [showTopBar, setShowTopBar] = useState<boolean>(true);
   const [lastScrollY, setLastScrollY] = useState<number>(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const headerRef = useRef<HTMLDivElement>(null);
 
+  // Use resolvedTheme which respects system preference when theme is 'system'
+  const currentTheme = mounted ? resolvedTheme : "light";
+
   const logoPath = useMemo(
-    () => (theme === "dark" ? "/logos/logo_3_dark.png" : "/logos/logo_3.png"),
-    [theme]
+    () => (currentTheme === "dark" ? "/logos/logo_3_dark.png" : "/logos/logo_3.png"),
+    [currentTheme]
   );
+
+  // Set mounted flag after component mounts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const logoDimensions = useMemo(
     () => ({
